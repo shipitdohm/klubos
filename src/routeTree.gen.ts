@@ -17,10 +17,13 @@ import { Route as AuthenticatedSponsorenRouteImport } from './routes/_authentica
 import { Route as AuthenticatedPlatzplanungRouteImport } from './routes/_authenticated/platzplanung'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedMitgliederRouteImport } from './routes/_authenticated/mitglieder'
+import { Route as AuthenticatedKiRouteImport } from './routes/_authenticated/ki'
 import { Route as AuthenticatedFinanzenRouteImport } from './routes/_authenticated/finanzen'
 import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated/events'
 import { Route as AuthenticatedEinstellungenRouteImport } from './routes/_authenticated/einstellungen'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedKiIndexRouteImport } from './routes/_authenticated/ki.index'
+import { Route as AuthenticatedKiThreadIdRouteImport } from './routes/_authenticated/ki.$threadId'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -62,6 +65,11 @@ const AuthenticatedMitgliederRoute = AuthenticatedMitgliederRouteImport.update({
   path: '/mitglieder',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedKiRoute = AuthenticatedKiRouteImport.update({
+  id: '/ki',
+  path: '/ki',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedFinanzenRoute = AuthenticatedFinanzenRouteImport.update({
   id: '/finanzen',
   path: '/finanzen',
@@ -83,6 +91,16 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedKiIndexRoute = AuthenticatedKiIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedKiRoute,
+} as any)
+const AuthenticatedKiThreadIdRoute = AuthenticatedKiThreadIdRouteImport.update({
+  id: '/$threadId',
+  path: '/$threadId',
+  getParentRoute: () => AuthenticatedKiRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -91,11 +109,14 @@ export interface FileRoutesByFullPath {
   '/einstellungen': typeof AuthenticatedEinstellungenRoute
   '/events': typeof AuthenticatedEventsRoute
   '/finanzen': typeof AuthenticatedFinanzenRoute
+  '/ki': typeof AuthenticatedKiRouteWithChildren
   '/mitglieder': typeof AuthenticatedMitgliederRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/platzplanung': typeof AuthenticatedPlatzplanungRoute
   '/sponsoren': typeof AuthenticatedSponsorenRoute
   '/api/chat': typeof ApiChatRoute
+  '/ki/$threadId': typeof AuthenticatedKiThreadIdRoute
+  '/ki/': typeof AuthenticatedKiIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -109,6 +130,8 @@ export interface FileRoutesByTo {
   '/platzplanung': typeof AuthenticatedPlatzplanungRoute
   '/sponsoren': typeof AuthenticatedSponsorenRoute
   '/api/chat': typeof ApiChatRoute
+  '/ki/$threadId': typeof AuthenticatedKiThreadIdRoute
+  '/ki': typeof AuthenticatedKiIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -119,11 +142,14 @@ export interface FileRoutesById {
   '/_authenticated/einstellungen': typeof AuthenticatedEinstellungenRoute
   '/_authenticated/events': typeof AuthenticatedEventsRoute
   '/_authenticated/finanzen': typeof AuthenticatedFinanzenRoute
+  '/_authenticated/ki': typeof AuthenticatedKiRouteWithChildren
   '/_authenticated/mitglieder': typeof AuthenticatedMitgliederRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/platzplanung': typeof AuthenticatedPlatzplanungRoute
   '/_authenticated/sponsoren': typeof AuthenticatedSponsorenRoute
   '/api/chat': typeof ApiChatRoute
+  '/_authenticated/ki/$threadId': typeof AuthenticatedKiThreadIdRoute
+  '/_authenticated/ki/': typeof AuthenticatedKiIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -134,11 +160,14 @@ export interface FileRouteTypes {
     | '/einstellungen'
     | '/events'
     | '/finanzen'
+    | '/ki'
     | '/mitglieder'
     | '/onboarding'
     | '/platzplanung'
     | '/sponsoren'
     | '/api/chat'
+    | '/ki/$threadId'
+    | '/ki/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -152,6 +181,8 @@ export interface FileRouteTypes {
     | '/platzplanung'
     | '/sponsoren'
     | '/api/chat'
+    | '/ki/$threadId'
+    | '/ki'
   id:
     | '__root__'
     | '/'
@@ -161,11 +192,14 @@ export interface FileRouteTypes {
     | '/_authenticated/einstellungen'
     | '/_authenticated/events'
     | '/_authenticated/finanzen'
+    | '/_authenticated/ki'
     | '/_authenticated/mitglieder'
     | '/_authenticated/onboarding'
     | '/_authenticated/platzplanung'
     | '/_authenticated/sponsoren'
     | '/api/chat'
+    | '/_authenticated/ki/$threadId'
+    | '/_authenticated/ki/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -233,6 +267,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMitgliederRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ki': {
+      id: '/_authenticated/ki'
+      path: '/ki'
+      fullPath: '/ki'
+      preLoaderRoute: typeof AuthenticatedKiRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/finanzen': {
       id: '/_authenticated/finanzen'
       path: '/finanzen'
@@ -261,14 +302,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ki/': {
+      id: '/_authenticated/ki/'
+      path: '/'
+      fullPath: '/ki/'
+      preLoaderRoute: typeof AuthenticatedKiIndexRouteImport
+      parentRoute: typeof AuthenticatedKiRoute
+    }
+    '/_authenticated/ki/$threadId': {
+      id: '/_authenticated/ki/$threadId'
+      path: '/$threadId'
+      fullPath: '/ki/$threadId'
+      preLoaderRoute: typeof AuthenticatedKiThreadIdRouteImport
+      parentRoute: typeof AuthenticatedKiRoute
+    }
   }
 }
+
+interface AuthenticatedKiRouteChildren {
+  AuthenticatedKiThreadIdRoute: typeof AuthenticatedKiThreadIdRoute
+  AuthenticatedKiIndexRoute: typeof AuthenticatedKiIndexRoute
+}
+
+const AuthenticatedKiRouteChildren: AuthenticatedKiRouteChildren = {
+  AuthenticatedKiThreadIdRoute: AuthenticatedKiThreadIdRoute,
+  AuthenticatedKiIndexRoute: AuthenticatedKiIndexRoute,
+}
+
+const AuthenticatedKiRouteWithChildren = AuthenticatedKiRoute._addFileChildren(
+  AuthenticatedKiRouteChildren,
+)
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEinstellungenRoute: typeof AuthenticatedEinstellungenRoute
   AuthenticatedEventsRoute: typeof AuthenticatedEventsRoute
   AuthenticatedFinanzenRoute: typeof AuthenticatedFinanzenRoute
+  AuthenticatedKiRoute: typeof AuthenticatedKiRouteWithChildren
   AuthenticatedMitgliederRoute: typeof AuthenticatedMitgliederRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPlatzplanungRoute: typeof AuthenticatedPlatzplanungRoute
@@ -280,6 +350,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedEinstellungenRoute: AuthenticatedEinstellungenRoute,
   AuthenticatedEventsRoute: AuthenticatedEventsRoute,
   AuthenticatedFinanzenRoute: AuthenticatedFinanzenRoute,
+  AuthenticatedKiRoute: AuthenticatedKiRouteWithChildren,
   AuthenticatedMitgliederRoute: AuthenticatedMitgliederRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPlatzplanungRoute: AuthenticatedPlatzplanungRoute,
