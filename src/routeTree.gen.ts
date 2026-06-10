@@ -13,7 +13,13 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AuthenticatedSponsorenRouteImport } from './routes/_authenticated/sponsoren'
+import { Route as AuthenticatedPlatzplanungRouteImport } from './routes/_authenticated/platzplanung'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedMitgliederRouteImport } from './routes/_authenticated/mitglieder'
+import { Route as AuthenticatedFinanzenRouteImport } from './routes/_authenticated/finanzen'
+import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated/events'
+import { Route as AuthenticatedEinstellungenRouteImport } from './routes/_authenticated/einstellungen'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 
 const AuthRoute = AuthRouteImport.update({
@@ -35,11 +41,43 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedSponsorenRoute = AuthenticatedSponsorenRouteImport.update({
+  id: '/sponsoren',
+  path: '/sponsoren',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPlatzplanungRoute =
+  AuthenticatedPlatzplanungRouteImport.update({
+    id: '/platzplanung',
+    path: '/platzplanung',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMitgliederRoute = AuthenticatedMitgliederRouteImport.update({
+  id: '/mitglieder',
+  path: '/mitglieder',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedFinanzenRoute = AuthenticatedFinanzenRouteImport.update({
+  id: '/finanzen',
+  path: '/finanzen',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEventsRoute = AuthenticatedEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEinstellungenRoute =
+  AuthenticatedEinstellungenRouteImport.update({
+    id: '/einstellungen',
+    path: '/einstellungen',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -50,14 +88,26 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/einstellungen': typeof AuthenticatedEinstellungenRoute
+  '/events': typeof AuthenticatedEventsRoute
+  '/finanzen': typeof AuthenticatedFinanzenRoute
+  '/mitglieder': typeof AuthenticatedMitgliederRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/platzplanung': typeof AuthenticatedPlatzplanungRoute
+  '/sponsoren': typeof AuthenticatedSponsorenRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/einstellungen': typeof AuthenticatedEinstellungenRoute
+  '/events': typeof AuthenticatedEventsRoute
+  '/finanzen': typeof AuthenticatedFinanzenRoute
+  '/mitglieder': typeof AuthenticatedMitgliederRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/platzplanung': typeof AuthenticatedPlatzplanungRoute
+  '/sponsoren': typeof AuthenticatedSponsorenRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesById {
@@ -66,21 +116,55 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/einstellungen': typeof AuthenticatedEinstellungenRoute
+  '/_authenticated/events': typeof AuthenticatedEventsRoute
+  '/_authenticated/finanzen': typeof AuthenticatedFinanzenRoute
+  '/_authenticated/mitglieder': typeof AuthenticatedMitgliederRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/platzplanung': typeof AuthenticatedPlatzplanungRoute
+  '/_authenticated/sponsoren': typeof AuthenticatedSponsorenRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/onboarding' | '/api/chat'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/einstellungen'
+    | '/events'
+    | '/finanzen'
+    | '/mitglieder'
+    | '/onboarding'
+    | '/platzplanung'
+    | '/sponsoren'
+    | '/api/chat'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/onboarding' | '/api/chat'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/einstellungen'
+    | '/events'
+    | '/finanzen'
+    | '/mitglieder'
+    | '/onboarding'
+    | '/platzplanung'
+    | '/sponsoren'
+    | '/api/chat'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/dashboard'
+    | '/_authenticated/einstellungen'
+    | '/_authenticated/events'
+    | '/_authenticated/finanzen'
+    | '/_authenticated/mitglieder'
     | '/_authenticated/onboarding'
+    | '/_authenticated/platzplanung'
+    | '/_authenticated/sponsoren'
     | '/api/chat'
   fileRoutesById: FileRoutesById
 }
@@ -121,11 +205,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/sponsoren': {
+      id: '/_authenticated/sponsoren'
+      path: '/sponsoren'
+      fullPath: '/sponsoren'
+      preLoaderRoute: typeof AuthenticatedSponsorenRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/platzplanung': {
+      id: '/_authenticated/platzplanung'
+      path: '/platzplanung'
+      fullPath: '/platzplanung'
+      preLoaderRoute: typeof AuthenticatedPlatzplanungRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/onboarding': {
       id: '/_authenticated/onboarding'
       path: '/onboarding'
       fullPath: '/onboarding'
       preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/mitglieder': {
+      id: '/_authenticated/mitglieder'
+      path: '/mitglieder'
+      fullPath: '/mitglieder'
+      preLoaderRoute: typeof AuthenticatedMitgliederRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/finanzen': {
+      id: '/_authenticated/finanzen'
+      path: '/finanzen'
+      fullPath: '/finanzen'
+      preLoaderRoute: typeof AuthenticatedFinanzenRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/events': {
+      id: '/_authenticated/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof AuthenticatedEventsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/einstellungen': {
+      id: '/_authenticated/einstellungen'
+      path: '/einstellungen'
+      fullPath: '/einstellungen'
+      preLoaderRoute: typeof AuthenticatedEinstellungenRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -140,12 +266,24 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEinstellungenRoute: typeof AuthenticatedEinstellungenRoute
+  AuthenticatedEventsRoute: typeof AuthenticatedEventsRoute
+  AuthenticatedFinanzenRoute: typeof AuthenticatedFinanzenRoute
+  AuthenticatedMitgliederRoute: typeof AuthenticatedMitgliederRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
+  AuthenticatedPlatzplanungRoute: typeof AuthenticatedPlatzplanungRoute
+  AuthenticatedSponsorenRoute: typeof AuthenticatedSponsorenRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEinstellungenRoute: AuthenticatedEinstellungenRoute,
+  AuthenticatedEventsRoute: AuthenticatedEventsRoute,
+  AuthenticatedFinanzenRoute: AuthenticatedFinanzenRoute,
+  AuthenticatedMitgliederRoute: AuthenticatedMitgliederRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+  AuthenticatedPlatzplanungRoute: AuthenticatedPlatzplanungRoute,
+  AuthenticatedSponsorenRoute: AuthenticatedSponsorenRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -160,3 +298,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
