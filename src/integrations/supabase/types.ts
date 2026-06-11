@@ -197,32 +197,41 @@ export type Database = {
       }
       members: {
         Row: {
+          birth_year: number | null
           created_at: string
           email: string | null
           first_name: string
           id: string
           joined_at: string | null
           last_name: string
+          lk_rating: string | null
+          nuliga_id: string | null
           organization_id: string
           role: string | null
         }
         Insert: {
+          birth_year?: number | null
           created_at?: string
           email?: string | null
           first_name: string
           id?: string
           joined_at?: string | null
           last_name: string
+          lk_rating?: string | null
+          nuliga_id?: string | null
           organization_id: string
           role?: string | null
         }
         Update: {
+          birth_year?: number | null
           created_at?: string
           email?: string | null
           first_name?: string
           id?: string
           joined_at?: string | null
           last_name?: string
+          lk_rating?: string | null
+          nuliga_id?: string | null
           organization_id?: string
           role?: string | null
         }
@@ -239,21 +248,33 @@ export type Database = {
       organizations: {
         Row: {
           created_at: string
+          eversports_url: string | null
           id: string
+          logo_url: string | null
+          members_synced_at: string | null
           name: string
           slug: string | null
+          tennis_de_url: string | null
         }
         Insert: {
           created_at?: string
+          eversports_url?: string | null
           id?: string
+          logo_url?: string | null
+          members_synced_at?: string | null
           name: string
           slug?: string | null
+          tennis_de_url?: string | null
         }
         Update: {
           created_at?: string
+          eversports_url?: string | null
           id?: string
+          logo_url?: string | null
+          members_synced_at?: string | null
           name?: string
           slug?: string | null
+          tennis_de_url?: string | null
         }
         Relationships: []
       }
@@ -320,6 +341,59 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "sponsors_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          age_group: string | null
+          association: string | null
+          captain: string | null
+          created_at: string
+          external_url: string | null
+          id: string
+          league: string | null
+          name: string
+          organization_id: string
+          season: string | null
+          training_time: string | null
+          updated_at: string
+        }
+        Insert: {
+          age_group?: string | null
+          association?: string | null
+          captain?: string | null
+          created_at?: string
+          external_url?: string | null
+          id?: string
+          league?: string | null
+          name: string
+          organization_id: string
+          season?: string | null
+          training_time?: string | null
+          updated_at?: string
+        }
+        Update: {
+          age_group?: string | null
+          association?: string | null
+          captain?: string | null
+          created_at?: string
+          external_url?: string | null
+          id?: string
+          league?: string | null
+          name?: string
+          organization_id?: string
+          season?: string | null
+          training_time?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teams_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"

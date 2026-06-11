@@ -18,6 +18,7 @@ import { Route as AuthenticatedSponsorenRouteImport } from './routes/_authentica
 import { Route as AuthenticatedPlatzplanungRouteImport } from './routes/_authenticated/platzplanung'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedMitgliederRouteImport } from './routes/_authenticated/mitglieder'
+import { Route as AuthenticatedMannschaftenRouteImport } from './routes/_authenticated/mannschaften'
 import { Route as AuthenticatedKiRouteImport } from './routes/_authenticated/ki'
 import { Route as AuthenticatedFinanzenRouteImport } from './routes/_authenticated/finanzen'
 import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated/events'
@@ -25,6 +26,7 @@ import { Route as AuthenticatedEinstellungenRouteImport } from './routes/_authen
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedKiIndexRouteImport } from './routes/_authenticated/ki.index'
 import { Route as AuthenticatedKiThreadIdRouteImport } from './routes/_authenticated/ki.$threadId'
+import { Route as ApiPublicHooksSyncTennisRouteImport } from './routes/api/public/hooks/sync-tennis'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -71,6 +73,12 @@ const AuthenticatedMitgliederRoute = AuthenticatedMitgliederRouteImport.update({
   path: '/mitglieder',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMannschaftenRoute =
+  AuthenticatedMannschaftenRouteImport.update({
+    id: '/mannschaften',
+    path: '/mannschaften',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedKiRoute = AuthenticatedKiRouteImport.update({
   id: '/ki',
   path: '/ki',
@@ -107,6 +115,12 @@ const AuthenticatedKiThreadIdRoute = AuthenticatedKiThreadIdRouteImport.update({
   path: '/$threadId',
   getParentRoute: () => AuthenticatedKiRoute,
 } as any)
+const ApiPublicHooksSyncTennisRoute =
+  ApiPublicHooksSyncTennisRouteImport.update({
+    id: '/api/public/hooks/sync-tennis',
+    path: '/api/public/hooks/sync-tennis',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -117,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/events': typeof AuthenticatedEventsRoute
   '/finanzen': typeof AuthenticatedFinanzenRoute
   '/ki': typeof AuthenticatedKiRouteWithChildren
+  '/mannschaften': typeof AuthenticatedMannschaftenRoute
   '/mitglieder': typeof AuthenticatedMitgliederRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/platzplanung': typeof AuthenticatedPlatzplanungRoute
@@ -124,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/api/chat': typeof ApiChatRoute
   '/ki/$threadId': typeof AuthenticatedKiThreadIdRoute
   '/ki/': typeof AuthenticatedKiIndexRoute
+  '/api/public/hooks/sync-tennis': typeof ApiPublicHooksSyncTennisRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -133,6 +149,7 @@ export interface FileRoutesByTo {
   '/einstellungen': typeof AuthenticatedEinstellungenRoute
   '/events': typeof AuthenticatedEventsRoute
   '/finanzen': typeof AuthenticatedFinanzenRoute
+  '/mannschaften': typeof AuthenticatedMannschaftenRoute
   '/mitglieder': typeof AuthenticatedMitgliederRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/platzplanung': typeof AuthenticatedPlatzplanungRoute
@@ -140,6 +157,7 @@ export interface FileRoutesByTo {
   '/api/chat': typeof ApiChatRoute
   '/ki/$threadId': typeof AuthenticatedKiThreadIdRoute
   '/ki': typeof AuthenticatedKiIndexRoute
+  '/api/public/hooks/sync-tennis': typeof ApiPublicHooksSyncTennisRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -152,6 +170,7 @@ export interface FileRoutesById {
   '/_authenticated/events': typeof AuthenticatedEventsRoute
   '/_authenticated/finanzen': typeof AuthenticatedFinanzenRoute
   '/_authenticated/ki': typeof AuthenticatedKiRouteWithChildren
+  '/_authenticated/mannschaften': typeof AuthenticatedMannschaftenRoute
   '/_authenticated/mitglieder': typeof AuthenticatedMitgliederRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/platzplanung': typeof AuthenticatedPlatzplanungRoute
@@ -159,6 +178,7 @@ export interface FileRoutesById {
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/ki/$threadId': typeof AuthenticatedKiThreadIdRoute
   '/_authenticated/ki/': typeof AuthenticatedKiIndexRoute
+  '/api/public/hooks/sync-tennis': typeof ApiPublicHooksSyncTennisRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,6 +191,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/finanzen'
     | '/ki'
+    | '/mannschaften'
     | '/mitglieder'
     | '/onboarding'
     | '/platzplanung'
@@ -178,6 +199,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/ki/$threadId'
     | '/ki/'
+    | '/api/public/hooks/sync-tennis'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -187,6 +209,7 @@ export interface FileRouteTypes {
     | '/einstellungen'
     | '/events'
     | '/finanzen'
+    | '/mannschaften'
     | '/mitglieder'
     | '/onboarding'
     | '/platzplanung'
@@ -194,6 +217,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/ki/$threadId'
     | '/ki'
+    | '/api/public/hooks/sync-tennis'
   id:
     | '__root__'
     | '/'
@@ -205,6 +229,7 @@ export interface FileRouteTypes {
     | '/_authenticated/events'
     | '/_authenticated/finanzen'
     | '/_authenticated/ki'
+    | '/_authenticated/mannschaften'
     | '/_authenticated/mitglieder'
     | '/_authenticated/onboarding'
     | '/_authenticated/platzplanung'
@@ -212,6 +237,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/_authenticated/ki/$threadId'
     | '/_authenticated/ki/'
+    | '/api/public/hooks/sync-tennis'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -220,6 +246,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiPublicHooksSyncTennisRoute: typeof ApiPublicHooksSyncTennisRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -287,6 +314,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMitgliederRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/mannschaften': {
+      id: '/_authenticated/mannschaften'
+      path: '/mannschaften'
+      fullPath: '/mannschaften'
+      preLoaderRoute: typeof AuthenticatedMannschaftenRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/ki': {
       id: '/_authenticated/ki'
       path: '/ki'
@@ -336,6 +370,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedKiThreadIdRouteImport
       parentRoute: typeof AuthenticatedKiRoute
     }
+    '/api/public/hooks/sync-tennis': {
+      id: '/api/public/hooks/sync-tennis'
+      path: '/api/public/hooks/sync-tennis'
+      fullPath: '/api/public/hooks/sync-tennis'
+      preLoaderRoute: typeof ApiPublicHooksSyncTennisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -359,6 +400,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedEventsRoute: typeof AuthenticatedEventsRoute
   AuthenticatedFinanzenRoute: typeof AuthenticatedFinanzenRoute
   AuthenticatedKiRoute: typeof AuthenticatedKiRouteWithChildren
+  AuthenticatedMannschaftenRoute: typeof AuthenticatedMannschaftenRoute
   AuthenticatedMitgliederRoute: typeof AuthenticatedMitgliederRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPlatzplanungRoute: typeof AuthenticatedPlatzplanungRoute
@@ -371,6 +413,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedEventsRoute: AuthenticatedEventsRoute,
   AuthenticatedFinanzenRoute: AuthenticatedFinanzenRoute,
   AuthenticatedKiRoute: AuthenticatedKiRouteWithChildren,
+  AuthenticatedMannschaftenRoute: AuthenticatedMannschaftenRoute,
   AuthenticatedMitgliederRoute: AuthenticatedMitgliederRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPlatzplanungRoute: AuthenticatedPlatzplanungRoute,
@@ -386,6 +429,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiPublicHooksSyncTennisRoute: ApiPublicHooksSyncTennisRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

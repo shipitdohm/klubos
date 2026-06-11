@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/app-shell";
 import {
@@ -11,6 +12,7 @@ import {
   Field,
   Plus,
 } from "@/components/data-ui";
+import { getMyContext } from "@/lib/clubbase.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/platzplanung")({
@@ -28,6 +30,8 @@ type Booking = {
 
 function Page() {
   const qc = useQueryClient();
+  const getCtx = useServerFn(getMyContext);
+  const { data: ctx } = useQuery({ queryKey: ["me"], queryFn: () => getCtx({}) });
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
     facility: "",
@@ -94,6 +98,33 @@ function Page() {
           </PrimaryButton>
         }
       />
+
+      {ctx?.organization?.eversports_url && (
+        <div className="surface-card mb-6 overflow-hidden">
+          <div className="flex items-center justify-between px-5 py-3 hairline-b">
+            <div>
+              <h2 className="text-sm font-semibold">Eversports Live-Buchung</h2>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Direkt eingebettet — Buchungen laufen weiter über Eversports.
+              </p>
+            </div>
+            <a
+              href={ctx.organization.eversports_url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-xs text-primary hover:underline"
+            >
+              In Eversports öffnen ↗
+            </a>
+          </div>
+          <iframe
+            src={ctx.organization.eversports_url}
+            title="Eversports Platzbuchung"
+            className="h-[900px] w-full bg-background"
+          />
+        </div>
+      )}
+
       <DataTable
         rows={data ?? []}
         columns={[
@@ -107,7 +138,7 @@ function Page() {
           { key: "booked_by", label: "Gebucht von", render: (r) => r.booked_by ?? "—" },
         ]}
         onDelete={remove}
-        empty="Noch keine Buchungen."
+        empty="Noch keine eigenen Buchungen."
       />
       <Modal open={open} onClose={() => setOpen(false)} title="Buchung erstellen">
         <form onSubmit={add} className="space-y-4">
