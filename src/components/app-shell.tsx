@@ -10,6 +10,7 @@ import {
   Settings,
   Bell,
   LogOut,
+  Trophy,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -21,6 +22,7 @@ import { toast } from "sonner";
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/mitglieder", label: "Mitglieder", icon: Users },
+  { to: "/mannschaften", label: "Mannschaften", icon: Trophy },
   { to: "/platzplanung", label: "Platzplanung", icon: CalendarRange },
   { to: "/finanzen", label: "Finanzen", icon: Wallet },
   { to: "/sponsoren", label: "Sponsoren", icon: Handshake },
@@ -92,7 +94,18 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-10 flex h-14 items-center justify-between bg-background/80 px-6 backdrop-blur hairline-b">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
+            {data?.organization?.logoSignedUrl ? (
+              <img
+                src={data.organization.logoSignedUrl}
+                alt={`${data.organization.name} Logo`}
+                className="size-7 rounded-md object-cover hairline"
+              />
+            ) : (
+              <div className="flex size-7 items-center justify-center rounded-md bg-secondary text-[10px] font-semibold uppercase text-muted-foreground hairline">
+                {data?.organization?.name?.slice(0, 2) ?? "CB"}
+              </div>
+            )}
             <span className="text-sm font-medium">
               {data?.organization?.name ?? "Dein Verein"}
             </span>
