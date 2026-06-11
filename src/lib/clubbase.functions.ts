@@ -29,26 +29,31 @@ export const createOrganization = createServerFn({ method: "POST" })
   .inputValidator(z.object({ name: z.string().min(2) }))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
+    const organizationId = crypto.randomUUID();
     const slug = data.name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "")
       .slice(0, 40);
 
-    const { data: org, error } = await supabase
+    const organization = {
+      id: organizationId,
+      name: data.name,
+      slug: `${slug}-${Date.now().toString(36)}`,
+    };
+
+    const { error } = await supabase
       .from("organizations")
-      .insert({ name: data.name, slug: `${slug}-${Date.now().toString(36)}` })
-      .select()
-      .single();
+      .insert(organization);
     if (error) throw new Error(error.message);
 
     const { error: upErr } = await supabase
       .from("profiles")
-      .update({ organization_id: org.id })
+      .update({ organization_id: organizationId })
       .eq("id", userId);
     if (upErr) throw new Error(upErr.message);
 
-    return org;
+    return organization;
   });
 
 export const listThreads = createServerFn({ method: "GET" })
