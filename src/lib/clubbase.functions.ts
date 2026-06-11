@@ -90,7 +90,7 @@ export const updateOrganization = createServerFn({ method: "POST" })
 
     const { error } = await supabase
       .from("organizations")
-      .update(patch)
+      .update(patch as never)
       .eq("id", profile.organization_id);
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -202,7 +202,7 @@ async function fetchNuLigaData(verband: string, verein: string) {
 }
 
 async function syncOrganizationFromTennisDe(
-  supabase: Awaited<ReturnType<typeof import("@supabase/supabase-js").createClient>>,
+  supabase: any,
   organizationId: string,
   tennisDeUrl: string,
 ) {
