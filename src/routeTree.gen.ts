@@ -26,6 +26,7 @@ import { Route as AuthenticatedEinstellungenRouteImport } from './routes/_authen
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedKiIndexRouteImport } from './routes/_authenticated/ki.index'
 import { Route as AuthenticatedKiThreadIdRouteImport } from './routes/_authenticated/ki.$threadId'
+import { Route as ApiPublicHooksSyncTennisRouteImport } from './routes/api/public/hooks/sync-tennis'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -114,6 +115,12 @@ const AuthenticatedKiThreadIdRoute = AuthenticatedKiThreadIdRouteImport.update({
   path: '/$threadId',
   getParentRoute: () => AuthenticatedKiRoute,
 } as any)
+const ApiPublicHooksSyncTennisRoute =
+  ApiPublicHooksSyncTennisRouteImport.update({
+    id: '/api/public/hooks/sync-tennis',
+    path: '/api/public/hooks/sync-tennis',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -132,6 +139,7 @@ export interface FileRoutesByFullPath {
   '/api/chat': typeof ApiChatRoute
   '/ki/$threadId': typeof AuthenticatedKiThreadIdRoute
   '/ki/': typeof AuthenticatedKiIndexRoute
+  '/api/public/hooks/sync-tennis': typeof ApiPublicHooksSyncTennisRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -149,6 +157,7 @@ export interface FileRoutesByTo {
   '/api/chat': typeof ApiChatRoute
   '/ki/$threadId': typeof AuthenticatedKiThreadIdRoute
   '/ki': typeof AuthenticatedKiIndexRoute
+  '/api/public/hooks/sync-tennis': typeof ApiPublicHooksSyncTennisRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -169,6 +178,7 @@ export interface FileRoutesById {
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/ki/$threadId': typeof AuthenticatedKiThreadIdRoute
   '/_authenticated/ki/': typeof AuthenticatedKiIndexRoute
+  '/api/public/hooks/sync-tennis': typeof ApiPublicHooksSyncTennisRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/ki/$threadId'
     | '/ki/'
+    | '/api/public/hooks/sync-tennis'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -206,6 +217,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/ki/$threadId'
     | '/ki'
+    | '/api/public/hooks/sync-tennis'
   id:
     | '__root__'
     | '/'
@@ -225,6 +237,7 @@ export interface FileRouteTypes {
     | '/api/chat'
     | '/_authenticated/ki/$threadId'
     | '/_authenticated/ki/'
+    | '/api/public/hooks/sync-tennis'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -233,6 +246,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiPublicHooksSyncTennisRoute: typeof ApiPublicHooksSyncTennisRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -356,6 +370,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedKiThreadIdRouteImport
       parentRoute: typeof AuthenticatedKiRoute
     }
+    '/api/public/hooks/sync-tennis': {
+      id: '/api/public/hooks/sync-tennis'
+      path: '/api/public/hooks/sync-tennis'
+      fullPath: '/api/public/hooks/sync-tennis'
+      preLoaderRoute: typeof ApiPublicHooksSyncTennisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -408,7 +429,18 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiPublicHooksSyncTennisRoute: ApiPublicHooksSyncTennisRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
