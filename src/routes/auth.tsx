@@ -4,6 +4,7 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const search = z.object({
   mode: z.enum(["login", "signup"]).optional(),
@@ -64,6 +65,25 @@ function AuthPage() {
     }
   }
 
+  async function requestPasswordReset() {
+    if (!email) {
+      toast.error("Bitte gib zuerst deine E-Mail-Adresse ein.");
+      return;
+    }
+
+    setLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setLoading(false);
+
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Wir haben dir einen Link zum Zurücksetzen gesendet.");
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-6">
       <div className="w-full max-w-sm">
@@ -109,14 +129,26 @@ function AuthPage() {
               placeholder="••••••••"
             />
 
-            <button
+            {mode === "login" && (
+              <Button
+                type="button"
+                variant="link"
+                className="h-auto justify-start px-0 text-xs"
+                disabled={loading}
+                onClick={requestPasswordReset}
+              >
+                Passwort vergessen?
+              </Button>
+            )}
+
+            <Button
               type="submit"
               disabled={loading}
-              className="mt-2 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md bg-primary text-sm font-medium text-primary-foreground teal-glow transition-transform hover:scale-[1.01] disabled:opacity-60"
+              className="mt-2 h-10 w-full teal-glow transition-transform hover:scale-[1.01]"
             >
               {loading && <Loader2 className="size-4 animate-spin" />}
               Weiter
-            </button>
+            </Button>
           </form>
 
           <div className="mt-6 text-center text-xs text-muted-foreground">

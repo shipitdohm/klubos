@@ -28,7 +28,9 @@ function Page() {
       const { data } = await supabase
         .from("widget_settings")
         .select("widget_key, enabled");
-      return new Map(data?.map((d) => [d.widget_key, d.enabled]) ?? []);
+      return Object.fromEntries(
+        data?.map((setting) => [setting.widget_key, setting.enabled]) ?? [],
+      );
     },
   });
 
@@ -62,7 +64,7 @@ function Page() {
         </div>
         <div className="divide-y divide-border/40">
           {WIDGETS.map((w) => {
-            const enabled = settings?.get(w.key) !== false;
+            const enabled = settings?.[w.key] !== false;
             return (
               <div
                 key={w.key}
