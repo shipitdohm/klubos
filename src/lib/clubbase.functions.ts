@@ -4,29 +4,6 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const LOGO_SIGNED_URL_TTL_SECONDS = 60 * 60;
 
-async function loadOrganization(
-  supabase: Awaited<ReturnType<typeof import("@supabase/supabase-js").createClient>>,
-  organizationId: string,
-) {
-  const { data: org } = await supabase
-    .from("organizations")
-    .select(
-      "id, name, slug, logo_url, tennis_de_url, eversports_url, members_synced_at",
-    )
-    .eq("id", organizationId)
-    .maybeSingle();
-  if (!org) return null;
-
-  let logoSignedUrl: string | null = null;
-  if (org.logo_url) {
-    const { data: signed } = await supabase.storage
-      .from("club-assets")
-      .createSignedUrl(org.logo_url, LOGO_SIGNED_URL_TTL_SECONDS);
-    logoSignedUrl = signed?.signedUrl ?? null;
-  }
-  return { ...org, logoSignedUrl };
-}
-
 export const getMyContext = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
@@ -37,10 +14,25 @@ export const getMyContext = createServerFn({ method: "GET" })
       .eq("id", userId)
       .maybeSingle();
 
-    const organization = profile?.organization_id
-      ? await loadOrganization(supabase, profile.organization_id)
-      : null;
-    return { profile, organization };
+    if (!profile?.organization_id) return { profile, organization: null };
+
+    const { data: org } = await supabase
+      .from("organizations")
+      .select(
+        "id, name, slug, logo_url, tennis_de_url, eversports_url, members_synced_at",
+      )
+      .eq("id", profile.organization_id)
+      .maybeSingle();
+    if (!org) return { profile, organization: null };
+
+    let logoSignedUrl: string | null = null;
+    if (org.logo_url) {
+      const { data: signed } = await supabase.storage
+        .from("club-assets")
+        .createSignedUrl(org.logo_url, LOGO_SIGNED_URL_TTL_SECONDS);
+      logoSignedUrl = signed?.signedUrl ?? null;
+    }
+    return { profile, organization: { ...org, logoSignedUrl } };
   });
 
 export const createOrganization = createServerFn({ method: "POST" })
