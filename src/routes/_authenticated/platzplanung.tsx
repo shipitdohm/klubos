@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/app-shell";
 import {
@@ -11,6 +12,7 @@ import {
   Field,
   Plus,
 } from "@/components/data-ui";
+import { getMyContext } from "@/lib/clubbase.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/platzplanung")({
@@ -28,6 +30,8 @@ type Booking = {
 
 function Page() {
   const qc = useQueryClient();
+  const getCtx = useServerFn(getMyContext);
+  const { data: ctx } = useQuery({ queryKey: ["me"], queryFn: () => getCtx({}) });
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({
     facility: "",

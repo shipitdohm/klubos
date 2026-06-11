@@ -18,6 +18,7 @@ import { Route as AuthenticatedSponsorenRouteImport } from './routes/_authentica
 import { Route as AuthenticatedPlatzplanungRouteImport } from './routes/_authenticated/platzplanung'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedMitgliederRouteImport } from './routes/_authenticated/mitglieder'
+import { Route as AuthenticatedMannschaftenRouteImport } from './routes/_authenticated/mannschaften'
 import { Route as AuthenticatedKiRouteImport } from './routes/_authenticated/ki'
 import { Route as AuthenticatedFinanzenRouteImport } from './routes/_authenticated/finanzen'
 import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated/events'
@@ -71,6 +72,12 @@ const AuthenticatedMitgliederRoute = AuthenticatedMitgliederRouteImport.update({
   path: '/mitglieder',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMannschaftenRoute =
+  AuthenticatedMannschaftenRouteImport.update({
+    id: '/mannschaften',
+    path: '/mannschaften',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedKiRoute = AuthenticatedKiRouteImport.update({
   id: '/ki',
   path: '/ki',
@@ -117,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/events': typeof AuthenticatedEventsRoute
   '/finanzen': typeof AuthenticatedFinanzenRoute
   '/ki': typeof AuthenticatedKiRouteWithChildren
+  '/mannschaften': typeof AuthenticatedMannschaftenRoute
   '/mitglieder': typeof AuthenticatedMitgliederRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/platzplanung': typeof AuthenticatedPlatzplanungRoute
@@ -133,6 +141,7 @@ export interface FileRoutesByTo {
   '/einstellungen': typeof AuthenticatedEinstellungenRoute
   '/events': typeof AuthenticatedEventsRoute
   '/finanzen': typeof AuthenticatedFinanzenRoute
+  '/mannschaften': typeof AuthenticatedMannschaftenRoute
   '/mitglieder': typeof AuthenticatedMitgliederRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/platzplanung': typeof AuthenticatedPlatzplanungRoute
@@ -152,6 +161,7 @@ export interface FileRoutesById {
   '/_authenticated/events': typeof AuthenticatedEventsRoute
   '/_authenticated/finanzen': typeof AuthenticatedFinanzenRoute
   '/_authenticated/ki': typeof AuthenticatedKiRouteWithChildren
+  '/_authenticated/mannschaften': typeof AuthenticatedMannschaftenRoute
   '/_authenticated/mitglieder': typeof AuthenticatedMitgliederRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/platzplanung': typeof AuthenticatedPlatzplanungRoute
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/events'
     | '/finanzen'
     | '/ki'
+    | '/mannschaften'
     | '/mitglieder'
     | '/onboarding'
     | '/platzplanung'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/einstellungen'
     | '/events'
     | '/finanzen'
+    | '/mannschaften'
     | '/mitglieder'
     | '/onboarding'
     | '/platzplanung'
@@ -205,6 +217,7 @@ export interface FileRouteTypes {
     | '/_authenticated/events'
     | '/_authenticated/finanzen'
     | '/_authenticated/ki'
+    | '/_authenticated/mannschaften'
     | '/_authenticated/mitglieder'
     | '/_authenticated/onboarding'
     | '/_authenticated/platzplanung'
@@ -287,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMitgliederRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/mannschaften': {
+      id: '/_authenticated/mannschaften'
+      path: '/mannschaften'
+      fullPath: '/mannschaften'
+      preLoaderRoute: typeof AuthenticatedMannschaftenRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/ki': {
       id: '/_authenticated/ki'
       path: '/ki'
@@ -359,6 +379,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedEventsRoute: typeof AuthenticatedEventsRoute
   AuthenticatedFinanzenRoute: typeof AuthenticatedFinanzenRoute
   AuthenticatedKiRoute: typeof AuthenticatedKiRouteWithChildren
+  AuthenticatedMannschaftenRoute: typeof AuthenticatedMannschaftenRoute
   AuthenticatedMitgliederRoute: typeof AuthenticatedMitgliederRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPlatzplanungRoute: typeof AuthenticatedPlatzplanungRoute
@@ -371,6 +392,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedEventsRoute: AuthenticatedEventsRoute,
   AuthenticatedFinanzenRoute: AuthenticatedFinanzenRoute,
   AuthenticatedKiRoute: AuthenticatedKiRouteWithChildren,
+  AuthenticatedMannschaftenRoute: AuthenticatedMannschaftenRoute,
   AuthenticatedMitgliederRoute: AuthenticatedMitgliederRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPlatzplanungRoute: AuthenticatedPlatzplanungRoute,
@@ -390,3 +412,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
