@@ -1,0 +1,30 @@
+# Render Blueprint — ClubOS
+# https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: clubos
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: true
+    headers:
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+# Astro builds one HTML file per route (format: directory).
+# No SPA catch-all rewrite needed for the current static site.
+
+# Optional: add when Supabase proxy or API routes are needed
+#  - type: web
+#    name: clubos-api
+#    runtime: node
+#    buildCommand: npm install && npm run build
+#    startCommand: node dist/server/entry.mjs
+#    plan: starter

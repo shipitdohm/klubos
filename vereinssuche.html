@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vereinssuche - ClubOS</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 16% 10%, rgba(187, 85, 34, 0.1), transparent 28rem),
+    linear-gradient(135deg, #f7f1eb 0%, var(--bg) 44%, #ebe4de 100%);
+  color: var(--fg);
+}
+
+.vs-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.25rem, 3.5vw, 3rem);
+}
+
+.vs-frame {
+  width: min(100%, 720px);
+}
+
+.vs-brand-outside {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0 0.8rem 0.25rem;
+  opacity: 0.72;
+}
+
+.vs-brand-outside img {
+  width: 74px;
+  height: auto;
+  filter: brightness(0) saturate(100%) invert(22%) sepia(8%) saturate(740%) hue-rotate(343deg) brightness(90%) contrast(88%);
+}
+
+.vs-card {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: auto;
+  display: block;
+  padding: clamp(0.9rem, 2vw, 1.35rem);
+  border: 0.5px solid var(--border);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 28px 90px rgba(45, 33, 25, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.vs-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(27, 24, 22, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27, 24, 22, 0.035) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(90deg, rgba(0,0,0,0.5), transparent 66%);
+}
+
+.vs-result {
+  position: relative;
+  z-index: 1;
+  border: 0.5px solid var(--border);
+  border-radius: 22px;
+}
+
+.vs-result {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 0.9rem;
+  min-height: 600px;
+  padding: clamp(0.95rem, 1.8vw, 1.3rem);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.vs-result.is-search,
+.vs-result.is-loading {
+  grid-template-rows: 1fr;
+}
+
+.vs-result.is-error {
+  grid-template-rows: auto auto;
+  align-content: start;
+  min-height: 210px;
+}
+
+.vs-search-panel,
+.vs-animation-panel,
+.vs-status-panel,
+.vs-error-actions {
+  display: none;
+}
+
+.vs-result.is-search .vs-search-panel,
+.vs-result.is-loading .vs-animation-panel {
+  display: block;
+}
+
+.vs-result.is-result .vs-status-panel,
+.vs-result.is-result .vs-club-head,
+.vs-result.is-result .vs-fields,
+.vs-result.is-result .vs-actions,
+.vs-result.is-error .vs-status-panel {
+  display: grid;
+}
+
+.vs-result.is-result .vs-actions {
+  display: flex;
+}
+
+.vs-result.is-error .vs-error-actions {
+  display: flex;
+}
+
+.vs-result.is-search .vs-club-head,
+.vs-result.is-search .vs-fields,
+.vs-result.is-search .vs-actions,
+.vs-result.is-search .vs-error-actions,
+.vs-result.is-loading .vs-status-panel,
+.vs-result.is-loading .vs-club-head,
+.vs-result.is-loading .vs-fields,
+.vs-result.is-loading .vs-actions,
+.vs-result.is-loading .vs-error-actions,
+.vs-result.is-error .vs-club-head,
+.vs-result.is-error .vs-fields,
+.vs-result.is-error .vs-actions {
+  display: none;
+}
+
+.vs-search-panel {
+  align-self: center;
+  padding: clamp(1.05rem, 2.4vw, 1.7rem);
+  border: 0.5px solid var(--border);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(250,246,242,0.9));
+}
+
+.vs-search-eyebrow {
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 720;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.vs-search-title {
+  max-width: 10ch;
+  font-size: clamp(2rem, 7vw, 3.35rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  font-weight: 680;
+}
+
+.vs-search-copy {
+  max-width: 48ch;
+  margin-top: 0.8rem;
+  color: var(--fg-muted);
+  font-size: 0.94rem;
+}
+
+.vs-search-form {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.45rem;
+}
+
+.vs-search-form label {
+  color: var(--fg-dim);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vs-search-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.65rem;
+}
+
+.vs-search-row input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.68rem 0.78rem;
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 520;
+  outline: none;
+}
+
+.vs-search-row input:focus {
+  border-color: rgba(187, 85, 34, 0.42);
+  box-shadow: 0 0 0 4px rgba(187, 85, 34, 0.06);
+}
+
+.vs-animation-panel {
+  align-self: center;
+  padding: clamp(1.05rem, 2.4vw, 1.7rem);
+  border: 0.5px solid var(--border);
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(250,246,242,0.9));
+}
+
+.vs-animation-title {
+  font-size: clamp(1.28rem, 3vw, 1.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 650;
+}
+
+.vs-animation-copy {
+  margin-top: 0.35rem;
+  color: var(--fg-muted);
+  font-size: 0.9rem;
+}
+
+.vs-court {
+  position: relative;
+  height: 172px;
+  margin-top: 1.1rem;
+  overflow: hidden;
+  border: 0.5px solid rgba(187, 85, 34, 0.18);
+  border-radius: 18px;
+  background:
+    linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(47, 126, 82, 0.18) 50%, transparent calc(50% + 0.5px)),
+    linear-gradient(rgba(47, 126, 82, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47, 126, 82, 0.08) 1px, transparent 1px),
+    #fbf8f3;
+  background-size: 100% 100%, 100% 44px, 48px 100%, 100% 100%;
+}
+
+.vs-court::before {
+  content: "";
+  position: absolute;
+  inset: 22px 30px;
+  border: 1px solid rgba(47, 126, 82, 0.24);
+  border-radius: 10px;
+  background:
+    linear-gradient(90deg, transparent calc(50% - 0.5px), rgba(47, 126, 82, 0.26) 50%, transparent calc(50% + 0.5px)),
+    linear-gradient(rgba(47, 126, 82, 0.18) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 50%;
+}
+
+.vs-court::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 18px;
+  bottom: 18px;
+  width: 1px;
+  background: rgba(27, 24, 22, 0.14);
+}
+
+.vs-ball {
+  position: absolute;
+  left: 36px;
+  top: 50%;
+  z-index: 2;
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  background: #bb5522;
+  box-shadow: 0 0 0 6px rgba(187, 85, 34, 0.08), 0 10px 24px rgba(187, 85, 34, 0.25);
+  animation: tennisRally 1.08s cubic-bezier(0.45, 0, 0.2, 1) infinite alternate;
+}
+
+@keyframes tennisRally {
+  0% { transform: translate(0, -12px); }
+  42% { transform: translate(230px, 12px); }
+  100% { transform: translate(460px, -8px); }
+}
+
+.vs-status-panel {
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: center;
+  min-height: 82px;
+  padding: 0.95rem 1rem;
+  border: 0.5px solid var(--border);
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(250,246,242,0.9));
+}
+
+.vs-status-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+  color: var(--fg-muted);
+}
+
+.vs-status-panel.is-success .vs-status-icon {
+  background: rgba(47, 126, 82, 0.12);
+  color: #2f7e52;
+}
+
+.vs-status-panel.is-error .vs-status-icon {
+  background: rgba(174, 58, 45, 0.12);
+  color: #ae3a2d;
+}
+
+.vs-status-icon svg {
+  width: 23px;
+  height: 23px;
+  stroke-width: 2.4;
+}
+
+.vs-status-title {
+  font-size: clamp(1.12rem, 2vw, 1.45rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 650;
+}
+
+.vs-status-text {
+  margin-top: 0.22rem;
+  color: var(--fg-muted);
+  font-size: 0.9rem;
+}
+
+.vs-status-text:empty {
+  display: none;
+}
+
+.vs-club-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.82rem;
+  border: 0.5px solid var(--border);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--surface-2) 40%, #fff);
+}
+
+.vs-club-logo-card {
+  width: 92px;
+  height: 92px;
+  display: grid;
+  place-items: center;
+  border: 0.5px solid var(--border);
+  border-radius: 24px;
+  background: #fff;
+}
+
+.vs-club-logo-card img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
+.vs-crest-fallback {
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  border-radius: 22px;
+  background: rgba(187, 85, 34, 0.1);
+  color: var(--accent);
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.vs-club-name {
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-weight: 650;
+}
+
+.vs-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.vs-field {
+  min-width: 0;
+}
+
+.vs-field label {
+  display: block;
+  margin: 0 0 0.32rem;
+  color: var(--fg-dim);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vs-field .value {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.68rem 0.78rem;
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 520;
+  outline: none;
+}
+
+.vs-field .value:focus {
+  border-color: rgba(187, 85, 34, 0.42);
+  box-shadow: 0 0 0 4px rgba(187, 85, 34, 0.06);
+}
+
+.vs-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
+.vs-error-actions {
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  margin-top: 0.1rem;
+}
+
+.vs-actions .btn {
+  min-height: 46px;
+  border-radius: 14px;
+}
+
+.vs-error-actions .btn {
+  min-height: 46px;
+  border-radius: 14px;
+}
+
+@media (max-width: 980px) {
+  .vs-shell { align-items: flex-start; }
+}
+
+@media (max-width: 640px) {
+  .vs-shell { padding: 1rem; }
+  .vs-brand-outside img { width: 62px; }
+  .vs-card { border-radius: 22px; }
+  .vs-club-head,
+  .vs-fields {
+    grid-template-columns: 1fr;
+  }
+  .vs-search-row { grid-template-columns: 1fr; }
+  .vs-actions,
+  .vs-error-actions { flex-direction: column; }
+  .vs-actions .btn,
+  .vs-error-actions .btn { width: 100%; }
+  @keyframes tennisRally {
+    0% { transform: translate(0, -10px); }
+    42% { transform: translate(42vw, 12px); }
+    100% { transform: translate(72vw, -8px); }
+  }
+}
+</style>
+</head>
+<body>
+
+<main class="vs-shell" data-od-id="vereinssuche-shell">
+  <div class="vs-frame">
+    <a href="index.html" class="vs-brand-outside" aria-label="ClubOS Startseite" data-od-id="vereinssuche-brand">
+      <img src="mr8as03a-clubos_logo_white_transparent.png" alt="ClubOS">
+    </a>
+
+    <section class="vs-card" data-od-id="vereinssuche-card">
+      <section class="vs-result" id="vs-result" data-od-id="vereinssuche-result">
+        <div class="vs-search-panel" id="vs-search-panel" data-od-id="vereinssuche-search-panel">
+          <div class="vs-search-eyebrow">Vereinssuche</div>
+          <h1 class="vs-search-title" data-od-id="vereinssuche-search-title">Deinen Verein finden</h1>
+          <p class="vs-search-copy">Wir prüfen Website, Vereinsname und Verbandsdaten. Kürzel wie TC werden dabei automatisch auch ausgeschrieben geprüft.</p>
+          <form class="vs-search-form" id="vs-search-form" data-od-id="vereinssuche-search-form" onsubmit="return handleClubSearch(event)">
+            <label for="vs-query">Vereinsname</label>
+            <div class="vs-search-row">
+              <input id="vs-query" type="search" autocomplete="organization" value="TC Kirchhörde" placeholder="z. B. TC Kirchhörde">
+              <button class="btn btn-primary" type="submit" data-od-id="vereinssuche-submit">Verein suchen</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="vs-animation-panel" id="vs-animation-panel" data-od-id="vereinssuche-animation">
+          <div class="vs-animation-title">Wir spielen den Treffer kurz sauber frei.</div>
+          <div class="vs-animation-copy">Website und Verbandsdaten werden abgeglichen.</div>
+          <div class="vs-court" aria-hidden="true">
+            <span class="vs-ball"></span>
+          </div>
+        </div>
+
+        <div class="vs-status-panel is-success" id="vs-status-panel" data-od-id="vereinssuche-status">
+          <div class="vs-status-icon" id="vs-status-icon" aria-hidden="true"></div>
+          <div>
+            <div class="vs-status-title" id="vs-status-title">Wir haben deinen Verein gefunden!</div>
+            <div class="vs-status-text" id="vs-status-text">Website und Verband sind als öffentliche Quellen verknüpft.</div>
+          </div>
+        </div>
+
+        <div class="vs-club-head">
+          <div class="vs-club-logo-card" id="vs-logo-card" data-od-id="vereinssuche-club-logo"></div>
+          <div>
+            <div class="vs-club-name" id="vs-club-name">TC Kirchhörde</div>
+          </div>
+        </div>
+
+        <div class="vs-fields" data-od-id="vereinssuche-fields">
+          <div class="vs-field">
+            <label for="r-verein">Vereinsname</label>
+            <input class="value" id="r-verein" type="text">
+          </div>
+          <div class="vs-field">
+            <label for="r-ort">Ort</label>
+            <input class="value" id="r-ort" type="text">
+          </div>
+          <div class="vs-field">
+            <label for="r-verband">Verband</label>
+            <input class="value" id="r-verband" type="text">
+          </div>
+          <div class="vs-field">
+            <label for="r-website">Website</label>
+            <input class="value" id="r-website" type="text">
+          </div>
+        </div>
+
+        <div class="vs-actions">
+          <button class="btn btn-ghost" type="button" onclick="resetSearch()">Suche zurücksetzen</button>
+          <button class="btn btn-primary" type="button" onclick="confirmAndProceed()">Weiter zum Dashboard</button>
+        </div>
+
+        <div class="vs-error-actions" data-od-id="vereinssuche-error-actions">
+          <button class="btn btn-ghost" type="button" onclick="resetSearch()">Erneut suchen</button>
+          <a class="btn btn-primary" href="mailto:hallo@clubos.de?subject=Verein%20nicht%20gefunden">Kontaktiere uns</a>
+        </div>
+      </section>
+    </section>
+  </div>
+</main>
+
+<script>
+(function() {
+  const result = document.getElementById('vs-result');
+  const form = document.getElementById('vs-search-form');
+  const queryEl = document.getElementById('vs-query');
+  const statusPanel = document.getElementById('vs-status-panel');
+  const statusIcon = document.getElementById('vs-status-icon');
+  const statusTitle = document.getElementById('vs-status-title');
+  const statusText = document.getElementById('vs-status-text');
+  const logoCard = document.getElementById('vs-logo-card');
+  const clubName = document.getElementById('vs-club-name');
+
+  const fields = {
+    verein: document.getElementById('r-verein'),
+    ort: document.getElementById('r-ort'),
+    verband: document.getElementById('r-verband'),
+    website: document.getElementById('r-website'),
+  };
+
+  const clubs = [
+    {
+      name: 'TC Kirchhörde',
+      legalName: 'Tennis-Club Kirchhörde e.V.',
+      aliases: ['tc kirchhörde', 'tc kirchhoerde', 'tennis club kirchhörde', 'tennis-club kirchhörde', 'tennis club kirchhoerde', 'tennis-club kirchhoerde', 'tennisclub kirchhoerde', 'tck', 'tckirchhoerde'],
+      website: 'https://tennisclubkirchhoerde.de/',
+      logo: 'https://tennisclubkirchhoerde.de/wp-content/uploads/2022/11/TCK_Logo.png',
+      ort: 'Dortmund-Kirchhörde',
+      verband: 'Westfälischer Tennis-Verband',
+    },
+  ];
+
+  const icons = {
+    success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2" stroke-linecap="round"/></svg>',
+  };
+
+  showClub(clubs[0]);
+
+  window.handleClubSearch = function(event) {
+    event.preventDefault();
+    runSearch(queryEl.value);
+    return false;
+  };
+
+  function setMode(mode) {
+    result.classList.remove('is-search', 'is-loading', 'is-result', 'is-error');
+    result.classList.add('is-' + mode);
+  }
+
+  function showSearch() {
+    setMode('search');
+    window.setTimeout(() => {
+      queryEl.focus({ preventScroll: true });
+      queryEl.select();
+    }, 0);
+  }
+
+  function runSearch(rawQuery) {
+    const query = String(rawQuery || '').trim();
+    setMode('loading');
+
+    window.setTimeout(() => {
+      const club = findClub(query);
+      if (club) {
+        showClub(club);
+      } else {
+        showNotFound(query);
+      }
+    }, 1450);
+  }
+
+  function findClub(query) {
+    const variants = expandClubQuery(query);
+    return clubs.find((club) => {
+      const haystack = [
+        club.name,
+        club.legalName,
+        club.website,
+        club.ort,
+        club.verband,
+        ...(club.aliases || []),
+      ].map(normalize);
+
+      return variants.some((variant) => haystack.some((item) => item.includes(variant) || variant.includes(item)));
+    });
+  }
+
+  function expandClubQuery(query) {
+    const normalized = normalize(query);
+    const replacements = [
+      ['tc', 'tennis club'],
+      ['tc', 'tennis-club'],
+      ['tsc', 'tennis sportclub'],
+      ['tsc', 'tennis-sportclub'],
+      ['tv', 'turnverein'],
+      ['tv', 'tennisverein'],
+      ['sc', 'sportclub'],
+      ['sc', 'sport-club'],
+    ];
+    const variants = new Set([normalized]);
+
+    replacements.forEach(([abbr, full]) => {
+      const pattern = new RegExp('(^| )' + abbr + '( |$)', 'g');
+      if (pattern.test(normalized)) {
+        variants.add(normalized.replace(pattern, '$1' + full + '$2').trim());
+      }
+    });
+
+    return Array.from(variants).filter(Boolean);
+  }
+
+  function normalize(value) {
+    return String(value || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[-/]+/g, ' ')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  }
+
+  function showClub(club) {
+    setMode('result');
+    setStatus('success', 'Wir haben deinen Verein gefunden!', 'Logo, Website und Verband sind als öffentliche Quellen verknüpft.');
+    clubName.textContent = club.name;
+    renderLogo(club);
+    fields.verein.value = club.legalName;
+    fields.ort.value = club.ort;
+    fields.verband.value = club.verband;
+    fields.website.value = club.website;
+  }
+
+  function showNotFound(query) {
+    setMode('error');
+    setStatus('error', 'Leider konnten wir keinen passenden Verein finden', '');
+    clubName.textContent = query || 'Kein Treffer';
+    renderFallbackLogo(getInitials(query || 'Verein'));
+    fields.verein.value = query || '';
+    fields.ort.value = '';
+    fields.verband.value = '';
+    fields.website.value = '';
+  }
+
+  function setStatus(type, title, text) {
+    const statusType = type === 'search' ? 'success' : type;
+    statusPanel.className = 'vs-status-panel is-' + statusType;
+    statusIcon.innerHTML = icons[type] || icons.search;
+    statusTitle.textContent = title;
+    statusText.textContent = text;
+  }
+
+  function renderLogo(club) {
+    logoCard.innerHTML = '';
+    const img = document.createElement('img');
+    img.alt = club.name + ' Wappen';
+    img.src = club.logo;
+    img.onerror = () => renderFallbackLogo(getInitials(club.name));
+    logoCard.appendChild(img);
+  }
+
+  function renderFallbackLogo(initials) {
+    logoCard.innerHTML = '<div class="vs-crest-fallback">' + escapeHtml(initials || 'V') + '</div>';
+  }
+
+  function getInitials(name) {
+    return String(name || '')
+      .replace(/\d+/g, '')
+      .trim()
+      .split(/[\s-]+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((word) => word[0])
+      .join('')
+      .toUpperCase();
+  }
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, (char) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;',
+    }[char]));
+  }
+
+  window.resetSearch = function() {
+    showSearch();
+  };
+
+  window.confirmAndProceed = function() {
+    const data = {
+      verein: fields.verein.value,
+      website: fields.website.value,
+      ort: fields.ort.value,
+      verband: fields.verband.value,
+    };
+
+    try {
+      localStorage.setItem('clubos_verein', JSON.stringify(data));
+    } catch (_) {}
+
+    window.location.href = 'dashboard.html';
+  };
+})();
+</script>
+
+</body>
+</html>

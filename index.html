@@ -1,0 +1,2844 @@
+<!doctype html>
+<html lang="de"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClubOS — Startseite</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+html { scroll-behavior: auto; }
+.site-grid,
+.site-grid-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.site-grid {
+  background-image:
+    linear-gradient(rgba(17, 24, 39, 0.055) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, rgba(17, 24, 39, 0.055) 0.5px, transparent 0.5px);
+  background-size: 60px 60px;
+  background-position: center top;
+  opacity: 0.42;
+  overflow: hidden;
+}
+.grid-hotspot {
+  position: absolute;
+  width: min(46vw, 620px);
+  aspect-ratio: 1.35;
+  background-image:
+    linear-gradient(rgba(17, 24, 39, 0.11) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, rgba(17, 24, 39, 0.11) 0.5px, transparent 0.5px);
+  background-size: 60px 60px;
+  background-position: center top;
+  border-radius: 50%;
+  opacity: 0.34;
+  filter: blur(0.2px);
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at center, black 0 16%, rgba(0, 0, 0, 0.55) 34%, transparent 68%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 0 16%, rgba(0, 0, 0, 0.55) 34%, transparent 68%);
+}
+.grid-hotspot.is-a { top: 6vh; left: -8vw; }
+.grid-hotspot.is-b { top: 20vh; right: -9vw; opacity: 0.28; transform: rotate(7deg); }
+.grid-hotspot.is-c { top: 58vh; left: 14vw; width: min(34vw, 460px); opacity: 0.22; transform: rotate(-6deg); }
+.grid-hotspot.is-d { bottom: 8vh; right: 8vw; width: min(38vw, 520px); opacity: 0.26; }
+.site-grid-canvas {
+  opacity: 0.95;
+}
+main,
+footer.landing-footer {
+  position: relative;
+  z-index: 1;
+}
+header.landing-header {
+  position: fixed;
+  z-index: 50;
+}
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── Alternative Hero: floating app widgets ── */
+.hero-widget-cloud {
+  min-height: 112vh;
+  isolation: isolate;
+}
+.hero-widget-cloud .hero-content {
+  z-index: 3;
+  max-width: 760px;
+}
+.hero-orbit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.floating-widget {
+  position: absolute;
+  width: clamp(150px, 18vw, 260px);
+  background: rgba(255, 255, 255, 0.86);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem;
+  text-align: left;
+  box-shadow: 0 18px 46px rgba(17,24,39,0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  animation: heroFloat 7.5s ease-in-out infinite;
+  transform: var(--float-transform);
+}
+.floating-widget:nth-child(2) { animation-delay: -1.8s; }
+.floating-widget:nth-child(3) { animation-delay: -3.2s; }
+.floating-widget:nth-child(4) { animation-delay: -4.6s; }
+.floating-widget:nth-child(5) { animation-delay: -5.4s; }
+.floating-widget h3 {
+  font-size: 0.78rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.35rem;
+}
+.floating-widget p {
+  font-size: 0.66rem;
+  line-height: 1.45;
+  color: var(--fg-dim);
+  margin: 0;
+}
+.floating-widget .mini-row,
+.floating-widget .mini-bars,
+.floating-widget .mini-calendar,
+.floating-widget .mini-chat {
+  margin-top: 0.75rem;
+}
+.mini-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.65rem;
+  color: var(--fg-muted);
+}
+.mini-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 0.5px solid rgba(187,85,34,0.35);
+  border-radius: 999px;
+  padding: 0.25rem 0.5rem;
+  color: var(--accent);
+  background: rgba(187,85,34,0.08);
+}
+.mini-bars {
+  display: grid;
+  gap: 0.32rem;
+}
+.mini-bars span {
+  display: block;
+  height: 0.48rem;
+  border-radius: 999px;
+  background: rgba(187,85,34,0.24);
+}
+.mini-bars span:nth-child(2) { width: 72%; background: rgba(245,166,35,0.22); }
+.mini-bars span:nth-child(3) { width: 48%; background: rgba(48,164,108,0.24); }
+.mini-calendar {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.25rem;
+}
+.mini-calendar span {
+  aspect-ratio: 1.25;
+  border-radius: 4px;
+  background: var(--surface-2);
+  border: 0.5px solid rgba(17,24,39,0.07);
+}
+.mini-calendar span:nth-child(2),
+.mini-calendar span:nth-child(4),
+.mini-calendar span:nth-child(8) {
+  background: rgba(187,85,34,0.24);
+  border-color: rgba(187,85,34,0.36);
+}
+.mini-chat {
+  display: grid;
+  gap: 0.35rem;
+}
+.mini-chat span {
+  display: block;
+  width: 86%;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: rgba(17,24,39,0.08);
+}
+.mini-chat span:nth-child(2) {
+  width: 62%;
+  justify-self: end;
+  background: rgba(187,85,34,0.42);
+}
+.floating-widget.is-social { left: -1.2rem; top: 23%; --float-transform: rotate(-7deg); }
+.floating-widget.is-booking { right: -0.8rem; top: 22%; --float-transform: rotate(7deg); }
+.floating-widget.is-finance { left: 7%; bottom: 17%; --float-transform: rotate(6deg); }
+.floating-widget.is-ai { right: 6%; bottom: 18%; --float-transform: rotate(-6deg); }
+.floating-widget.is-members { left: 50%; bottom: 2.5rem; width: clamp(220px, 24vw, 330px); --float-transform: translateX(-50%) rotate(0deg); }
+@keyframes heroFloat {
+  0%, 100% { transform: var(--float-transform) translateY(0); }
+  50% { transform: var(--float-transform) translateY(-14px); }
+}
+@media (max-width: 900px) {
+  .hero-widget-cloud {
+    min-height: auto;
+    padding-bottom: 3rem;
+  }
+  .hero-orbit {
+    position: relative;
+    inset: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+    width: min(100%, 680px);
+    margin-top: 2rem;
+  }
+  .floating-widget,
+  .floating-widget.is-social,
+  .floating-widget.is-booking,
+  .floating-widget.is-finance,
+  .floating-widget.is-ai,
+  .floating-widget.is-members {
+    position: static;
+    width: auto;
+    animation: none;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .floating-widget { animation: none; }
+}
+
+/* ── Widget Cards ── */
+.widget-grid-alt {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.widget-grid-alt[data-od-id="path-3-2-1"] {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: stretch;
+}
+.widget-grid-alt[data-od-id="path-3-2-1"] .widget-card:nth-child(1) { grid-column: span 7; }
+.widget-grid-alt[data-od-id="path-3-2-1"] .widget-card:nth-child(2) { grid-column: span 5; }
+.widget-grid-alt[data-od-id="path-3-2-1"] .widget-card:nth-child(3),
+.widget-grid-alt[data-od-id="path-3-2-1"] .widget-card:nth-child(4),
+.widget-grid-alt[data-od-id="path-3-2-1"] .widget-card:nth-child(5) { grid-column: span 4; }
+.widget-grid-alt[data-od-id="path-3-2-1"] .widget-card:nth-child(6),
+.widget-grid-alt[data-od-id="path-3-2-1"] .widget-card:nth-child(7) { grid-column: span 6; }
+.widget-grid-alt[data-od-id="path-3-2-1"] .widget-card {
+  opacity: 0;
+  transform: translateY(28px) scale(0.965);
+  filter: blur(10px);
+  transform-origin: center bottom;
+  will-change: opacity, transform, filter;
+}
+.widget-grid-alt[data-od-id="path-3-2-1"].visible .widget-card {
+  animation: widgetCardPopIn 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.widget-grid-alt[data-od-id="path-3-2-1"].visible .widget-card:nth-child(1) { animation-delay: 0.04s; }
+.widget-grid-alt[data-od-id="path-3-2-1"].visible .widget-card:nth-child(2) { animation-delay: 0.22s; }
+.widget-grid-alt[data-od-id="path-3-2-1"].visible .widget-card:nth-child(3) { animation-delay: 0.42s; }
+.widget-grid-alt[data-od-id="path-3-2-1"].visible .widget-card:nth-child(4) { animation-delay: 0.58s; }
+.widget-grid-alt[data-od-id="path-3-2-1"].visible .widget-card:nth-child(5) { animation-delay: 0.74s; }
+.widget-grid-alt[data-od-id="path-3-2-1"].visible .widget-card:nth-child(6) { animation-delay: 0.94s; }
+.widget-grid-alt[data-od-id="path-3-2-1"].visible .widget-card:nth-child(7) { animation-delay: 1.1s; }
+.widget-grid-alt[data-od-id="path-3-2-1"] .pl-booked,
+.widget-grid-alt[data-od-id="path-3-2-1"] .pl-booked2,
+.widget-grid-alt[data-od-id="path-3-2-1"] .pl-booked3,
+.widget-grid-alt[data-od-id="path-3-2-1"] .pl-today {
+  animation: widgetCellPulse 3.6s ease-in-out infinite;
+}
+.widget-grid-alt[data-od-id="path-3-2-1"] .pl-booked2 { animation-delay: 0.45s; }
+.widget-grid-alt[data-od-id="path-3-2-1"] .pl-booked3 { animation-delay: 0.9s; }
+.widget-grid-alt[data-od-id="path-3-2-1"] .pl-today { animation-delay: 1.35s; }
+.widget-grid-alt[data-od-id="path-3-2-1"] .mm-row,
+.widget-grid-alt[data-od-id="path-3-2-1"] .sp-row {
+  animation: widgetRowBreathe 4.8s ease-in-out infinite;
+}
+.widget-grid-alt[data-od-id="path-3-2-1"] .mm-row:nth-child(2),
+.widget-grid-alt[data-od-id="path-3-2-1"] .sp-row:nth-child(2) { animation-delay: 0.4s; }
+.widget-grid-alt[data-od-id="path-3-2-1"] .mm-row:nth-child(3),
+.widget-grid-alt[data-od-id="path-3-2-1"] .sp-row:nth-child(3) { animation-delay: 0.8s; }
+.widget-grid-alt[data-od-id="path-3-2-1"] .mm-row:nth-child(4),
+.widget-grid-alt[data-od-id="path-3-2-1"] .sp-row:nth-child(4) { animation-delay: 1.2s; }
+.widget-grid-alt[data-od-id="path-3-2-1"] .mag-cover,
+.widget-grid-alt[data-od-id="path-3-2-1"] .so-img {
+  animation: widgetPreviewGlow 5.2s ease-in-out infinite;
+}
+.widget-grid-alt[data-od-id="path-3-2-1"] .mag-thumbs span {
+  transform-origin: left center;
+  animation: widgetThumbScan 4.4s ease-in-out infinite;
+}
+.widget-grid-alt[data-od-id="path-3-2-1"] .mag-thumbs span:nth-child(2) { animation-delay: 0.5s; }
+.widget-grid-alt[data-od-id="path-3-2-1"] .mag-thumbs span:nth-child(3) { animation-delay: 1s; }
+.widget-grid-alt[data-od-id="path-3-2-1"] [data-ai-prompt]::after {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 0.85em;
+  margin-left: 2px;
+  background: var(--accent);
+  animation: widgetCursorBlink 0.9s steps(2, start) infinite;
+  vertical-align: -0.1em;
+}
+@keyframes widgetCellPulse {
+  0%, 100% { filter: brightness(1); transform: translateY(0); }
+  50% { filter: brightness(1.35); transform: translateY(-1px); }
+}
+@keyframes widgetRowBreathe {
+  0%, 100% { opacity: 0.72; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(2px); }
+}
+@keyframes widgetPreviewGlow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.18) saturate(1.08); }
+}
+@keyframes widgetThumbScan {
+  0%, 100% { transform: scaleX(0.72); opacity: 0.72; }
+  50% { transform: scaleX(1); opacity: 1; }
+}
+@keyframes widgetCursorBlink {
+  0%, 45% { opacity: 1; }
+  46%, 100% { opacity: 0; }
+}
+@keyframes widgetCardPopIn {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.965);
+    filter: blur(10px);
+  }
+  58% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.006);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+.widget-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: border-color 0.25s;
+  display: flex;
+  flex-direction: column;
+}
+.widget-card:hover {
+  border-color: var(--fg-dim);
+}
+.widget-card h3 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+}
+.widget-card > p {
+  font-size: 0.75rem;
+  color: var(--fg-dim);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+/* ── Widget Previews ── */
+.wp {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-top: auto;
+}
+.wp-magazine {
+  background: linear-gradient(135deg, #E7F5F4, #EAF0FF);
+  padding: 0.75rem;
+}
+.wp-magazine .mag-cover {
+  background: linear-gradient(135deg, #e83e8c, #6f42c1);
+  border-radius: 6px;
+  padding: 0.75rem;
+  color: #fff;
+}
+.wp-magazine .mag-cover .mag-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.25rem;
+}
+.wp-magazine .mag-cover .mag-sub {
+  font-size: 0.625rem;
+  opacity: 0.8;
+}
+.wp-magazine .mag-thumbs {
+  display: flex;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+.wp-magazine .mag-thumbs span {
+  flex: 1;
+  height: 1.25rem;
+  border-radius: 3px;
+  background: rgba(17,24,39,0.08);
+}
+.wp-magazine .mag-thumbs span:nth-child(1) { background: linear-gradient(135deg, #fd7e14, #e83e8c); }
+.wp-magazine .mag-thumbs span:nth-child(2) { background: linear-gradient(135deg, #C8753C, #D8A574); }
+.wp-magazine .mag-thumbs span:nth-child(3) { background: linear-gradient(135deg, #ffc107, #fd7e14); }
+
+.wp-articlebuild {
+  background: #FFFFFF;
+  padding: 0.72rem;
+  display: grid;
+  gap: 0.42rem;
+}
+.wp-articlebuild .ab-page {
+  border-radius: 7px;
+  border: 0.5px solid var(--border);
+  background: var(--surface);
+  padding: 0.52rem;
+  display: grid;
+  gap: 0.36rem;
+  overflow: hidden;
+}
+.wp-articlebuild .ab-image {
+  height: 2.1rem;
+  border-radius: 5px;
+  background:
+    linear-gradient(135deg, rgba(187,85,34,0.22), rgba(17,24,39,0.055)),
+    repeating-linear-gradient(135deg, rgba(17,24,39,0.055) 0 1px, transparent 1px 7px);
+  border: 0.5px solid rgba(187,85,34,0.16);
+  transform-origin: left center;
+  animation: abBlockBuild 6.8s cubic-bezier(0.16, 1, 0.3, 1) infinite both;
+}
+.wp-articlebuild .ab-title {
+  display: grid;
+  gap: 0.18rem;
+}
+.wp-articlebuild .ab-title i,
+.wp-articlebuild .ab-line,
+.wp-articlebuild .ab-meta i {
+  display: block;
+  height: 0.22rem;
+  border-radius: 999px;
+  background: rgba(17,24,39,0.12);
+  transform-origin: left center;
+  animation: abLineBuild 6.8s cubic-bezier(0.16, 1, 0.3, 1) infinite both;
+}
+.wp-articlebuild .ab-title i {
+  height: 0.28rem;
+  background: rgba(240,240,240,0.82);
+}
+.wp-articlebuild .ab-title i:first-child { width: 68%; animation-delay: 0.45s; }
+.wp-articlebuild .ab-title i:last-child { width: 44%; animation-delay: 0.75s; }
+.wp-articlebuild .ab-paragraph {
+  display: grid;
+  gap: 0.18rem;
+}
+.wp-articlebuild .ab-paragraph:nth-child(3) .ab-line:nth-child(1) { width: 92%; animation-delay: 1.05s; }
+.wp-articlebuild .ab-paragraph:nth-child(3) .ab-line:nth-child(2) { width: 76%; animation-delay: 1.28s; }
+.wp-articlebuild .ab-paragraph:nth-child(3) .ab-line:nth-child(3) { width: 84%; animation-delay: 1.5s; }
+.wp-articlebuild .ab-paragraph:nth-child(4) .ab-line:nth-child(1) { width: 86%; animation-delay: 1.95s; }
+.wp-articlebuild .ab-paragraph:nth-child(4) .ab-line:nth-child(2) { width: 64%; animation-delay: 2.18s; }
+.wp-articlebuild .ab-paragraph:nth-child(4) .ab-line:nth-child(3) { width: 74%; animation-delay: 2.4s; }
+.wp-articlebuild .ab-meta {
+  display: grid;
+  grid-template-columns: 1fr 0.56fr;
+  gap: 0.26rem;
+}
+.wp-articlebuild .ab-meta i:first-child {
+  width: 100%;
+  background: rgba(187,85,34,0.65);
+  animation-delay: 2.85s;
+}
+.wp-articlebuild .ab-meta i:last-child {
+  width: 100%;
+  background: rgba(245,158,11,0.72);
+  animation-delay: 3.08s;
+}
+.wp-articlebuild .ab-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  min-height: 1rem;
+}
+.wp-articlebuild .ab-export {
+  width: 3.2rem;
+  height: 0.82rem;
+  border-radius: 999px;
+  background: rgba(187,85,34,0.11);
+  border: 0.5px solid rgba(187,85,34,0.24);
+  animation: abExportBuild 6.8s cubic-bezier(0.16, 1, 0.3, 1) infinite both;
+  animation-delay: 3.45s;
+}
+.wp-articlebuild .ab-dots {
+  display: flex;
+  gap: 0.16rem;
+}
+.wp-articlebuild .ab-dots i {
+  width: 0.24rem;
+  height: 0.24rem;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.4;
+  animation: abDotPulse 1.4s ease-in-out infinite;
+}
+.wp-articlebuild .ab-dots i:nth-child(2) { animation-delay: 0.18s; }
+.wp-articlebuild .ab-dots i:nth-child(3) { animation-delay: 0.36s; }
+@keyframes abBlockBuild {
+  0%, 8% { opacity: 0; transform: scaleX(0.72) translateY(6px); }
+  18%, 82% { opacity: 1; transform: scaleX(1) translateY(0); }
+  100% { opacity: 0.16; transform: scaleX(1) translateY(0); }
+}
+@keyframes abLineBuild {
+  0%, 14% { opacity: 0; transform: scaleX(0.12); }
+  26%, 82% { opacity: 1; transform: scaleX(1); }
+  100% { opacity: 0.18; transform: scaleX(1); }
+}
+@keyframes abExportBuild {
+  0%, 45% { opacity: 0; transform: translateY(4px) scale(0.94); }
+  58%, 86% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0.2; transform: translateY(0) scale(1); }
+}
+@keyframes abDotPulse {
+  0%, 100% { opacity: 0.32; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-1px); }
+}
+
+.wp-brandkit {
+  background: #FFFFFF;
+  padding: 0.72rem;
+  display: grid;
+  gap: 0.5rem;
+}
+.wp-brandkit .bk-ingest {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem;
+}
+.wp-brandkit .bk-logo {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: var(--fg);
+  background: rgba(187,85,34,0.10);
+  border: 0.5px solid rgba(187,85,34,0.32);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.wp-brandkit .bk-stack {
+  min-width: 0;
+  display: grid;
+  gap: 0.28rem;
+}
+.wp-brandkit .bk-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--fg-muted);
+  font-size: 0.5rem;
+  line-height: 1;
+}
+.wp-brandkit .bk-line strong {
+  color: var(--fg);
+  font-size: 0.58rem;
+  font-weight: 650;
+}
+.wp-brandkit .bk-chips {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.2rem;
+}
+.wp-brandkit .bk-chip {
+  min-width: 0;
+  border-radius: 4px;
+  border: 0.5px solid rgba(17,24,39,0.07);
+  background: var(--surface-2);
+  color: var(--fg-dim);
+  font-size: 0.42rem;
+  line-height: 1;
+  text-align: center;
+  padding: 0.25rem 0.16rem;
+}
+.wp-brandkit .bk-memory {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 6px;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  padding: 0.46rem 0.5rem;
+}
+.wp-brandkit .bk-memory::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(187,85,34,0.16), transparent);
+  transform: translateX(-100%);
+  animation: bkMemoryScan 4.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+.wp-brandkit .bk-memory span {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  color: var(--fg-muted);
+  font-size: 0.52rem;
+  line-height: 1.2;
+}
+.wp-brandkit .bk-memory span strong {
+  color: var(--accent);
+  font-weight: 650;
+}
+.wp-brandkit .bk-palette {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 0.16rem;
+}
+.wp-brandkit .bk-palette i {
+  width: 0.52rem;
+  height: 0.52rem;
+  border-radius: 50%;
+  border: 0.5px solid rgba(17,24,39,0.14);
+}
+.wp-brandkit .bk-palette i:nth-child(1) { background: var(--accent); }
+.wp-brandkit .bk-palette i:nth-child(2) { background: var(--fg); }
+.wp-brandkit .bk-palette i:nth-child(3) { background: var(--warning); }
+.wp-brandkit .bk-output {
+  display: grid;
+  gap: 0.34rem;
+}
+.wp-brandkit .bk-output-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--fg-dim);
+  font-size: 0.48rem;
+  line-height: 1;
+}
+.wp-brandkit .bk-output-head strong {
+  color: var(--fg);
+  font-size: 0.56rem;
+  font-weight: 650;
+}
+.wp-brandkit .bk-format-cloud {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.22rem;
+}
+.wp-brandkit .bk-format {
+  min-width: 0;
+  border-radius: 5px;
+  border: 0.5px solid rgba(17,24,39,0.07);
+  background: var(--surface-2);
+  color: var(--fg-muted);
+  padding: 0.28rem 0.18rem;
+  text-align: center;
+  font-size: 0.42rem;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: bkFormatPulse 7.2s ease-in-out infinite;
+}
+.wp-brandkit .bk-format:nth-child(2) {
+  animation-delay: 0.8s;
+}
+.wp-brandkit .bk-format:nth-child(3) { animation-delay: 1.6s; }
+.wp-brandkit .bk-format:nth-child(4) { animation-delay: 2.4s; }
+.wp-brandkit .bk-format:nth-child(5) { animation-delay: 3.2s; }
+.wp-brandkit .bk-format:nth-child(6) { animation-delay: 4s; }
+@keyframes bkMemoryScan {
+  0%, 18% { transform: translateX(-100%); opacity: 0; }
+  42% { opacity: 1; }
+  72%, 100% { transform: translateX(100%); opacity: 0; }
+}
+@keyframes bkFormatPulse {
+  0%, 100% {
+    color: var(--fg-muted);
+    border-color: rgba(17,24,39,0.07);
+    background: var(--surface-2);
+  }
+  45%, 55% {
+    color: var(--fg);
+    border-color: rgba(187,85,34,0.28);
+    background: rgba(187,85,34,0.07);
+  }
+}
+
+.wp-sponsors {
+  background: #FFFFFF;
+  padding: 0.75rem;
+}
+.wp-sponsors .sp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.375rem 0;
+  border-bottom: 0.5px solid rgba(17,24,39,0.055);
+  font-size: 0.6875rem;
+}
+.wp-sponsors .sp-row:last-child { border-bottom: none; }
+.wp-sponsors .sp-name {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+.wp-sponsors .sp-name .sp-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+.wp-sponsors .sp-dot.gold { background: #ffc107; }
+.wp-sponsors .sp-dot.silver { background: #adb5bd; }
+.wp-sponsors .sp-dot.bronze { background: #cd7f32; }
+.wp-sponsors .sp-amount {
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+.wp-sponsors .sp-total {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 0.5px solid rgba(17,24,39,0.08);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+[data-od-id="widget-sponsoren"] .sp-row,
+[data-od-id="widget-sponsoren"] .sp-total {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 3.45rem 2.6rem 2.2rem;
+  align-items: center;
+  gap: 0.35rem;
+}
+[data-od-id="widget-sponsoren"] .sp-row {
+  min-height: 1.55rem;
+  padding: 0.34rem 0;
+  animation: none !important;
+  transition: opacity 0.58s cubic-bezier(0.16, 1, 0.3, 1), transform 0.58s cubic-bezier(0.16, 1, 0.3, 1), filter 0.58s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-od-id="widget-sponsoren"] .wp-sponsors.is-animating .sp-row {
+  opacity: 0.34;
+  filter: saturate(0.65);
+  transform: translateY(4px);
+}
+[data-od-id="widget-sponsoren"] .wp-sponsors.is-animating .sp-row.is-active,
+[data-od-id="widget-sponsoren"] .wp-sponsors.is-animating .sp-row.is-done {
+  opacity: 1;
+  filter: saturate(1);
+  transform: translateY(0);
+}
+[data-od-id="widget-sponsoren"] .wp-sponsors.is-animating .sp-row.is-active .sp-amount {
+  color: var(--accent);
+}
+[data-od-id="widget-sponsoren"] .wp-sponsors.is-animating .sp-row.is-done .sp-amount {
+  color: var(--fg-muted);
+}
+[data-od-id="widget-sponsoren"] .sp-name {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+[data-od-id="widget-sponsoren"] .sp-amount {
+  text-align: right;
+  font-size: 0.625rem;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.35s ease;
+}
+[data-od-id="widget-sponsoren"] .sp-status,
+[data-od-id="widget-sponsoren"] .sp-total-status {
+  justify-self: end;
+  padding: 0.13rem 0.28rem;
+  border-radius: 999px;
+  font-size: 0.5rem;
+  line-height: 1;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  border: 0.5px solid rgba(17,24,39,0.08);
+}
+[data-od-id="widget-sponsoren"] .sp-status.paid {
+  color: var(--success);
+  background: rgba(34,197,94,0.09);
+}
+[data-od-id="widget-sponsoren"] .sp-status.open {
+  color: var(--danger);
+  background: rgba(239,68,68,0.09);
+}
+[data-od-id="widget-sponsoren"] .sp-status.due,
+[data-od-id="widget-sponsoren"] .sp-total-status {
+  color: var(--warning);
+  background: rgba(245,158,11,0.09);
+}
+[data-od-id="widget-sponsoren"] .sp-doc {
+  position: relative;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  min-width: 1.15rem;
+  height: 1.1rem;
+  border-radius: 4px;
+  border: 0.5px solid rgba(17,24,39,0.10);
+  color: var(--fg-muted);
+  background: rgba(17,24,39,0.035);
+  padding: 0;
+  font: inherit;
+}
+[data-od-id="widget-sponsoren"] button.sp-doc {
+  cursor: pointer;
+}
+[data-od-id="widget-sponsoren"] button.sp-doc:focus-visible {
+  outline: 1px solid rgba(187,85,34,0.7);
+  outline-offset: 2px;
+}
+[data-od-id="widget-sponsoren"] .sp-doc svg,
+[data-od-id="widget-sponsoren"] .sp-zip svg {
+  width: 0.72rem;
+  height: 0.72rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+[data-od-id="widget-sponsoren"] .sp-doc.has-notice::after {
+  content: "";
+  position: absolute;
+  top: -0.15rem;
+  right: -0.12rem;
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: var(--danger);
+  box-shadow: 0 0 0 0 rgba(239,68,68,0.42);
+  animation: sponsorNoticePulse 1.9s ease-in-out infinite;
+}
+[data-od-id="widget-sponsoren"] .sp-gimmick-bubble {
+  position: absolute;
+  right: calc(100% + 0.38rem);
+  top: 50%;
+  width: 8.4rem;
+  padding: 0.46rem 0.52rem;
+  border-radius: 8px 8px 2px 8px;
+  border: 0.5px solid rgba(187,85,34,0.24);
+  background: rgba(255,255,255,0.96);
+  color: var(--fg-muted);
+  font-size: 0.52rem;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.35;
+  text-align: left;
+  white-space: normal;
+  box-shadow: 0 12px 28px rgba(17,24,39,0.10);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) translateX(0.35rem) scale(0.96);
+  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1), transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 8;
+}
+[data-od-id="widget-sponsoren"] .sp-gimmick-bubble::after {
+  content: "";
+  position: absolute;
+  right: -0.28rem;
+  top: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: rgba(255,255,255,0.96);
+  border-right: 0.5px solid rgba(187,85,34,0.20);
+  border-top: 0.5px solid rgba(187,85,34,0.20);
+  transform: translateY(-50%) rotate(45deg);
+}
+[data-od-id="widget-sponsoren"] .sp-doc.is-open .sp-gimmick-bubble {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0) scale(1);
+}
+[data-od-id="widget-sponsoren"] .sp-zip {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.18rem;
+  width: 2.2rem;
+  height: 1.1rem;
+  border-radius: 4px;
+  border: 0.5px solid rgba(17,24,39,0.10);
+  color: var(--fg-muted);
+  background: rgba(17,24,39,0.035);
+  font-size: 0.48rem;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+[data-od-id="widget-sponsoren"] .sp-zip svg {
+  width: 0.58rem;
+  height: 0.58rem;
+}
+[data-od-id="widget-sponsoren"] .sp-total {
+  transition: opacity 0.58s cubic-bezier(0.16, 1, 0.3, 1), transform 0.58s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-od-id="widget-sponsoren"] .wp-sponsors.is-animating .sp-total {
+  opacity: 0.5;
+  transform: translateY(4px);
+}
+[data-od-id="widget-sponsoren"] .wp-sponsors.is-animating .sp-total.is-active,
+[data-od-id="widget-sponsoren"] .wp-sponsors.is-animating .sp-total.is-done {
+  opacity: 1;
+  transform: translateY(0);
+}
+[data-od-id="widget-sponsoren"] [data-sponsor-total] {
+  font-variant-numeric: tabular-nums;
+}
+@keyframes sponsorNoticePulse {
+  0%, 100% {
+    transform: scale(0.92);
+    box-shadow: 0 0 0 0 rgba(239,68,68,0.4);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 5px rgba(239,68,68,0);
+  }
+}
+
+.wp-social {
+  background: #FFFFFF;
+  padding: 0.75rem;
+}
+.wp-social .so-post {
+  background: linear-gradient(135deg, #BB5522, #D88455);
+  border-radius: 8px;
+  padding: 0.75rem;
+  color: #fff;
+}
+.wp-social .so-post .so-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.wp-social .so-post .so-avatar {
+  width: 1.25rem; height: 1.25rem;
+  border-radius: 50%;
+  background: rgba(17,24,39,0.12);
+}
+.wp-social .so-post .so-name {
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+.wp-social .so-post .so-text {
+  font-size: 0.625rem;
+  opacity: 0.9;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+.wp-social .so-post .so-img {
+  height: 2rem;
+  background: rgba(17,24,39,0.10);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+.wp-social .so-post .so-stats {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.5625rem;
+  opacity: 0.7;
+}
+
+[data-od-id="widget-finanzen"] .wp-finance-report {
+  background: #FFFFFF;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+[data-od-id="widget-finanzen"] .fr-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 0.5px solid rgba(17,24,39,0.08);
+}
+[data-od-id="widget-finanzen"] .fr-header span {
+  font-size: 0.75rem;
+  font-weight: 650;
+  color: var(--fg);
+  letter-spacing: -0.01em;
+}
+[data-od-id="widget-finanzen"] .fr-header small {
+  font-size: 0.5625rem;
+  line-height: 1.3;
+  color: var(--fg-dim);
+}
+[data-od-id="widget-finanzen"] .fr-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+[data-od-id="widget-finanzen"] .fr-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 1.35rem;
+  padding: 0.16rem 0.38rem;
+  border-radius: 5px;
+  background: rgba(17,24,39,0.025);
+  border: 0.5px solid rgba(17,24,39,0.07);
+  opacity: 0.64;
+  transform: translateY(2px);
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-od-id="widget-finanzen"] .fr-line.is-active,
+[data-od-id="widget-finanzen"] .fr-line.is-done {
+  opacity: 1;
+  transform: translateY(0);
+  border-color: rgba(17,24,39,0.09);
+}
+[data-od-id="widget-finanzen"] .fr-line span {
+  color: var(--fg-muted);
+  font-size: 0.625rem;
+  line-height: 1;
+}
+[data-od-id="widget-finanzen"] .fr-line strong {
+  font-size: 0.6875rem;
+  line-height: 1;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+[data-od-id="widget-finanzen"] .fr-line[data-finance-type="income"] strong { color: var(--success); }
+[data-od-id="widget-finanzen"] .fr-line[data-finance-type="expense"] strong { color: var(--danger); }
+[data-od-id="widget-finanzen"] .fr-sum {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.18rem;
+  padding: 0.52rem 0.4rem 0.62rem;
+  border-radius: 6px;
+  background: rgba(17,24,39,0.035);
+}
+[data-od-id="widget-finanzen"] .fr-sum span {
+  color: var(--fg-muted);
+  font-size: 0.625rem;
+  line-height: 1;
+}
+[data-od-id="widget-finanzen"] .fr-sum strong {
+  color: var(--fg);
+  font-size: 0.9rem;
+  line-height: 1;
+  font-weight: 750;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+}
+[data-od-id="widget-finanzen"] .fr-sum::after {
+  content: "";
+  position: absolute;
+  left: 0.4rem;
+  right: 0.4rem;
+  bottom: 0.32rem;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-od-id="widget-finanzen"] .fr-sum.is-underlined::after {
+  transform: scaleX(1);
+}
+
+.wp-platz {
+  position: relative;
+  background: #FFFFFF;
+  padding: 0.68rem;
+  overflow: hidden;
+}
+.wp-platz .pl-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.42rem;
+  font-size: 0.62rem;
+  color: var(--fg-muted);
+}
+.wp-platz .pl-calendar {
+  display: grid;
+  gap: 0;
+}
+.wp-platz .pl-week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: center;
+  gap: 0.34rem;
+  perspective: 680px;
+}
+.wp-platz .pl-day {
+  position: relative;
+  min-width: 0;
+  min-height: 4.05rem;
+  border-radius: 7px;
+  background: var(--surface-2);
+  border: 0.5px solid rgba(17,24,39,0.06);
+  padding: 0.52rem 0.28rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.56;
+  filter: blur(0.65px);
+  transform: translateY(0) scale(0.96);
+  animation: plDaySpotlight 14s linear infinite both;
+  will-change: transform, opacity, filter, background, border-color;
+  transition: border-color 0.7s cubic-bezier(0.22, 1, 0.36, 1), background 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.wp-platz .pl-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.32rem;
+  font-size: 0.5rem;
+  line-height: 1;
+  color: var(--fg-dim);
+}
+.wp-platz .pl-date strong {
+  color: var(--fg-muted);
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+.wp-platz .pl-date span {
+  color: var(--fg);
+  font-size: 1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.wp-platz .pl-day:nth-child(1) { animation-delay: 0s; }
+.wp-platz .pl-day:nth-child(2) { animation-delay: -12s; }
+.wp-platz .pl-day:nth-child(3) { animation-delay: -10s; }
+.wp-platz .pl-day:nth-child(4) { animation-delay: -8s; }
+.wp-platz .pl-day:nth-child(5) { animation-delay: -6s; }
+.wp-platz .pl-day:nth-child(6) { animation-delay: -4s; }
+.wp-platz .pl-day:nth-child(7) { animation-delay: -2s; }
+@keyframes plDaySpotlight {
+  0% {
+    z-index: 2;
+    opacity: 0.94;
+    filter: blur(0.12px);
+    border-color: rgba(187,85,34,0.30);
+    background: rgba(187,85,34,0.055);
+    transform: translateY(-2px) scale(1.015);
+  }
+  7% {
+    z-index: 2;
+    opacity: 1;
+    filter: blur(0);
+    border-color: rgba(187,85,34,0.45);
+    background: rgba(187,85,34,0.105);
+    transform: translateY(-4px) scale(1.045);
+  }
+  15% {
+    z-index: 2;
+    opacity: 0.9;
+    filter: blur(0.18px);
+    border-color: rgba(187,85,34,0.24);
+    background: rgba(187,85,34,0.045);
+    transform: translateY(-1px) scale(1.01);
+  }
+  28%, 100% {
+    z-index: 1;
+    opacity: 0.56;
+    filter: blur(0.65px);
+    border-color: rgba(17,24,39,0.06);
+    background: var(--surface-2);
+    transform: translateY(0) scale(0.96);
+  }
+}
+
+.wp-members {
+  background: #FFFFFF;
+  padding: 0.75rem;
+}
+.wp-members .mm-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin-bottom: 0.65rem;
+}
+.wp-members .mm-stat {
+  text-align: center;
+  padding: 0.42rem 0.35rem;
+  border-radius: 6px;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+}
+.wp-members .mm-stat .mm-num {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.wp-members .mm-stat .mm-num.teal { color: var(--accent); }
+.wp-members .mm-stat .mm-num.orange { color: var(--warning); }
+.wp-members .mm-stat .mm-num.green { color: var(--success); }
+.wp-members .mm-stat .mm-label {
+  font-size: 0.5625rem;
+  color: var(--fg-dim);
+  margin-top: 0.125rem;
+}
+.wp-members .mm-pies {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.42rem;
+  margin-bottom: 0.58rem;
+}
+.wp-members .mm-pie {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 3.65rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.38rem 0.5rem;
+  border-radius: 7px;
+  background: rgba(17,24,39,0.025);
+  border: 0.5px solid rgba(17,24,39,0.06);
+}
+.wp-members .mm-pie-graphic {
+  position: relative;
+  width: 3.65rem;
+  height: 3.65rem;
+  border-radius: 50%;
+  background: rgba(17,24,39,0.045);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.wp-members .mm-pie-graphic::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--pie);
+  --mm-pie-reveal: 100%;
+  -webkit-mask: conic-gradient(#000 0 var(--mm-pie-reveal), transparent var(--mm-pie-reveal) 100%);
+  mask: conic-gradient(#000 0 var(--mm-pie-reveal), transparent var(--mm-pie-reveal) 100%);
+}
+.wp-members .mm-pie-graphic.is-animating::before {
+  animation: memberPieReveal 1.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.wp-members .mm-pie-graphic::after {
+  display: none;
+}
+.wp-members .mm-pie-meta {
+  min-width: 0;
+  min-height: 3.65rem;
+  display: flex;
+  align-items: center;
+}
+.wp-members .mm-pie-legend {
+  display: grid;
+  gap: 0.14rem;
+  font-size: 0.56rem;
+  line-height: 1.25;
+  color: var(--fg-dim);
+}
+.wp-members .mm-pie-legend span {
+  display: flex;
+  align-items: center;
+  gap: 0.22rem;
+  min-width: 0;
+  white-space: nowrap;
+}
+.wp-members .mm-pie-legend i {
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  background: var(--legend-color);
+}
+.wp-members .mm-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+}
+.wp-members .mm-row {
+  display: grid;
+  grid-template-columns: 6px minmax(0, 1fr) 7.1rem 1.15rem;
+  align-items: center;
+  gap: 0.38rem;
+  font-size: 0.625rem;
+  color: var(--fg-muted);
+  padding: 0.28rem 0;
+  animation: none !important;
+  transform: none !important;
+}
+.wp-members .mm-row .mm-status {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+.wp-members .mm-row .mm-status.green { background: var(--success); }
+.wp-members .mm-row .mm-status.amber { background: var(--warning); }
+.wp-members .mm-row .mm-status.red { background: var(--danger); }
+.wp-members .mm-member-main {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.24rem;
+}
+.wp-members .mm-row .mm-name {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--fg);
+}
+.wp-members .mm-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.78rem;
+  height: 0.78rem;
+  border-radius: 3px;
+  font-size: 0.46rem;
+  line-height: 1;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+  flex: 0 0 auto;
+  border: 0.5px solid rgba(17,24,39,0.10);
+}
+.wp-members .mm-tag.is-male {
+  color: #cfe4ff;
+  background: rgba(96,165,250,0.22);
+}
+.wp-members .mm-tag.is-female {
+  color: #ffd7ee;
+  background: rgba(236,72,153,0.22);
+}
+.wp-members .mm-tag.is-student {
+  color: #d8f7e2;
+  background: rgba(34,197,94,0.18);
+}
+.wp-members .mm-row .mm-since {
+  font-size: 0.52rem;
+  color: var(--fg-dim);
+  white-space: nowrap;
+  justify-self: center;
+  text-align: center;
+}
+.wp-members .mm-doc {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  min-width: 1.15rem;
+  height: 1.1rem;
+  border-radius: 4px;
+  border: 0.5px solid rgba(17,24,39,0.10);
+  color: var(--fg-muted);
+  background: rgba(17,24,39,0.035);
+}
+.wp-members .mm-doc svg {
+  width: 0.72rem;
+  height: 0.72rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@property --mm-pie-reveal {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@keyframes memberPieReveal {
+  0% {
+    --mm-pie-reveal: 0%;
+    filter: brightness(1.28);
+  }
+  100% {
+    --mm-pie-reveal: 100%;
+    filter: brightness(1);
+  }
+}
+
+.wp-chat {
+  background: #FFFFFF;
+  padding: 0.75rem;
+}
+.wp-chat .ch-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+.wp-chat .ch-bubble {
+  max-width: 80%;
+  padding: 0.375rem 0.625rem;
+  border-radius: 8px;
+  font-size: 0.625rem;
+  line-height: 1.4;
+}
+.wp-chat .ch-bubble.user {
+  align-self: flex-end;
+  background: var(--accent);
+  color: #fff;
+  border-bottom-right-radius: 2px;
+}
+.wp-chat .ch-bubble.ai {
+  align-self: flex-start;
+  background: var(--surface-2);
+  color: var(--fg);
+  border: 0.5px solid var(--border);
+  border-bottom-left-radius: 2px;
+}
+.wp-chat .ch-bubble.ai em {
+  color: var(--accent);
+  font-style: normal;
+}
+.wp-chat .ch-input {
+  display: flex;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+.wp-chat .ch-input span {
+  flex: 1;
+  height: 1.5rem;
+  background: var(--surface-2);
+  border-radius: 6px;
+  border: 0.5px solid var(--border);
+}
+.wp-chat .ch-input i {
+  width: 1.5rem;
+  height: 1.5rem;
+  background: var(--accent);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  color: #fff;
+  font-style: normal;
+}
+[data-od-id="widget-ki"] .ch-messages {
+  min-height: 5.8rem;
+  justify-content: flex-end;
+}
+[data-od-id="widget-ki"] .ch-bubble {
+  transition: opacity 0.62s cubic-bezier(0.16, 1, 0.3, 1), transform 0.62s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-od-id="widget-ki"] .ch-bubble.is-hidden {
+  opacity: 0;
+  transform: translateY(10px) scale(0.985);
+}
+[data-od-id="widget-ki"] .ch-input {
+  align-items: center;
+}
+[data-od-id="widget-ki"] .ch-input span {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 0 0.5rem;
+  color: var(--fg);
+  font-size: 0.625rem;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+}
+[data-od-id="widget-ki"] .ch-input.is-sent span {
+  color: var(--fg-dim);
+}
+[data-od-id="widget-ki"] .ch-input.is-sent i {
+  transform: translateY(-1px);
+  filter: brightness(1.12);
+}
+
+/* ── Calculator ── */
+.calculator-section {
+  padding: 4rem 2rem 6rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.calc-card {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin-top: 2.5rem;
+}
+.calc-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.86fr);
+  gap: 2.25rem;
+  align-items: stretch;
+}
+.calc-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.calc-group {
+  margin-bottom: 0;
+}
+.calc-group:last-child { margin-bottom: 0; }
+.calc-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.625rem;
+}
+.calc-label-row label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+.calc-label-row .calc-value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.calc-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(240, 240, 240, 0.1);
+  outline: none;
+  cursor: pointer;
+}
+.calc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--border);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.calc-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.calc-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--border);
+  cursor: pointer;
+}
+.calc-scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.55rem;
+  color: var(--fg-dim);
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+}
+.calc-sub {
+  font-size: 0.6875rem;
+  color: var(--fg-dim);
+  margin-top: 0.375rem;
+}
+.calc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.125rem;
+}
+.calc-chip {
+  padding: 0.5rem 1rem;
+  border-radius: 100px;
+  border: 0.5px solid var(--border);
+  font-size: 0.8125rem;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--surface);
+  user-select: none;
+}
+.calc-chip:hover {
+  border-color: var(--fg-muted);
+  color: var(--fg);
+}
+.calc-chip.active {
+  background: rgba(187, 85, 34, 0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.calc-socials {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+.calc-social,
+.calc-wide-toggle,
+.calc-tool-toggle {
+  border: 0.5px solid var(--border);
+  color: var(--fg-muted);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+.calc-social:hover,
+.calc-wide-toggle:hover,
+.calc-tool-toggle:hover {
+  border-color: var(--fg-muted);
+  color: var(--fg);
+}
+.calc-social.active,
+.calc-wide-toggle.active,
+.calc-tool-toggle.active {
+  border-color: rgba(187, 85, 34, 0.5);
+  color: var(--accent);
+  background: rgba(187, 85, 34, 0.045);
+}
+.calc-social {
+  min-height: 54px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+}
+.calc-social svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.calc-social span {
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+.calc-wide-toggle {
+  width: 100%;
+  min-height: 46px;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.calc-binary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.calc-tool-toggle {
+  min-height: 42px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.calc-result {
+  position: relative;
+  overflow: hidden;
+  min-height: 100%;
+  background:
+    linear-gradient(180deg, rgba(187, 85, 34, 0.06), transparent 46%),
+    rgba(255, 255, 255, 0.92);
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  padding: 1.75rem;
+  box-shadow: 0 14px 36px rgba(17,24,39,0.10);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+  gap: 0.7rem;
+}
+.calc-output-kicker {
+  color: var(--fg-dim);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.calc-number {
+  font-size: clamp(3.1rem, 6vw, 4.55rem);
+  font-weight: 650;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  text-shadow: none;
+}
+.calc-number .calc-prefix {
+  font-size: 0.42em;
+  letter-spacing: -0.03em;
+  color: var(--fg-dim);
+}
+.calc-unit {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--fg-muted);
+  margin-top: 0.3rem;
+}
+.calc-card > .btn {
+  width: 100%;
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .widget-grid-alt { grid-template-columns: 1fr; }
+  .widget-grid-alt[data-od-id="path-3-2-1"] { grid-template-columns: 1fr; }
+  .widget-grid-alt[data-od-id="path-3-2-1"] .widget-card { grid-column: auto; }
+  .calc-columns { grid-template-columns: 1fr; gap: 1.4rem; }
+  .calc-socials { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .widget-grid-alt[data-od-id="path-3-2-1"] *,
+  .widget-grid-alt[data-od-id="path-3-2-1"] .sp-doc.has-notice::after,
+  .widget-grid-alt[data-od-id="path-3-2-1"] [data-ai-prompt]::after {
+    animation: none !important;
+  }
+  .widget-grid-alt[data-od-id="path-3-2-1"] [data-od-id="widget-platz"] .pl-day {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+  .widget-grid-alt[data-od-id="path-3-2-1"] .widget-card {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+  }
+}
+@media (max-width: 640px) {
+  .landing-header .landing-nav { display: none; }
+  .landing-header { padding: 0.75rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="site-grid" aria-hidden="true">
+  <span class="grid-hotspot is-a"></span>
+  <span class="grid-hotspot is-b"></span>
+  <span class="grid-hotspot is-c"></span>
+  <span class="grid-hotspot is-d"></span>
+</div>
+<canvas class="site-grid-canvas" id="site-grid-canvas" aria-hidden="true"></canvas>
+
+<header class="landing-header" data-od-id="landing-header" style="position:fixed;left:50%;transform:translateX(-50%);width:min(900px,calc(100% - 2rem));top:0.85rem;border-radius:18px;border:0.5px solid rgba(255,255,255,0.42);box-shadow:0 8px 24px rgba(17,24,39,0.045),inset 0 1px 0 rgba(255,255,255,0.62),inset 0 -1px 0 rgba(17,24,39,0.025);background:linear-gradient(135deg,rgba(255,255,255,0.34),rgba(255,255,255,0.08));backdrop-filter:blur(34px) saturate(220%) contrast(112%);-webkit-backdrop-filter:blur(34px) saturate(220%) contrast(112%)">
+  <a href="index.html" class="landing-logo" aria-label="ClubOS">
+    <img src="mr8as03a-clubos_logo_white_transparent.png" alt="ClubOS" class="brand-logo-image landing-logo-image">
+  </a>
+  <nav class="landing-nav" data-od-id="landing-nav" style="flex:1;display:flex;align-items:center;justify-content:center;gap:1.5rem">
+    <a href="#features">Funktionen</a>
+    <span aria-hidden="true" style="width:4px;height:4px;border-radius:50%;background:rgba(17,24,39,0.18);display:inline-block"></span>
+    <a href="#rechner">Berechne deine Zeitersparnis</a>
+  </nav>
+  <a href="signup.html" class="btn btn-primary" style="padding:0.5rem 1.25rem;font-size:0.8125rem">Zugang sichern</a>
+</header>
+
+<main>
+  <section class="hero hero-widget-cloud" data-od-id="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">ClubOS</div>
+      <h1>Das Betriebssystem für deinen Vereinsvorstand</h1>
+      <p>Vereinsvorstände verbringen 300+ Stunden im Jahr mit Verwaltung. ClubOS erledigt es in Sekunden.</p>
+      <div class="hero-cta">
+        <a href="signup.html" class="btn btn-primary btn-lg">Zugang sichern</a>
+        <a href="login.html" class="btn btn-ghost btn-lg" data-od-id="hero-login-cta">Einloggen</a>
+      </div>
+    </div>
+    <div class="hero-orbit" aria-hidden="true">
+      <article class="floating-widget is-social">
+        <h3>Social Media Asset Generator</h3>
+        <p>Turnierbericht, Spieltagspost und Sponsorengrafik aus einem Prompt.</p>
+        <div class="mini-bars"><span style="width:88%"></span><span></span><span></span></div>
+      </article>
+      <article class="floating-widget is-booking">
+        <h3>Platzbuchungsassistent</h3>
+        <p>Training, Punktspiel, Halle und Sperrzeiten automatisch sortiert.</p>
+        <div class="mini-calendar"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      </article>
+      <article class="floating-widget is-finance">
+        <h3>Finanz-Widget</h3>
+        <p>Kassenbericht, offene Beiträge und Monatsstatus auf einen Blick.</p>
+        <div class="mini-row"><span>Saldo</span><strong>+6.400 €</strong></div>
+        <div class="mini-row"><span class="mini-pill">bereit für Export</span></div>
+      </article>
+      <article class="floating-widget is-ai">
+        <h3>Vereins-KI</h3>
+        <p>Frage stellen. Dokument, E-Mail oder Bericht direkt erhalten.</p>
+        <div class="mini-chat"><span></span><span></span><span></span></div>
+      </article>
+      <article class="floating-widget is-members">
+        <h3>Mitgliederverwaltung</h3>
+        <p>Anmeldungen, Beiträge, Kündigungen und Mahnungen ohne Excel.</p>
+        <div class="mini-row"><span>847 aktiv</span><span class="mini-pill">12 neu</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="features-section" data-od-id="problem-section" style="padding-top:clamp(5.5rem,10vw,8rem);padding-bottom:clamp(6rem,12vw,9rem)">
+    <div class="features-header reveal">
+      <h2 class="h2">Das Ehrenamt stirbt nicht an fehlendem Idealismus.</h2>
+      <p style="color:var(--fg-muted);font-size:1rem;max-width:720px;margin:0.9rem auto 0">Es stirbt an Excel-Listen, Email-Chaos und zu vielen unnötigen Tagen Verwaltungsarbeit pro Jahr.</p>
+    </div>
+    <div class="reveal" data-od-id="path-3-1-1" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(1.75rem,4vw,3rem);margin:3.25rem auto 0;max-width:1040px;text-align:center">
+      <div>
+        <div data-stat-count="" data-stat-target="17500" data-stat-format="dot" style="font-size:clamp(3rem,7vw,6rem);font-weight:800;letter-spacing:-0.055em;line-height:0.9;color:var(--fg);font-variant-numeric:tabular-nums;text-shadow:0 0 34px rgba(187,85,34,0.18);white-space:nowrap">0</div>
+        <p style="color:var(--fg-muted);font-size:0.8125rem;line-height:1.5;margin:1.1rem auto 0;max-width:260px">Vereine in Deutschland existenziell bedroht durch fehlende Vorstandsmitglieder</p>
+      </div>
+      <div>
+        <div data-stat-count="" data-stat-target="42" data-stat-suffix=" Tage" style="font-size:clamp(3rem,7vw,6rem);font-weight:800;letter-spacing:-0.055em;line-height:0.9;color:var(--fg);font-variant-numeric:tabular-nums;text-shadow:0 0 34px rgba(187,85,34,0.18);white-space:nowrap">0 Tage</div>
+        <p style="color:var(--fg-muted);font-size:0.8125rem;line-height:1.5;margin:1.1rem auto 0;max-width:260px">Verwaltungsaufwand pro Jahr — pro durchschnittlichem Sportverein</p>
+      </div>
+      <div>
+        <div data-stat-count="" data-stat-target="50" data-stat-prefix="&gt; " data-stat-suffix="%" style="font-size:clamp(3rem,7vw,6rem);font-weight:800;letter-spacing:-0.055em;line-height:0.9;color:var(--fg);font-variant-numeric:tabular-nums;text-shadow:0 0 34px rgba(187,85,34,0.18);white-space:nowrap">&gt; 0%</div>
+        <p style="color:var(--fg-muted);font-size:0.8125rem;line-height:1.5;margin:1.1rem auto 0;max-width:260px">der aktiven Vorstandsmitglieder denken ans Aufhören — wegen Zeitmangel</p>
+      </div>
+    </div>
+    <p class="reveal" style="color:var(--fg-dim);font-size:0.6875rem;line-height:1.5;text-align:center;margin:2.75rem auto 0;max-width:720px">Sportentwicklungsbericht 2023–25 (BISp/DOSB, n=18.862) · DSEE 2024 · Hochschule Koblenz 2024</p>
+  </section>
+
+
+
+  <section id="features" class="features-section" data-od-id="features-section">
+    <div class="features-header reveal">
+      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Funktionen</div>
+      <h2 class="h2">Alles, was ein Vorstand braucht.</h2>
+      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:520px;margin:0.75rem auto 0">Tools, die deinen Verein am Laufen halten.</p>
+    </div>
+    <div class="widget-grid-alt reveal" data-od-id="path-3-2-1">
+      <div class="widget-card" data-od-id="widget-platz">
+        <h3>Platz- &amp; Hallenplanung</h3>
+        <p>Der komplette Saisonbelegungsplan - automatisch, in Sekunden.</p>
+        <div class="wp wp-platz">
+          <div class="pl-header"><span>KW 14</span><span>Mo 30 - So 05</span></div>
+          <div class="pl-calendar">
+            <div class="pl-week">
+              <div class="pl-day"><div class="pl-date"><strong>Mo</strong><span>30</span></div></div>
+              <div class="pl-day"><div class="pl-date"><strong>Di</strong><span>31</span></div></div>
+              <div class="pl-day"><div class="pl-date"><strong>Mi</strong><span>01</span></div></div>
+              <div class="pl-day"><div class="pl-date"><strong>Do</strong><span>02</span></div></div>
+              <div class="pl-day"><div class="pl-date"><strong>Fr</strong><span>03</span></div></div>
+              <div class="pl-day"><div class="pl-date"><strong>Sa</strong><span>04</span></div></div>
+              <div class="pl-day"><div class="pl-date"><strong>So</strong><span>05</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="widget-card" data-od-id="widget-mitglieder">
+        <h3>Mitgliederverwaltung</h3>
+        <p>Anmeldungen, Beiträge, Kündigungen. Alles digital.</p>
+        <div class="wp wp-members">
+          <div class="mm-stats">
+            <div class="mm-stat"><div class="mm-num teal" data-member-count="" data-member-target="847">0</div><div class="mm-label">Aktiv</div></div>
+            <div class="mm-stat"><div class="mm-num orange" data-member-count="" data-member-target="23">0</div><div class="mm-label">Offen</div></div>
+            <div class="mm-stat"><div class="mm-num green" data-member-count="" data-member-target="12">0</div><div class="mm-label">Neu</div></div>
+          </div>
+          <div class="mm-list">
+            <div class="mm-row"><i class="mm-status green"></i><span class="mm-member-main"><span class="mm-name">Max Mustermann</span><span class="mm-tag is-male">M</span><span class="mm-tag is-student">S</span></span><span class="mm-since">Mitglied seit 14.03.2021</span><span class="mm-doc" aria-label="Dokumente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg></span></div>
+            <div class="mm-row"><i class="mm-status amber"></i><span class="mm-member-main"><span class="mm-name">Mona Musterfrau</span><span class="mm-tag is-female">W</span></span><span class="mm-since">Mitglied seit 01.09.2023</span><span class="mm-doc" aria-label="Dokumente"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="widget-card" data-od-id="widget-design">
+        <h3>Design Assistent</h3>
+        <p>Lade eure CI hoch. Die KI erstellt danach Vereinsmaterialien in eurem Stil.</p>
+        <div class="wp wp-brandkit">
+          <div class="bk-ingest">
+            <div class="bk-logo">TC</div>
+            <div class="bk-stack">
+              <div class="bk-line"><strong>Brand Kit</strong><span>hochgeladen</span></div>
+              <div class="bk-chips"><span class="bk-chip">Logo</span><span class="bk-chip">Bilder</span><span class="bk-chip">Farben</span><span class="bk-chip">Typo</span></div>
+            </div>
+          </div>
+          <div class="bk-memory">
+            <span><strong>KI merkt sich CI</strong><br>Look, Tonalität und Vorlagen</span>
+            <div class="bk-palette"><i></i><i></i><i></i></div>
+          </div>
+          <div class="bk-output">
+            <div class="bk-output-head"><strong>Ein Briefing</strong><span>alle Formate</span></div>
+            <div class="bk-format-cloud">
+              <span class="bk-format">Speisekarte</span>
+              <span class="bk-format">Flyer</span>
+              <span class="bk-format">Newsletter</span>
+              <span class="bk-format">Aushang</span>
+              <span class="bk-format">Sponsoren</span>
+              <span class="bk-format">Website</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="widget-card" data-od-id="widget-sponsoren">
+        <h3>Sponsorship Manager</h3>
+        <p>Verträge, Fristen, Berichte. Alles auf einen Blick.</p>
+        <div class="wp wp-sponsors">
+          <div class="sp-row" data-sponsor-line="" data-sponsor-target="12000"><span class="sp-name"><i class="sp-dot gold"></i>Sponsor 1</span><span class="sp-amount" data-sponsor-amount="">12.000 €</span><span class="sp-status paid">bezahlt</span><span class="sp-doc" aria-label="Anhang"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg></span></div>
+          <div class="sp-row" data-sponsor-line="" data-sponsor-target="8500"><span class="sp-name"><i class="sp-dot gold"></i>Sponsor 2</span><span class="sp-amount" data-sponsor-amount="">8.500 €</span><span class="sp-status open">offen</span><button type="button" class="sp-doc has-notice" aria-label="Neuer Anhang" aria-expanded="false" data-sponsor-gimmick=""><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg><span class="sp-gimmick-bubble">WOW, du hast es echt versucht. Kontaktiere uns, um zu erfahren, wie es aussehen kann!</span></button></div>
+          <div class="sp-row" data-sponsor-line="" data-sponsor-target="3000"><span class="sp-name"><i class="sp-dot silver"></i>Sponsor 3</span><span class="sp-amount" data-sponsor-amount="">3.000 €</span><span class="sp-status due">fällig</span><span class="sp-doc" aria-label="Anhang"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg></span></div>
+          <div class="sp-row" data-sponsor-line="" data-sponsor-target="1500"><span class="sp-name"><i class="sp-dot bronze"></i>Sponsor 4</span><span class="sp-amount" data-sponsor-amount="">1.500 €</span><span class="sp-status paid">bezahlt</span><span class="sp-doc" aria-label="Anhang"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg></span></div>
+          <div class="sp-total"><span>Gesamt</span><span data-sponsor-total="">25.000 €</span><span class="sp-total-status">2 offen</span><span class="sp-zip" aria-label="ZIP herunterladen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg><span>ZIP</span></span></div>
+        </div>
+      </div>
+      <div class="widget-card" data-od-id="widget-magazin">
+        <h3>Clubmagazin Assistent</h3>
+        <p>Vereinszeitung auf Knopfdruck. Texte, Layout, Druck-PDF - fertig.</p>
+        <div class="wp wp-articlebuild">
+          <div class="ab-page">
+            <div class="ab-image"></div>
+            <div class="ab-title"><i></i><i></i></div>
+            <div class="ab-paragraph"><span class="ab-line"></span><span class="ab-line"></span><span class="ab-line"></span></div>
+            <div class="ab-paragraph"><span class="ab-line"></span><span class="ab-line"></span><span class="ab-line"></span></div>
+            <div class="ab-meta"><i></i><i></i></div>
+          </div>
+          <div class="ab-footer">
+            <div class="ab-export"></div>
+            <div class="ab-dots"><i></i><i></i><i></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="widget-card" data-od-id="widget-finanzen">
+        <h3>Finanzmanager</h3>
+        <p>Einnahmen, Ausgaben, Kassenbericht. Dein Kassenwart sagt Danke.</p>
+        <div class="wp wp-finance-report">
+          <div class="fr-header">
+            <span>Kassenbericht</span>
+            <small>März 2026 · Vorstand</small>
+          </div>
+          <div class="fr-lines">
+            <div class="fr-line" data-finance-line="" data-finance-target="18400" data-finance-type="income"><span>Beiträge</span><strong>0 €</strong></div>
+            <div class="fr-line" data-finance-line="" data-finance-target="2750" data-finance-type="income"><span>Platzmieten</span><strong>0 €</strong></div>
+            <div class="fr-line" data-finance-line="" data-finance-target="-6200" data-finance-type="expense"><span>Trainerteam</span><strong>0 €</strong></div>
+            <div class="fr-line" data-finance-line="" data-finance-target="-1980" data-finance-type="expense"><span>Halle &amp; Strom</span><strong>0 €</strong></div>
+            <div class="fr-line" data-finance-line="" data-finance-target="1500" data-finance-type="income"><span>Sponsoring</span><strong>0 €</strong></div>
+          </div>
+          <div class="fr-sum" data-finance-sum="">
+            <span>Saldo</span>
+            <strong data-finance-total="">0 €</strong>
+          </div>
+        </div>
+      </div>
+      <div class="widget-card" data-od-id="widget-ki">
+        <h3>Vereins KI</h3>
+        <p>Stell eine Frage und erhalte einen fertigen Plan - in Sekunden.</p>
+        <div class="wp wp-chat">
+          <div class="ch-messages" data-chat-thread="">
+            <div class="ch-bubble user is-hidden" data-chat-user=""></div>
+            <div class="ch-bubble ai is-hidden" data-chat-ai=""></div>
+          </div>
+          <div class="ch-input" data-chat-composer=""><span data-ai-prompt=""></span><i data-chat-send="">→</i></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="features-section" data-od-id="how-it-works-section">
+    <div class="features-header reveal">
+      <div class="hero-eyebrow" style="margin-bottom:0.75rem">So funktioniert es</div>
+      <h2 class="h2">Drei Schritte. Ein fertiges Ergebnis.</h2>
+    </div>
+    <div class="widget-grid-alt reveal" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+      <div class="widget-card" data-od-id="step-vorstand-fragt">
+        <div class="hero-eyebrow" style="margin-bottom:0.75rem">01</div>
+        <h3>Vorstand fragt</h3>
+        <p>Öffne ClubOS und schreib auf Deutsch, was du brauchst. Kein Handbuch, keine Schulung, keine technischen Vorkenntnisse nötig.</p>
+        <div class="calc-chip active" style="align-self:flex-start;margin-top:auto">„Erstelle den Belegungsplan für die Sommersaison."</div>
+      </div>
+      <div class="widget-card" data-od-id="step-clubos-liefert">
+        <div class="hero-eyebrow" style="margin-bottom:0.75rem">02</div>
+        <h3>ClubOS liefert</h3>
+        <p>In Sekunden erscheint das fertige Ergebnis — Dokument, Plan, Bericht oder Entwurf. Direkt verwendbar, exportierbar, teilbar.</p>
+        <div class="calc-chip active" style="align-self:flex-start;margin-top:auto">→ 16-Wochen-Plan, alle Mannschaften, alle Trainer.</div>
+      </div>
+      <div class="widget-card" data-od-id="step-vorstand-entscheidet">
+        <div class="hero-eyebrow" style="margin-bottom:0.75rem">03</div>
+        <h3>Vorstand entscheidet</h3>
+        <p>Du behältst die Kontrolle. Jedes Ergebnis ist editierbar. ClubOS erledigt die Ausführung — du triffst die Entscheidungen.</p>
+        <div class="calc-chip active" style="align-self:flex-start;margin-top:auto">Export als PDF · Per E-Mail senden · Im System speichern.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="rechner" class="calculator-section" data-od-id="calculator-section">
+    <div class="features-header reveal">
+      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Zeitersparnis-Rechner</div>
+      <h2 class="h2">Wie viel Zeit verliert dein Vorstand gerade?</h2>
+      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:520px;margin:0.75rem auto 0">Rechne nach — und sieh was möglich wäre.</p>
+    </div>
+    <div class="calc-card reveal" data-od-id="calc-card">
+      <div class="calc-columns">
+        <div class="calc-inputs">
+        <div class="calc-group">
+          <div class="calc-label-row">
+            <label for="calc-members">Mitgliederzahl</label>
+            <span class="calc-value" id="calc-members-val">500</span>
+          </div>
+          <input type="range" class="calc-slider" id="calc-members" min="0" max="5000" value="500" step="50">
+          <div class="calc-scale"><span>0</span><span>5000+</span></div>
+        </div>
+
+        <div class="calc-group">
+          <div class="calc-label-row">
+            <label>Social-Kanäle</label>
+          </div>
+          <div class="calc-socials" role="group" aria-label="Social-Kanäle auswählen">
+            <button type="button" class="calc-social calc-toggle active" data-calc-toggle="" data-act="instagram" aria-pressed="true" data-od-id="calc-social-instagram">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="4"></rect><circle cx="12" cy="12" r="3.2"></circle><circle cx="16.6" cy="7.4" r="0.8"></circle></svg>
+              <span>Instagram</span>
+            </button>
+            <button type="button" class="calc-social calc-toggle" data-calc-toggle="" data-act="tiktok" aria-pressed="false" data-od-id="calc-social-tiktok">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4v9.2a4.1 4.1 0 1 1-3.2-4"></path><path d="M14 4c.7 2.5 2.2 4 4.8 4.4"></path></svg>
+              <span>TikTok</span>
+            </button>
+            <button type="button" class="calc-social calc-toggle" data-calc-toggle="" data-act="youtube" aria-pressed="false" data-od-id="calc-social-youtube">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="10" rx="3"></rect><path d="m11 10 4 2-4 2z"></path></svg>
+              <span>YouTube</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="calc-group">
+          <button type="button" class="calc-wide-toggle calc-toggle active" data-calc-toggle="" data-act="magazine" aria-pressed="true" data-od-id="calc-magazine-toggle">Vereinsmagazin</button>
+        </div>
+
+        <div class="calc-group">
+          <div class="calc-label-row">
+            <label>Nutzt ihr schon Tools für die Vereinsverwaltung?</label>
+          </div>
+          <div class="calc-binary" role="group" aria-label="Vorhandene Management-Tools">
+            <button type="button" class="calc-tool-toggle" data-calc-tool="yes" aria-pressed="false" data-od-id="calc-tools-yes">Ja</button>
+            <button type="button" class="calc-tool-toggle active" data-calc-tool="no" aria-pressed="true" data-od-id="calc-tools-no">Nein</button>
+          </div>
+        </div>
+        </div>
+
+        <div class="calc-result" data-od-id="calc-result" style="gap: 16.2px;">
+          <div>
+            <div class="calc-output-kicker">Geschätzte Entlastung</div>
+            <div class="calc-number"><span id="calc-hours">18</span></div>
+            <div class="calc-unit">Stunden / Woche</div>
+          </div>
+        </div>
+      </div>
+      <a href="signup.html" class="btn btn-primary btn-lg" data-od-id="calc-cta">Erfahre, wie viel Zeit dein Verein sparen kann</a>
+    </div>
+  </section>
+
+  <section class="features-section" data-od-id="validation-section">
+    <div class="features-header reveal">
+      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Validierung</div>
+      <h2 class="h2">Das Problem ist real.</h2>
+    </div>
+    <div class="widget-grid-alt reveal" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+      <div class="widget-card" style="border-left:2px solid var(--accent)" data-od-id="quote-thomas">
+        <p style="font-style:italic;color:var(--fg-muted);font-size:0.875rem">"Als Vorsitzender verbringe ich 8 bis 10 Stunden pro Woche mit Verwaltung. Das ist Zeit, die mir beim Sport und meiner Familie fehlt."</p>
+        <h3>Thomas M.</h3>
+        <p>1. Vorsitzender, Tennisverein</p>
+      </div>
+      <div class="widget-card" style="border-left:2px solid var(--accent)" data-od-id="quote-sandra">
+        <p style="font-style:italic;color:var(--fg-muted);font-size:0.875rem">"Wir haben seit drei Jahren keinen Nachfolger für den Schriftführerposten gefunden. Die Arbeit ist einfach zu viel."</p>
+        <h3>Sandra K.</h3>
+        <p>Vorstandsmitglied, Fußballverein</p>
+      </div>
+      <div class="widget-card" style="border-left:2px solid var(--accent)" data-od-id="quote-werner">
+        <p style="font-style:italic;color:var(--fg-muted);font-size:0.875rem">"Ich mache das jetzt im 9. Jahr. Aber wenn sich nichts ändert, höre ich auf. Die Bürokratie hat sich verdreifacht."</p>
+        <h3>Werner B.</h3>
+        <p>Kassenwart, Sportverein</p>
+      </div>
+    </div>
+    <div class="features-header reveal" style="margin-top:3rem">
+      <div style="font-size:clamp(3rem,7vw,5.5rem);font-weight:700;letter-spacing:-0.04em;line-height:1;color:var(--fg)">87.000</div>
+      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:560px;margin:0.75rem auto 0">registrierte Sportvereine in Deutschland. Kein einziges hat heute ein KI-gestütztes Verwaltungssystem.</p>
+    </div>
+  </section>
+
+  <section class="features-section" data-od-id="pricing-section">
+    <div class="features-header reveal">
+      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Preise</div>
+      <h2 class="h2">Einfach. Transparent. Monatlich kündbar.</h2>
+      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:600px;margin:0.75rem auto 0">Kein Lock-in. Kein Jahresvertrag als Pflicht. Kein verstecktes Pricing.</p>
+    </div>
+    <div class="widget-grid-alt reveal" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+      <div class="widget-card" data-od-id="pricing-core">
+        <h3>CORE</h3>
+        <div style="font-size:2rem;font-weight:700;letter-spacing:-0.03em;margin:0.5rem 0;color:var(--fg)">EUR 99 <span style="font-size:0.8125rem;color:var(--fg-dim);font-weight:500">/ Monat</span></div>
+        <p>Für kleine Vereine bis 200 Mitglieder</p>
+        <p>Vereins-KI · Mitgliederverwaltung · Kalender &amp; Events · E-Mail Kommunikation · Bis zu 5 Nutzer</p>
+      </div>
+      <div class="widget-card" style="border-color:var(--accent)" data-od-id="pricing-pro">
+        <div class="calc-chip active" style="align-self:flex-start;margin-bottom:0.75rem">Empfohlen</div>
+        <h3>PRO</h3>
+        <div style="font-size:2rem;font-weight:700;letter-spacing:-0.03em;margin:0.5rem 0;color:var(--fg)">EUR 179 <span style="font-size:0.8125rem;color:var(--fg-dim);font-weight:500">/ Monat</span></div>
+        <p>Für mittlere Vereine bis 500 Mitglieder</p>
+        <p>Alles aus Core · Platz- &amp; Hallenplanung AI · Finanz-Widget · Sponsorenmanagement · Vereinsmagazin AI · Social Media AI · Bis zu 15 Nutzer</p>
+      </div>
+      <div class="widget-card" data-od-id="pricing-club">
+        <h3>CLUB</h3>
+        <div style="font-size:2rem;font-weight:700;letter-spacing:-0.03em;margin:0.5rem 0;color:var(--fg)">EUR 299 <span style="font-size:0.8125rem;color:var(--fg-dim);font-weight:500">/ Monat</span></div>
+        <p>Für große Vereine, unbegrenzt</p>
+        <p>Alles aus Pro · Unbegrenzte Nutzer · Mehrere Abteilungen · Alle Sportmodule · Priority Support · Monatlicher Strategy-Call</p>
+      </div>
+    </div>
+    <p class="reveal" style="color:var(--fg-muted);font-size:0.875rem;text-align:center;margin:1.5rem auto 0">Großer Verein mit besonderen Anforderungen? → Enterprise auf Anfrage</p>
+  </section>
+
+  <section class="features-section" data-od-id="faq-section">
+    <div class="features-header reveal">
+      <div class="hero-eyebrow" style="margin-bottom:0.75rem">FAQ</div>
+      <h2 class="h2">Häufige Fragen.</h2>
+    </div>
+    <div class="calc-card reveal" style="max-width:800px" data-od-id="faq-list">
+      <details style="padding:1rem 0;border-bottom:0.5px solid var(--border)" open="">
+        <summary style="cursor:pointer;font-weight:600;color:var(--fg)">Müssen unsere Mitglieder ClubOS auch nutzen?</summary>
+        <p style="color:var(--fg-muted);font-size:0.875rem;line-height:1.6;margin-top:0.75rem">Nein. ClubOS ist ein internes Tool ausschließlich für den Vorstand. Mitglieder merken nur, dass alles besser läuft.</p>
+      </details>
+      <details style="padding:1rem 0;border-bottom:0.5px solid var(--border)">
+        <summary style="cursor:pointer;font-weight:600;color:var(--fg)">Wie lange dauert der Einstieg?</summary>
+        <p style="color:var(--fg-muted);font-size:0.875rem;line-height:1.6;margin-top:0.75rem">Ein Nachmittag. Wir richten gemeinsam alles ein — Datenmigration, erste Workflows, Schulung des Vorstands.</p>
+      </details>
+      <details style="padding:1rem 0;border-bottom:0.5px solid var(--border)">
+        <summary style="cursor:pointer;font-weight:600;color:var(--fg)">Ist ClubOS DSGVO-konform?</summary>
+        <p style="color:var(--fg-muted);font-size:0.875rem;line-height:1.6;margin-top:0.75rem">Ja. Alle Daten liegen auf EU-Servern. Jeder Verein erhält einen Auftragsverarbeitungsvertrag (AVV). Keine Daten werden an Dritte weitergegeben.</p>
+      </details>
+      <details style="padding:1rem 0;border-bottom:0.5px solid var(--border)">
+        <summary style="cursor:pointer;font-weight:600;color:var(--fg)">Kann der gesamte Vorstand einsteigen oder nur eine Person?</summary>
+        <p style="color:var(--fg-muted);font-size:0.875rem;line-height:1.6;margin-top:0.75rem">Mehrere Logins pro Verein sind Standard. Jedes Vorstandsmitglied bekommt seinen eigenen Zugang mit individuellen Rechten.</p>
+      </details>
+      <details style="padding:1rem 0;border-bottom:0.5px solid var(--border)">
+        <summary style="cursor:pointer;font-weight:600;color:var(--fg)">Was passiert nach dem kostenlosen Pilot?</summary>
+        <p style="color:var(--fg-muted);font-size:0.875rem;line-height:1.6;margin-top:0.75rem">Nach dem Pilot-Zeitraum wechselst du in einen der drei Tarife — oder nicht. Kein automatischer Vertrag, kein verstecktes Abo.</p>
+      </details>
+      <details style="padding:1rem 0">
+        <summary style="cursor:pointer;font-weight:600;color:var(--fg)">Für welche Sportarten funktioniert ClubOS?</summary>
+        <p style="color:var(--fg-muted);font-size:0.875rem;line-height:1.6;margin-top:0.75rem">Aktuell optimiert für Tennis und Fußball, funktioniert aber mit jeder Vereinsstruktur. Weitere sportartspezifische Module folgen auf Basis der Nutzerdaten.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="features-section" data-od-id="final-cta-section">
+    <div class="features-header reveal">
+      <h2 class="h2">Gib deinem Vorstand seine Zeit zurück.</h2>
+      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:620px;margin:0.75rem auto 0">Schließ dich den ersten Vereinen an, die ClubOS testen — kostenlos, unverbindlich, mit direktem Zugang zum Gründerteam.</p>
+      <div class="hero-cta" style="justify-content:center;margin-top:2rem">
+        <a href="signup.html" class="btn btn-primary btn-lg">Zugang sichern</a>
+      </div>
+      <p style="color:var(--fg-dim);font-size:0.75rem;margin:1rem auto 0">Keine Kreditkarte. Kein Vertrag. Nur dein Verein und weniger Verwaltung.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="landing-footer" data-od-id="landing-footer" style="width:min(420px,calc(100% - 2rem));margin:0 auto 1.25rem;padding:1.35rem 1.5rem 1.2rem;border:0.5px solid var(--border);border-radius:14px;box-shadow:0 14px 40px rgba(17,24,39,0.10);background:rgba(255,255,255,0.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0.7rem">
+  <div aria-hidden="true" style="width:8px;height:8px;border-radius:2px;background:var(--accent);box-shadow:0 0 16px rgba(187,85,34,0.45)"></div>
+  <div class="landing-footer-tagline" style="color:var(--fg-muted);font-size:0.8125rem;line-height:1.5">Gebaut für Vorstände</div>
+  <nav aria-label="Rechtliches" style="display:flex;align-items:center;justify-content:center;gap:0.75rem;font-size:0.6875rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg-dim)">
+    <a href="#" style="color:inherit">Impressum</a>
+    <span aria-hidden="true" style="width:3px;height:3px;border-radius:50%;background:var(--fg-dim);opacity:0.7"></span>
+    <a href="#" style="color:inherit">Datenschutz</a>
+  </nav>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Smooth header anchor navigation
+let menuScrollFrame = null;
+
+function animateMenuScroll(targetTop) {
+  if (menuScrollFrame) cancelAnimationFrame(menuScrollFrame);
+
+  const startTop = window.pageYOffset;
+  const distance = targetTop - startTop;
+  const duration = Math.min(1050, Math.max(620, Math.abs(distance) * 0.55));
+  const startTime = performance.now();
+
+  function easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  function step(now) {
+    const progress = Math.min(1, (now - startTime) / duration);
+    window.scrollTo(0, startTop + distance * easeOutCubic(progress));
+
+    if (progress < 1) {
+      menuScrollFrame = requestAnimationFrame(step);
+    } else {
+      window.scrollTo(0, targetTop);
+      menuScrollFrame = null;
+    }
+  }
+
+  menuScrollFrame = requestAnimationFrame(step);
+}
+
+document.querySelectorAll('.landing-nav').forEach(nav => {
+  nav.addEventListener('click', event => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link || !nav.contains(link)) return;
+
+    const target = document.querySelector(link.getAttribute('href'));
+    if (!target) return;
+
+    event.preventDefault();
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const headerOffset = 88;
+    const targetTop = Math.max(0, target.getBoundingClientRect().top + window.pageYOffset - headerOffset);
+
+    if (prefersReducedMotion) {
+      window.scrollTo(0, targetTop);
+    } else {
+      animateMenuScroll(targetTop);
+    }
+
+    history.pushState(null, '', link.getAttribute('href'));
+  });
+});
+
+// Problem section stat count-up
+(function initProblemStatsCountUp() {
+  const statsRow = document.querySelector('[data-od-id="path-3-1-1"]');
+  if (!statsRow) return;
+
+  const statEls = Array.from(statsRow.querySelectorAll('[data-stat-count]'));
+  if (!statEls.length) return;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function formatProblemStat(el, value) {
+    const rounded = Math.round(value);
+    const prefix = el.dataset.statPrefix || '';
+    const suffix = el.dataset.statSuffix || '';
+    const body = el.dataset.statFormat === 'dot' ? rounded.toLocaleString('de-DE') : String(rounded);
+    return prefix + body + suffix;
+  }
+
+  function paintFinalProblemStats() {
+    statEls.forEach(el => {
+      const target = Number(el.dataset.statTarget || 0);
+      el.textContent = formatProblemStat(el, target);
+    });
+  }
+
+  if (prefersReducedMotion) {
+    paintFinalProblemStats();
+    return;
+  }
+
+  let hasRun = false;
+  function runProblemStatsCountUp() {
+    if (hasRun) return;
+    hasRun = true;
+
+    const start = performance.now();
+    const duration = 1250;
+
+    function step(now) {
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+
+      statEls.forEach(el => {
+        const target = Number(el.dataset.statTarget || 0);
+        el.textContent = formatProblemStat(el, target * eased);
+      });
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        paintFinalProblemStats();
+      }
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  const statObserver = new IntersectionObserver(entries => {
+    if (entries.some(entry => entry.isIntersecting)) {
+      runProblemStatsCountUp();
+      statObserver.disconnect();
+    }
+  }, { threshold: 0.35 });
+
+  statObserver.observe(statsRow);
+})();
+
+// Active widget grid loops
+(function initActiveWidgetGrid() {
+  const grid = document.querySelector('[data-od-id="path-3-2-1"]');
+  if (!grid) return;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const kiWidget = grid.querySelector('[data-od-id="widget-ki"]');
+  const promptEl = kiWidget ? kiWidget.querySelector('[data-ai-prompt]') : null;
+  const chatUser = kiWidget ? kiWidget.querySelector('[data-chat-user]') : null;
+  const chatAi = kiWidget ? kiWidget.querySelector('[data-chat-ai]') : null;
+  const chatComposer = kiWidget ? kiWidget.querySelector('[data-chat-composer]') : null;
+  const chatSend = kiWidget ? kiWidget.querySelector('[data-chat-send]') : null;
+  const financeWidget = grid.querySelector('[data-od-id="widget-finanzen"]');
+  const financeLines = financeWidget ? Array.from(financeWidget.querySelectorAll('[data-finance-line]')) : [];
+  const financeTotal = financeWidget ? financeWidget.querySelector('[data-finance-total]') : null;
+  const financeSum = financeWidget ? financeWidget.querySelector('[data-finance-sum]') : null;
+  const sponsorWidget = grid.querySelector('[data-od-id="widget-sponsoren"] .wp-sponsors');
+  const sponsorLines = sponsorWidget ? Array.from(sponsorWidget.querySelectorAll('[data-sponsor-line]')) : [];
+  const sponsorTotal = sponsorWidget ? sponsorWidget.querySelector('[data-sponsor-total]') : null;
+  const sponsorTotalRow = sponsorWidget ? sponsorWidget.querySelector('.sp-total') : null;
+  const memberWidget = grid.querySelector('[data-od-id="widget-mitglieder"]');
+  const memberCounters = memberWidget ? Array.from(memberWidget.querySelectorAll('[data-member-count]')) : [];
+  const memberPies = memberWidget ? Array.from(memberWidget.querySelectorAll('[data-member-pie]')) : [];
+  const sponsorGimmick = grid.querySelector('[data-sponsor-gimmick]');
+  const chatExamples = [
+    {
+      prompt: 'Saisonstart planen',
+      answer: 'Gerne. Ich empfehle den 27. April und bereite Einladung, Kalendertermin und Aufgabenliste vor.'
+    },
+    {
+      prompt: 'JHV Einladung schreiben',
+      answer: 'Entwurf ist fertig: Tagesordnung, Fristen und Abstimmungspunkte sind sauber strukturiert.'
+    },
+    {
+      prompt: 'Offene Beiträge prüfen',
+      answer: '12 Zahlungen sind offen. Ich habe Erinnerungen für Vorstand und Kassenwart vorbereitet.'
+    }
+  ];
+
+  function setSponsorGimmickOpen(open) {
+    if (!sponsorGimmick) return;
+    sponsorGimmick.classList.toggle('is-open', open);
+    sponsorGimmick.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  if (sponsorGimmick) {
+    sponsorGimmick.addEventListener('click', event => {
+      event.stopPropagation();
+      setSponsorGimmickOpen(!sponsorGimmick.classList.contains('is-open'));
+    });
+    document.addEventListener('click', event => {
+      if (!sponsorGimmick.contains(event.target)) setSponsorGimmickOpen(false);
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') setSponsorGimmickOpen(false);
+    });
+  }
+
+  function formatEuro(value) {
+    const sign = value < 0 ? '-' : '';
+    return sign + Math.abs(Math.round(value)).toLocaleString('de-DE') + ' €';
+  }
+
+  function financeLineValue(line) {
+    return Number(line.dataset.financeTarget || 0);
+  }
+
+  function paintFinanceLine(line, value) {
+    const amount = line.querySelector('strong');
+    if (amount) amount.textContent = formatEuro(value);
+  }
+
+  function paintFinalFinanceReport() {
+    let total = 0;
+    financeLines.forEach(line => {
+      const value = financeLineValue(line);
+      total += value;
+      paintFinanceLine(line, value);
+      line.classList.add('is-done');
+    });
+    if (financeTotal) financeTotal.textContent = formatEuro(total);
+    if (financeSum) financeSum.classList.add('is-underlined');
+  }
+
+  function animateFinanceNumber(from, to, duration, onUpdate, onComplete) {
+    const start = performance.now();
+
+    function step(now) {
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      onUpdate(from + (to - from) * eased);
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        onUpdate(to);
+        if (onComplete) onComplete();
+      }
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  function resetFinanceReport() {
+    if (financeSum) financeSum.classList.remove('is-underlined');
+    if (financeTotal) financeTotal.textContent = formatEuro(0);
+    financeLines.forEach(line => {
+      line.classList.remove('is-active', 'is-done');
+      paintFinanceLine(line, 0);
+    });
+
+    setTimeout(() => runFinanceLine(0, 0), 680);
+  }
+
+  function runFinanceLine(index, runningTotal) {
+    if (index >= financeLines.length) {
+      setTimeout(() => runFinanceTotal(runningTotal), 780);
+      return;
+    }
+
+    const line = financeLines[index];
+    const target = financeLineValue(line);
+    line.classList.add('is-active');
+
+    animateFinanceNumber(0, target, 1120, value => {
+      paintFinanceLine(line, value);
+    }, () => {
+      line.classList.remove('is-active');
+      line.classList.add('is-done');
+      setTimeout(() => runFinanceLine(index + 1, runningTotal + target), 560);
+    });
+  }
+
+  function runFinanceTotal(total) {
+    animateFinanceNumber(0, total, 1280, value => {
+      if (financeTotal) financeTotal.textContent = formatEuro(value);
+    }, () => {
+      if (financeSum) financeSum.classList.add('is-underlined');
+      setTimeout(resetFinanceReport, 4200);
+    });
+  }
+
+  function sponsorLineValue(line) {
+    return Number(line.dataset.sponsorTarget || 0);
+  }
+
+  function paintSponsorLine(line, value) {
+    const amount = line.querySelector('[data-sponsor-amount]');
+    if (amount) amount.textContent = formatEuro(value);
+  }
+
+  function paintFinalSponsorWidget() {
+    let total = 0;
+    if (sponsorWidget) sponsorWidget.classList.add('is-animating');
+    sponsorLines.forEach(line => {
+      const value = sponsorLineValue(line);
+      total += value;
+      paintSponsorLine(line, value);
+      line.classList.remove('is-active');
+      line.classList.add('is-done');
+    });
+    if (sponsorTotal) sponsorTotal.textContent = formatEuro(total);
+    if (sponsorTotalRow) {
+      sponsorTotalRow.classList.remove('is-active');
+      sponsorTotalRow.classList.add('is-done');
+    }
+  }
+
+  function resetSponsorWidget() {
+    if (!sponsorWidget || !sponsorLines.length || !sponsorTotal) return;
+    sponsorWidget.classList.add('is-animating');
+    if (sponsorTotalRow) sponsorTotalRow.classList.remove('is-active', 'is-done');
+    sponsorTotal.textContent = formatEuro(0);
+    sponsorLines.forEach(line => {
+      line.classList.remove('is-active', 'is-done');
+      paintSponsorLine(line, 0);
+    });
+
+    setTimeout(() => runSponsorLine(0, 0), 520);
+  }
+
+  function runSponsorLine(index, runningTotal) {
+    if (index >= sponsorLines.length) {
+      setTimeout(() => runSponsorTotal(runningTotal), 620);
+      return;
+    }
+
+    const line = sponsorLines[index];
+    const target = sponsorLineValue(line);
+    line.classList.add('is-active');
+
+    animateFinanceNumber(0, target, 920, value => {
+      paintSponsorLine(line, value);
+    }, () => {
+      line.classList.remove('is-active');
+      line.classList.add('is-done');
+      setTimeout(() => runSponsorLine(index + 1, runningTotal + target), 360);
+    });
+  }
+
+  function runSponsorTotal(total) {
+    if (sponsorTotalRow) sponsorTotalRow.classList.add('is-active');
+    animateFinanceNumber(0, total, 1150, value => {
+      if (sponsorTotal) sponsorTotal.textContent = formatEuro(value);
+    }, () => {
+      if (sponsorTotalRow) {
+        sponsorTotalRow.classList.remove('is-active');
+        sponsorTotalRow.classList.add('is-done');
+      }
+      setTimeout(resetSponsorWidget, 4300);
+    });
+  }
+
+  function paintMemberCounter(el, value) {
+    el.textContent = Math.round(value).toLocaleString('de-DE');
+  }
+
+  function paintFinalMemberWidget() {
+    memberCounters.forEach(el => {
+      paintMemberCounter(el, Number(el.dataset.memberTarget || 0));
+    });
+    memberPies.forEach(pie => pie.classList.remove('is-animating'));
+  }
+
+  function restartMemberPies() {
+    memberPies.forEach(pie => pie.classList.remove('is-animating'));
+    if (memberWidget) memberWidget.offsetHeight;
+    memberPies.forEach(pie => pie.classList.add('is-animating'));
+  }
+
+  function runMemberWidgetAnimation() {
+    if (!memberCounters.length && !memberPies.length) return;
+
+    memberCounters.forEach(el => paintMemberCounter(el, 0));
+    restartMemberPies();
+
+    const start = performance.now();
+    const duration = 1650;
+
+    function step(now) {
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+
+      memberCounters.forEach(el => {
+        const target = Number(el.dataset.memberTarget || 0);
+        paintMemberCounter(el, target * eased);
+      });
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        paintFinalMemberWidget();
+        setTimeout(runMemberWidgetAnimation, 6200);
+      }
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  if (prefersReducedMotion) {
+    paintFinalFinanceReport();
+    paintFinalSponsorWidget();
+    paintFinalMemberWidget();
+    if (promptEl) promptEl.textContent = '';
+    if (chatUser && chatAi) {
+      chatUser.textContent = chatExamples[0].prompt;
+      chatAi.textContent = chatExamples[0].answer;
+      chatUser.classList.remove('is-hidden');
+      chatAi.classList.remove('is-hidden');
+    }
+    return;
+  }
+
+  if (financeLines.length && financeTotal && financeSum) resetFinanceReport();
+  if (sponsorLines.length && sponsorTotal) resetSponsorWidget();
+  if (memberCounters.length || memberPies.length) runMemberWidgetAnimation();
+
+  if (!promptEl || !chatUser || !chatAi || !chatComposer) return;
+
+  let chatIndex = 0;
+  let charIndex = 0;
+
+  function resetChatSequence() {
+    charIndex = 0;
+    promptEl.textContent = '';
+    chatUser.textContent = '';
+    chatAi.textContent = '';
+    chatUser.classList.add('is-hidden');
+    chatAi.classList.add('is-hidden');
+    chatComposer.classList.remove('is-sent');
+    if (chatSend) chatSend.textContent = '→';
+    setTimeout(typeChatPrompt, 620);
+  }
+
+  function typeChatPrompt() {
+    const item = chatExamples[chatIndex];
+    promptEl.textContent = item.prompt.slice(0, charIndex);
+
+    if (charIndex < item.prompt.length) {
+      charIndex += 1;
+      setTimeout(typeChatPrompt, 72);
+      return;
+    }
+
+    setTimeout(sendChatPrompt, 760);
+  }
+
+  function sendChatPrompt() {
+    const item = chatExamples[chatIndex];
+    chatComposer.classList.add('is-sent');
+    chatUser.textContent = item.prompt;
+    chatUser.classList.remove('is-hidden');
+    promptEl.textContent = '';
+    if (chatSend) chatSend.textContent = '✓';
+    setTimeout(showChatAnswer, 980);
+  }
+
+  function showChatAnswer() {
+    const item = chatExamples[chatIndex];
+    if (chatSend) chatSend.textContent = '→';
+    chatAi.textContent = 'ClubOS denkt ...';
+    chatAi.classList.remove('is-hidden');
+
+    setTimeout(() => {
+      chatAi.textContent = item.answer;
+      setTimeout(() => {
+        chatIndex = (chatIndex + 1) % chatExamples.length;
+        resetChatSequence();
+      }, 4200);
+    }, 1150);
+  }
+
+  resetChatSequence();
+})();
+
+// ── Small circles on grid intersections ──────────────────────
+
+const canvas = document.getElementById('site-grid-canvas');
+const ctx = canvas.getContext('2d');
+const GRID = 60;
+const ACCENT = '187, 85, 34';
+let dots = [];
+let sparks = [];
+let w = 0, h = 0;
+let nextSparkAt = 0;
+
+function resizeCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  w = window.innerWidth;
+  h = window.innerHeight;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  initDots();
+  sparks = [];
+}
+
+function initDots() {
+  const cols = Math.floor(w / GRID);
+  const rows = Math.floor(h / GRID);
+  dots = [];
+  for (let r = 1; r < rows; r++) {
+    for (let c = 1; c < cols; c++) {
+      dots.push({ x: c * GRID, y: r * GRID, size: 0.4 + Math.random() * 0.5, phase: Math.random() * Math.PI * 2, speed: 0.001 + Math.random() * 0.001 });
+    }
+  }
+}
+
+function rand(min, max) {
+  return min + Math.random() * (max - min);
+}
+
+function scheduleNextSpark(time) {
+  nextSparkAt = time + rand(1800, 5200);
+}
+
+function spawnSpark(time) {
+  const horizontal = Math.random() > 0.42;
+  const cols = Math.max(2, Math.floor(w / GRID) - 1);
+  const rows = Math.max(2, Math.floor(h / GRID) - 1);
+  const dir = Math.random() > 0.5 ? 1 : -1;
+  const travel = rand(160, 420);
+
+  sparks.push({
+    horizontal,
+    dir,
+    born: time,
+    duration: rand(1050, 1900),
+    line: (horizontal ? Math.ceil(rand(1, rows)) : Math.ceil(rand(1, cols))) * GRID,
+    start: horizontal ? rand(GRID, Math.max(GRID, w - GRID)) : rand(GRID, Math.max(GRID, h - GRID)),
+    travel,
+    tail: rand(32, 74),
+    width: rand(0.7, 1.25),
+    alpha: rand(0.42, 0.72)
+  });
+
+  if (sparks.length > 4) sparks.shift();
+  scheduleNextSpark(time);
+}
+
+function drawSpark(spark, time) {
+  const t = (time - spark.born) / spark.duration;
+  if (t < 0 || t > 1) return false;
+
+  const eased = 1 - Math.pow(1 - t, 3);
+  const head = spark.start + spark.dir * spark.travel * eased;
+  const tail = head - spark.dir * spark.tail;
+  const alpha = Math.sin(Math.PI * t) * spark.alpha;
+
+  ctx.save();
+  ctx.lineWidth = spark.width;
+  ctx.lineCap = 'round';
+  ctx.shadowBlur = 13;
+  ctx.shadowColor = `rgba(${ACCENT}, ${alpha * 0.85})`;
+
+  let gradient;
+  if (spark.horizontal) {
+    gradient = ctx.createLinearGradient(tail, spark.line, head, spark.line);
+  } else {
+    gradient = ctx.createLinearGradient(spark.line, tail, spark.line, head);
+  }
+  gradient.addColorStop(0, `rgba(${ACCENT}, 0)`);
+  gradient.addColorStop(0.65, `rgba(${ACCENT}, ${alpha * 0.32})`);
+  gradient.addColorStop(1, `rgba(240, 255, 254, ${alpha})`);
+  ctx.strokeStyle = gradient;
+  ctx.beginPath();
+  if (spark.horizontal) {
+    ctx.moveTo(tail, spark.line);
+    ctx.lineTo(head, spark.line);
+  } else {
+    ctx.moveTo(spark.line, tail);
+    ctx.lineTo(spark.line, head);
+  }
+  ctx.stroke();
+
+  ctx.beginPath();
+  if (spark.horizontal) {
+    ctx.arc(head, spark.line, 1.25 + alpha * 1.8, 0, Math.PI * 2);
+  } else {
+    ctx.arc(spark.line, head, 1.25 + alpha * 1.8, 0, Math.PI * 2);
+  }
+  ctx.fillStyle = `rgba(187, 85, 34, )`;
+  ctx.fill();
+  ctx.restore();
+  return true;
+}
+
+function drawScene(time) {
+  ctx.clearRect(0, 0, w, h);
+  for (const d of dots) {
+    const pulse = 0.4 + 0.6 * (0.5 + 0.5 * Math.sin(time * 0.001 + d.phase));
+    ctx.beginPath();
+    ctx.arc(d.x, d.y, d.size * pulse, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${ACCENT}, ${pulse * 0.3})`;
+    ctx.fill();
+  }
+
+  if (!nextSparkAt) scheduleNextSpark(time);
+  if (time >= nextSparkAt) spawnSpark(time);
+  sparks = sparks.filter(spark => drawSpark(spark, time));
+}
+
+let animId = null;
+function animate(time) { drawScene(time); animId = requestAnimationFrame(animate); }
+
+function startAnimation() {
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (mq.matches) return;
+  resizeCanvas();
+  animate(0);
+}
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+  cancelAnimationFrame(animId);
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { resizeCanvas(); animate(0); }, 150);
+});
+
+startAnimation();
+
+// ── Calculator ────────────────────────────────────────────────
+
+const membersSlider = document.getElementById('calc-members');
+const membersVal = document.getElementById('calc-members-val');
+const calcHours = document.getElementById('calc-hours');
+const calcToggles = document.querySelectorAll('.calc-card [data-calc-toggle]');
+const calcToolButtons = document.querySelectorAll('.calc-card [data-calc-tool]');
+
+function calcHoursSaved() {
+  const members = parseInt(membersSlider.value);
+  const activeToggles = document.querySelectorAll('.calc-card [data-calc-toggle].active');
+  const activeTool = document.querySelector('.calc-card [data-calc-tool].active');
+  const activities = { instagram: false, tiktok: false, youtube: false, magazine: false };
+  activeToggles.forEach(control => { activities[control.dataset.act] = true; });
+  const memberWork = Math.sqrt(Math.max(members, 1)) * 0.72 + members / 460;
+  let activityHours = 0;
+  if (activities.instagram) activityHours += 4;
+  if (activities.tiktok)    activityHours += 4;
+  if (activities.youtube)   activityHours += 5;
+  if (activities.magazine)  activityHours += 7;
+  const toolFactor = activeTool && activeTool.dataset.calcTool === 'yes' ? 0.82 : 1;
+  const totalHours = (memberWork + activityHours + 7) * toolFactor;
+  const savings = Math.max(3, Math.round(totalHours));
+  calcHours.textContent = savings;
+}
+
+function updateSliderDisplay() {
+  const members = parseInt(membersSlider.value);
+  membersVal.textContent = members >= 5000 ? '5000+' : members.toLocaleString('de-DE');
+  calcHoursSaved();
+}
+
+membersSlider.addEventListener('input', updateSliderDisplay);
+calcToggles.forEach(control => {
+  control.addEventListener('click', () => {
+    const active = !control.classList.contains('active');
+    control.classList.toggle('active', active);
+    control.setAttribute('aria-pressed', String(active));
+    calcHoursSaved();
+  });
+});
+calcToolButtons.forEach(control => {
+  control.addEventListener('click', () => {
+    calcToolButtons.forEach(button => {
+      const active = button === control;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+    calcHoursSaved();
+  });
+});
+updateSliderDisplay();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+</body></html>

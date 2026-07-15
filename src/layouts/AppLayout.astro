@@ -1,0 +1,68 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  activeNav?: string;
+}
+
+const { title, activeNav = 'dashboard' } = Astro.props;
+
+const navItems = [
+  { id: 'dashboard', label: 'Dashboard', href: '/app/dashboard' },
+  { id: 'mitglieder', label: 'Mitglieder', href: '/app/mitglieder' },
+  { id: 'finanzen', label: 'Finanzen', href: '/app/finanzen' },
+  { id: 'sponsoren', label: 'Sponsoren', href: '/app/sponsoren' },
+  { id: 'platzplanung', label: 'Platzplanung', href: '/app/platzplanung' },
+  { id: 'events', label: 'Events', href: '/app/events' },
+  { id: 'vereins-ki', label: 'Vereins-KI', href: '/app/vereins-ki' },
+  { id: 'einstellungen', label: 'Einstellungen', href: '/app/einstellungen' },
+];
+---
+
+<BaseLayout title={title} bodyClass="dashboard-floating-shell">
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo" aria-label="Verein wechseln">
+        <div class="club-switcher" style="width:max-content;min-width:0;padding-right:0.95rem">
+          <div class="club-switcher-logo">
+            <svg class="club-switcher-crest" viewBox="0 0 42 48" fill="none" aria-hidden="true">
+              <path d="M21 3.5L36.5 9V22.2C36.5 32.3 30.4 40.9 21 44.5C11.6 40.9 5.5 32.3 5.5 22.2V9L21 3.5Z" fill="currentColor" fill-opacity="0.18" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
+              <path d="M14 18.2H28" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M21 18.2V33.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              <text x="21" y="15" text-anchor="middle" font-size="8" font-weight="800" fill="currentColor" font-family="Satoshi, Avenir Next, system-ui, sans-serif">TSV</text>
+            </svg>
+          </div>
+          <div>
+            <span class="club-switcher-name">TSV Musterstadt</span>
+            <span class="club-switcher-meta">342 Mitglieder</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        {
+          navItems.map((item) => (
+            <a
+              href={item.href}
+              class:list={['sidebar-link', { active: activeNav === item.id }]}
+            >
+              <span class="sidebar-label">{item.label}</span>
+            </a>
+          ))
+        }
+      </nav>
+    </aside>
+
+    <div class="app-main">
+      <header class="topbar">
+        <div class="topbar-title">{title.replace(' — ClubOS', '')}</div>
+      </header>
+      <main class="app-content">
+        <slot />
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/app.js" is:inline></script>
+</BaseLayout>
