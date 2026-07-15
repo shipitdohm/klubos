@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Einloggen — ClubOS</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="page-center">
+  <div class="auth-card" data-od-id="auth-card-login">
+    <a href="index.html" class="logo" aria-label="ClubOS">
+      <img src="mr8as03a-clubos_logo_white_transparent.png" alt="ClubOS" class="brand-logo-image auth-logo-image">
+    </a>
+
+    <h2 style="font-size:1.25rem;font-weight:600;letter-spacing:-0.02em;margin-bottom:0.375rem">Willkommen zurück</h2>
+    <p style="font-size:0.875rem;color:var(--fg-muted);margin-bottom:1.75rem">Melde dich mit deinem Vereinszugang an.</p>
+
+    <form id="login-form" onsubmit="return handleLogin(event)" novalidate>
+      <div class="form-group">
+        <label class="form-label" for="email">E-Mail oder Benutzername</label>
+        <input class="input" id="email" type="text" placeholder="admin" required autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="password">Passwort</label>
+        <input class="input" id="password" type="password" placeholder="········" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:0.5rem" data-od-id="login-submit">
+        Einloggen
+      </button>
+      <p style="margin-top:0.8rem;text-align:center;font-size:0.75rem;color:var(--fg-muted)">Zugang: <strong style="color:var(--fg)">admin</strong> / <strong style="color:var(--fg)">admin</strong></p>
+    </form>
+
+    <hr class="form-divider">
+    <p style="text-align:center;font-size:0.8125rem;color:var(--fg-muted)">
+      Noch kein Konto? <a href="signup.html" style="color:var(--accent);font-weight:500">Konto erstellen</a>
+    </p>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
