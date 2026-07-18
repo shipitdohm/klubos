@@ -1,0 +1,17 @@
+---
+const destination = '/pilot.html';
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content={`0;url=${destination}`} />
+    <link rel="canonical" href={destination} />
+    <title>Pilot besprechen — KlubOS</title>
+  </head>
+  <body>
+    <p>Weiter zum <a href={destination}>KlubOS Pilotgespräch</a> …</p>
+    <script is:inline>window.location.replace('/pilot.html');</script>
+  </body>
+</html>

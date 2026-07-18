@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vereinssuche - ClubOS</title>
+<title>Vereinssuche - KlubOS</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
 body {
@@ -423,6 +423,35 @@ body {
   box-shadow: 0 0 0 4px rgba(187, 85, 34, 0.06);
 }
 
+.vs-field .value[readonly] {
+  cursor: default;
+  color: var(--fg-muted);
+}
+
+.vs-preview-note {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: start;
+  padding: 0.78rem 0.85rem;
+  border: 0.5px solid rgba(187, 85, 34, 0.2);
+  border-radius: 14px;
+  background: rgba(187, 85, 34, 0.055);
+  color: var(--fg-muted);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.vs-preview-note strong {
+  display: inline-block;
+  color: var(--accent);
+  font-size: 0.64rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.vs-preview-note p { margin: 0.18rem 0 0; }
+
 .vs-actions {
   display: flex;
   justify-content: flex-end;
@@ -475,8 +504,8 @@ body {
 
 <main class="vs-shell" data-od-id="vereinssuche-shell">
   <div class="vs-frame">
-    <a href="index.html" class="vs-brand-outside" aria-label="ClubOS Startseite" data-od-id="vereinssuche-brand">
-      <img src="mr8as03a-clubos_logo_white_transparent.png" alt="ClubOS">
+    <a href="index.html" class="vs-brand-outside" aria-label="KlubOS Startseite" data-od-id="vereinssuche-brand">
+      <img src="mr8as03a-klubos_logo_white_transparent.png" alt="KlubOS">
     </a>
 
     <section class="vs-card" data-od-id="vereinssuche-card">
@@ -505,7 +534,7 @@ body {
         <div class="vs-status-panel is-success" id="vs-status-panel" data-od-id="vereinssuche-status">
           <div class="vs-status-icon" id="vs-status-icon" aria-hidden="true"></div>
           <div>
-            <div class="vs-status-title" id="vs-status-title">Wir haben deinen Verein gefunden!</div>
+            <div class="vs-status-title" id="vs-status-title">Öffentliche Vereinsdaten gefunden</div>
             <div class="vs-status-text" id="vs-status-text">Website und Verband sind als öffentliche Quellen verknüpft.</div>
           </div>
         </div>
@@ -520,30 +549,36 @@ body {
         <div class="vs-fields" data-od-id="vereinssuche-fields">
           <div class="vs-field">
             <label for="r-verein">Vereinsname</label>
-            <input class="value" id="r-verein" type="text">
+            <input class="value" id="r-verein" type="text" readonly>
           </div>
           <div class="vs-field">
             <label for="r-ort">Ort</label>
-            <input class="value" id="r-ort" type="text">
+            <input class="value" id="r-ort" type="text" readonly>
           </div>
           <div class="vs-field">
             <label for="r-verband">Verband</label>
-            <input class="value" id="r-verband" type="text">
+            <input class="value" id="r-verband" type="text" readonly>
           </div>
           <div class="vs-field">
             <label for="r-website">Website</label>
-            <input class="value" id="r-website" type="text">
+            <input class="value" id="r-website" type="text" readonly>
           </div>
         </div>
 
+        <div class="vs-preview-note">
+          <div aria-hidden="true">✦</div>
+          <div><strong>Read-only Vorschau</strong><p>Das sind öffentliche Vereinsdaten – noch kein geschützter KlubOS-Arbeitsbereich. Im Pilot wird daraus euer Vorstandshub.</p></div>
+        </div>
+
         <div class="vs-actions">
-          <button class="btn btn-ghost" type="button" onclick="resetSearch()">Suche zurücksetzen</button>
-          <button class="btn btn-primary" type="button" onclick="confirmAndProceed()">Weiter zum Dashboard</button>
+          <button class="btn btn-ghost" type="button" onclick="resetSearch()">Andere Suche</button>
+          <a class="btn btn-ghost" id="vs-login-link" href="login.html">Einloggen</a>
+          <a class="btn btn-primary" id="vs-pilot-link" href="pilot.html">Pilot für diesen Verein anfragen</a>
         </div>
 
         <div class="vs-error-actions" data-od-id="vereinssuche-error-actions">
           <button class="btn btn-ghost" type="button" onclick="resetSearch()">Erneut suchen</button>
-          <a class="btn btn-primary" href="mailto:hallo@clubos.de?subject=Verein%20nicht%20gefunden">Kontaktiere uns</a>
+          <a class="btn btn-primary" id="vs-not-found-pilot-link" href="pilot.html">Verein hinzufügen lassen</a>
         </div>
       </section>
     </section>
@@ -561,6 +596,8 @@ body {
   const statusText = document.getElementById('vs-status-text');
   const logoCard = document.getElementById('vs-logo-card');
   const clubName = document.getElementById('vs-club-name');
+  const pilotLink = document.getElementById('vs-pilot-link');
+  const notFoundPilotLink = document.getElementById('vs-not-found-pilot-link');
 
   const fields = {
     verein: document.getElementById('r-verein'),
@@ -587,7 +624,9 @@ body {
     search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2" stroke-linecap="round"/></svg>',
   };
 
-  showClub(clubs[0]);
+  const initialQuery = new URLSearchParams(window.location.search).get('verein') || '';
+  queryEl.value = initialQuery;
+  showSearch();
 
   window.handleClubSearch = function(event) {
     event.preventDefault();
@@ -610,6 +649,10 @@ body {
 
   function runSearch(rawQuery) {
     const query = String(rawQuery || '').trim();
+    if (!query) {
+      showSearch();
+      return;
+    }
     setMode('loading');
 
     window.setTimeout(() => {
@@ -674,13 +717,15 @@ body {
 
   function showClub(club) {
     setMode('result');
-    setStatus('success', 'Wir haben deinen Verein gefunden!', 'Logo, Website und Verband sind als öffentliche Quellen verknüpft.');
+    setStatus('success', 'Öffentliche Vereinsdaten gefunden', 'Logo, Website und Verband sind als öffentliche Quellen verknüpft.');
     clubName.textContent = club.name;
     renderLogo(club);
     fields.verein.value = club.legalName;
     fields.ort.value = club.ort;
     fields.verband.value = club.verband;
     fields.website.value = club.website;
+    const params = new URLSearchParams({ verein: club.legalName, ort: club.ort, verband: club.verband, website: club.website, source: 'vereinssuche' });
+    pilotLink.href = 'pilot.html?' + params.toString();
   }
 
   function showNotFound(query) {
@@ -692,6 +737,7 @@ body {
     fields.ort.value = '';
     fields.verband.value = '';
     fields.website.value = '';
+    notFoundPilotLink.href = 'pilot.html?verein=' + encodeURIComponent(query || '');
   }
 
   function setStatus(type, title, text) {
@@ -742,18 +788,8 @@ body {
   };
 
   window.confirmAndProceed = function() {
-    const data = {
-      verein: fields.verein.value,
-      website: fields.website.value,
-      ort: fields.ort.value,
-      verband: fields.verband.value,
-    };
-
-    try {
-      localStorage.setItem('clubos_verein', JSON.stringify(data));
-    } catch (_) {}
-
-    window.location.href = 'dashboard.html';
+    const params = new URLSearchParams({ verein: fields.verein.value, ort: fields.ort.value, verband: fields.verband.value, website: fields.website.value, source: 'vereinssuche' });
+    window.location.href = 'pilot.html?' + params.toString();
   };
 })();
 </script>

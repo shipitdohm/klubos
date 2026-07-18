@@ -1,6 +1,6 @@
-# ClubOS Hosting Plan
+# KlubOS Hosting Plan
 
-This document compares **Vercel** and **Render** for hosting ClubOS, and describes the Astro scaffold added to this repo.
+This document compares **Vercel** and **Render** for hosting KlubOS, and describes the Astro scaffold added to this repo.
 
 ## Current project state
 
@@ -12,7 +12,7 @@ This document compares **Vercel** and **Render** for hosting ClubOS, and describ
 | Backend | Supabase planned (commented out in `js/app.js`) |
 | Build | Astro 5 static output → `dist/` |
 
-ClubOS is a **German-language SaaS** for sports clubs (Mitglieder, Finanzen, Sponsoren, Platzplanung). The near-term hosting need is a **static marketing site + authenticated app shell**. Longer term you'll add Supabase auth, possibly API routes, and cron jobs.
+KlubOS is a **German-language SaaS** for sports clubs (Mitglieder, Finanzen, Sponsoren, Platzplanung). The near-term hosting need is a **static marketing site + authenticated app shell**. Longer term you'll add Supabase auth, possibly API routes, and cron jobs.
 
 ---
 
@@ -44,7 +44,7 @@ ClubOS is a **German-language SaaS** for sports clubs (Mitglieder, Finanzen, Spo
 
 | Criteria | Vercel | Render |
 |----------|--------|--------|
-| **Best fit for ClubOS today** | ✅ Strong | ✅ Good |
+| **Best fit for KlubOS today** | ✅ Strong | ✅ Good |
 | **Static / Astro hosting** | Excellent (native Astro support) | Good (static site service) |
 | **Global CDN / latency (DE users)** | Edge network, fast cold delivery | CDN included; fewer edge POPs than Vercel |
 | **Preview deployments** | Per-PR previews, instant | PR previews on paid plans |
@@ -71,7 +71,7 @@ ClubOS is a **German-language SaaS** for sports clubs (Mitglieder, Finanzen, Spo
 - You may later use **Astro server islands** or edge middleware for auth gating
 - Team is frontend-heavy and wants minimal ops
 
-**Vercel limitations for ClubOS:**
+**Vercel limitations for KlubOS:**
 
 - No always-on background workers (e.g. nightly Beitrags-Reminder emails) without external service
 - Function timeouts cap long operations (PDF generation, bulk imports)
@@ -100,7 +100,7 @@ Config: `vercel.json` (included).
 - You prefer **Docker** for reproducible deploys
 - You need **cron jobs** without a separate scheduler
 
-**Render limitations for ClubOS:**
+**Render limitations for KlubOS:**
 
 - Static site CDN is good but **less edge-optimized** than Vercel for global traffic
 - PR previews require a paid plan
@@ -120,13 +120,13 @@ Config: `render.yaml` (included).
 
 ---
 
-## Recommendation for ClubOS
+## Recommendation for KlubOS
 
 ### Phase 1 (now): **Vercel** for the Astro static site
 
 Reasons:
 
-1. ClubOS is currently **100% static** — Vercel's sweet spot
+1. KlubOS is currently **100% static** — Vercel's sweet spot
 2. Astro has an official Vercel adapter for a future upgrade path
 3. Preview deploys speed up design review of the landing page
 4. Supabase stays external either way
@@ -152,7 +152,7 @@ If you need:
 ## Astro scaffold (added)
 
 ```
-ClubOS/
+KlubOS/
 ├── src/
 │   ├── components/     LandingHeader, LandingFooter
 │   ├── layouts/        BaseLayout, AppLayout

@@ -1,0 +1,17 @@
+---
+const destination = '/vereinssuche.html';
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content={`0;url=${destination}`} />
+    <link rel="canonical" href={destination} />
+    <title>Vereinssuche — KlubOS</title>
+  </head>
+  <body>
+    <p>Weiter zur <a href={destination}>KlubOS Vereinssuche</a> …</p>
+    <script is:inline>window.location.replace('/vereinssuche.html');</script>
+  </body>
+</html>

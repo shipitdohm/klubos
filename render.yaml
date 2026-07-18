@@ -1,9 +1,9 @@
-# Render Blueprint — ClubOS
+# Render Blueprint — KlubOS
 # https://render.com/docs/blueprint-spec
 
 services:
   - type: web
-    name: clubos
+    name: klubos
     runtime: static
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
@@ -23,7 +23,7 @@ services:
 
 # Optional: add when Supabase proxy or API routes are needed
 #  - type: web
-#    name: clubos-api
+#    name: klubos-api
 #    runtime: node
 #    buildCommand: npm install && npm run build
 #    startCommand: node dist/server/entry.mjs

@@ -1,110 +1,18 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import LandingHeader from '../components/LandingHeader.astro';
-import LandingFooter from '../components/LandingFooter.astro';
+/*
+ * Transitional bridge: the refined static landing page remains the visual
+ * source of truth while the Astro route structure is being migrated.
+ * Keeping the body here prevents the production build from falling back to
+ * the older scaffold landing page.
+ */
+import source from '../../index.html?raw';
 
-const features = [
-  {
-    title: 'Mitgliederverwaltung',
-    description: 'Mitglieder, Beiträge und Kommunikation an einem Ort.',
-  },
-  {
-    title: 'Finanzen & Sponsoring',
-    description: 'Übersicht über Einnahmen, Ausgaben und Partner.',
-  },
-  {
-    title: 'Platzplanung',
-    description: 'Buchungen, Trainingszeiten und Verfügbarkeiten koordinieren.',
-  },
-];
+const head = source.match(/<head[^>]*>([\s\S]*?)<\/head>/i)?.[1] ?? '';
+const body = source.match(/<body[^>]*>([\s\S]*?)<\/body>/i)?.[1] ?? '';
 ---
 
-<BaseLayout title="ClubOS — Startseite">
-  <div class="site-grid" aria-hidden="true">
-    <div class="grid-hotspot is-a"></div>
-    <div class="grid-hotspot is-b"></div>
-    <div class="grid-hotspot is-c"></div>
-    <div class="grid-hotspot is-d"></div>
-  </div>
-
-  <LandingHeader />
-
-  <main>
-    <section class="hero-widget-cloud" style="padding:8rem 1.5rem 4rem;max-width:1100px;margin:0 auto;text-align:center">
-      <div class="hero-content" style="margin:0 auto">
-        <p class="eyebrow" style="font-size:0.8125rem;font-weight:600;color:var(--accent);margin-bottom:1rem">
-          Vereinsplattform für Deutschland
-        </p>
-        <h1 style="font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.05;letter-spacing:-0.03em;margin-bottom:1rem">
-          Alles für deinen Verein.<br />Eine Plattform.
-        </h1>
-        <p style="font-size:1.05rem;color:var(--fg-muted);max-width:42rem;margin:0 auto 2rem">
-          ClubOS bündelt Mitgliederverwaltung, Finanzen, Sponsoring und Planung —
-          damit Vorstände weniger administrieren und mehr Verein leben.
-        </p>
-        <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
-          <a href="/signup" class="btn btn-primary btn-lg">Kostenlos starten</a>
-          <a href="/login" class="btn btn-secondary btn-lg">Einloggen</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="features" style="padding:2rem 1.5rem 5rem;max-width:1100px;margin:0 auto">
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem">
-        {
-          features.map((feature) => (
-            <article class="card" style="padding:1.25rem">
-              <h2 style="font-size:1.05rem;margin-bottom:0.5rem">{feature.title}</h2>
-              <p style="color:var(--fg-muted);font-size:0.9rem">{feature.description}</p>
-            </article>
-          ))
-        }
-      </div>
-    </section>
-
-    <section style="padding:0 1.5rem 4rem;max-width:760px;margin:0 auto;text-align:center">
-      <p style="font-size:0.875rem;color:var(--fg-muted);margin-bottom:0.75rem">
-        Migration vom HTML-Prototyp läuft schrittweise in Astro.
-      </p>
-      <a href="/legacy/index.html" style="color:var(--accent);font-size:0.875rem;font-weight:500">
-        Vollständigen Prototyp ansehen →
-      </a>
-    </section>
-  </main>
-
-  <LandingFooter />
-</BaseLayout>
-
-<style>
-  .site-grid {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    background-image:
-      linear-gradient(rgba(17, 24, 39, 0.055) 0.5px, transparent 0.5px),
-      linear-gradient(90deg, rgba(17, 24, 39, 0.055) 0.5px, transparent 0.5px);
-    background-size: 60px 60px;
-    opacity: 0.42;
-  }
-  .grid-hotspot {
-    position: absolute;
-    width: min(46vw, 620px);
-    aspect-ratio: 1.35;
-    border-radius: 50%;
-    opacity: 0.3;
-    pointer-events: none;
-    background: radial-gradient(circle, rgba(187, 85, 34, 0.08), transparent 70%);
-  }
-  .grid-hotspot.is-a { top: 6vh; left: -8vw; }
-  .grid-hotspot.is-b { top: 20vh; right: -9vw; }
-  .grid-hotspot.is-c { top: 58vh; left: 14vw; }
-  .grid-hotspot.is-d { bottom: 8vh; right: 8vw; }
-  main,
-  .landing-footer {
-    position: relative;
-    z-index: 1;
-  }
-</style>
+<!doctype html>
+<html lang="de">
+  <head set:html={head}></head>
+  <body set:html={body}></body>
+</html>

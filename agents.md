@@ -1,6 +1,6 @@
-# ClubOS — Agent Context
+# KlubOS — Agent Context
 
-This file is the operating context for every agent working on ClubOS. It describes the current founder-led product direction, the customer we are prioritizing, the problem we are solving, and how the repository’s product surfaces fit together.
+This file is the operating context for every agent working on KlubOS. It describes the current founder-led product direction, the customer we are prioritizing, the problem we are solving, and how the repository’s product surfaces fit together.
 
 Last reviewed: 2026-07-15
 Current strategy: **DACH context, Germany first, tennis clubs first.**
@@ -9,8 +9,8 @@ Use this file together with the current repository, the user’s task, and the l
 
 ## 1. Identity, relationship, and language
 
-- **ClubOS** is the canonical company, project, and product name everywhere.
-- ClubOS is a software hub for tennis-club boards. It is made up of multiple widgets and work areas; the AI assistant is one important part of the system, not the entire product.
+- **KlubOS** is the canonical company, project, and product name everywhere.
+- KlubOS is a software hub for tennis-club boards. It is made up of multiple widgets and work areas; the AI assistant is one important part of the system, not the entire product.
 - The primary market context is the German-speaking DACH region, with **Germany as the immediate focus**. Austria and Switzerland are relevant later, but they should not distract from learning and winning in Germany.
 - The immediate sport focus is **tennis clubs**. Do not lead-generate for football, golf, indoor sports, or other sports in the current phase unless the founder explicitly asks for it.
 - Customer-facing communication is **German-first**. Use natural, plain German for club boards. Use English for code and internal technical documentation when that is clearer.
@@ -18,13 +18,13 @@ Use this file together with the current repository, the user’s task, and the l
 
 ## 2. The idea and vision
 
-### ClubOS in one paragraph
+### KlubOS in one paragraph
 
-ClubOS is a web-based software hub for tennis-club boards in Germany that brings the board’s daily administrative work into one coordinated app. It includes a dashboard and different widgets for areas such as members, finances, sponsors, court planning, events, settings, and club knowledge. The integrated Vereins-KI is one widget and one orchestration layer within that hub: it helps the board turn natural-language requests into plans, documents, messages, summaries, and actions across the relevant work areas. ClubOS is therefore not merely a chatbot where users throw commands and hope everything happens automatically. It is the operating workspace that connects the club’s information and workflows, using AI to make everyday board work much faster, more effective, and easier to manage. The board remains in control of decisions and approvals.
+KlubOS is a web-based software hub for tennis-club boards in Germany that brings the board’s daily administrative work into one coordinated app. It includes a dashboard and different widgets for areas such as members, finances, sponsors, court planning, events, settings, and club knowledge. The integrated Vereins-KI is one widget and one orchestration layer within that hub: it helps the board turn natural-language requests into plans, documents, messages, summaries, and actions across the relevant work areas. KlubOS is therefore not merely a chatbot where users throw commands and hope everything happens automatically. It is the operating workspace that connects the club’s information and workflows, using AI to make everyday board work much faster, more effective, and easier to manage. The board remains in control of decisions and approvals.
 
 ### Founder-market fit
 
-ClubOS is being built from real club experience, not from a distant view of the market. One founder is based in Munich, is originally from Dortmund, plays in TC Kirchhörde’s men’s team, is the team captain, and is also part of the club board. This gives ClubOS direct access to the language, routines, frustrations, seasonal rhythms, and trust dynamics of German tennis clubs.
+KlubOS is being built from real club experience, not from a distant view of the market. One founder is based in Munich, is originally from Dortmund, plays in TC Kirchhörde’s men’s team, is the team captain, and is also part of the club board. This gives KlubOS direct access to the language, routines, frustrations, seasonal rhythms, and trust dynamics of German tennis clubs.
 
 Agents should use this founder-market fit carefully: it supports authentic understanding and access, but it is not a reason to invent customer claims, testimonials, or market proof.
 
@@ -32,11 +32,11 @@ Agents should use this founder-market fit carefully: it supports authentic under
 
 Tennis clubs are increasingly missing people willing to take on board responsibilities. The people who do take responsibility often have too much to do, alongside work, family, sport, and everyday life. A large share of their time goes into repetitive administration rather than leading the club, supporting members, or improving the tennis community.
 
-ClubOS is the practical answer to that pressure: help the board master more work in a much shorter and more effective time, all in one app. It should reduce the amount of administrative work the board has to carry and make the club less dependent on individual people remembering how everything works.
+KlubOS is the practical answer to that pressure: help the board master more work in a much shorter and more effective time, all in one app. It should reduce the amount of administrative work the board has to carry and make the club less dependent on individual people remembering how everything works.
 
 The central product promise is:
 
-> The board decides. ClubOS helps the board get the work done.
+> The board decides. KlubOS helps the board get the work done.
 
 AI is the multiplier, not the thesis by itself. The thesis is that a focused, connected workspace can give a tennis-club board more capacity with the people it already has.
 
@@ -56,7 +56,7 @@ Do not optimize for AI novelty, feature count, or automation theatre if it does 
 
 The primary customer is a **board member of a German tennis club registered as an `e.V.`**. The club has ongoing tennis operations and a board that wants to use AI and connected software to save time in daily administration.
 
-The product is not limited to unpaid or formally voluntary workers. Many tennis-club board roles are voluntary or volunteer-heavy, which is a major source of the problem, but ClubOS is for **all relevant tennis-club boards**—including clubs with paid staff, mixed structures, or more professional operations when the product can create value.
+The product is not limited to unpaid or formally voluntary workers. Many tennis-club board roles are voluntary or volunteer-heavy, which is a major source of the problem, but KlubOS is for **all relevant tennis-club boards**—including clubs with paid staff, mixed structures, or more professional operations when the product can create value.
 
 ### Geography and sport focus
 
@@ -107,7 +107,7 @@ Strong-fit clubs often show several of these signals:
 - Rejecting a club solely because it is small or because it has some paid staff.
 - Assuming a large club is automatically out of scope because it looks more professional.
 
-## 5. The problem ClubOS solves
+## 5. The problem KlubOS solves
 
 Describe the problem in the language of daily club work, not abstract “digital transformation” language.
 
@@ -123,7 +123,7 @@ The core opportunity is not to make boards work harder with a new tool. It is to
 
 ## 6. Product definition: a multi-widget operating hub
 
-### What ClubOS is
+### What KlubOS is
 
 - A board-first software hub for the daily operation of a tennis club.
 - A dashboard made of widgets and work areas for different administrative domains.
@@ -134,15 +134,15 @@ The core opportunity is not to make boards work harder with a new tool. It is to
 
 ### The AI’s role
 
-The AI chatbot is not the product boundary. It is an interaction and orchestration layer inside ClubOS.
+The AI chatbot is not the product boundary. It is an interaction and orchestration layer inside KlubOS.
 
 - A board member can ask for help in natural German.
-- The AI can use relevant ClubOS context and help produce a useful output.
+- The AI can use relevant KlubOS context and help produce a useful output.
 - The AI should connect to widgets and workflows instead of forcing every task through an isolated chat transcript.
 - The board should be able to review, edit, approve, export, or reject important outputs.
-- Agents must not describe ClubOS as “just a chatbot” or imply that every task happens invisibly without board control.
+- Agents must not describe KlubOS as “just a chatbot” or imply that every task happens invisibly without board control.
 
-### What ClubOS is not
+### What KlubOS is not
 
 - Not only a chatbot.
 - Not a member-facing social network.
@@ -182,10 +182,10 @@ These are useful product-direction signals. An agent must distinguish between a 
 
 ## 8. Product vision and experience principles
 
-- ClubOS should feel like one connected board workspace, not a collection of unrelated tools.
+- KlubOS should feel like one connected board workspace, not a collection of unrelated tools.
 - Widgets make the work visible and navigable; AI makes the work faster and more effective.
 - The AI should be able to move context between relevant work areas, subject to permissions and approval.
-- A board member should be able to understand the value of ClubOS quickly and explain it to another board member in a few minutes.
+- A board member should be able to understand the value of KlubOS quickly and explain it to another board member in a few minutes.
 - The first useful outcome should arrive quickly, ideally through a real tennis-club task rather than a feature tour.
 - Good examples include: preparing the next season’s court allocation, drafting a sponsor report, creating an invitation for the Jahreshauptversammlung, summarizing a board meeting, preparing a newsletter, or identifying overdue member/admin work.
 - The system should support different board roles without making every person learn every module.
@@ -198,7 +198,7 @@ These are useful product-direction signals. An agent must distinguish between a 
 
 ### Positioning
 
-For tennis-club boards in Germany that are carrying too much administrative work with too few people, ClubOS is the connected board operating hub that brings daily club work into one app. It combines practical widgets for members, finances, sponsors, court planning, events, and club administration with an integrated AI assistant that helps the board execute work faster and more effectively. Unlike a standalone chatbot or a collection of disconnected tools, ClubOS connects the board’s workflows and club context in one place.
+For tennis-club boards in Germany that are carrying too much administrative work with too few people, KlubOS is the connected board operating hub that brings daily club work into one app. It combines practical widgets for members, finances, sponsors, court planning, events, and club administration with an integrated AI assistant that helps the board execute work faster and more effectively. Unlike a standalone chatbot or a collection of disconnected tools, KlubOS connects the board’s workflows and club context in one place.
 
 ### Differentiators to emphasize
 
@@ -206,7 +206,7 @@ For tennis-club boards in Germany that are carrying too much administrative work
 - **Board-first:** built for the people running the club, not primarily for members.
 - **Tennis-specific starting point:** court planning, teams, matches, tournaments, seasonal operations, and club realities matter.
 - **Connected context:** the value grows when club information and recurring processes are available together.
-- **Operational outputs:** ClubOS helps create the actual work product, not only store data or produce generic suggestions.
+- **Operational outputs:** KlubOS helps create the actual work product, not only store data or produce generic suggestions.
 - **More capacity with the existing board:** the goal is to save time and make limited human capacity go further.
 - **German-first:** the product and communication should fit how German tennis clubs actually speak and work.
 - **Founder-market fit:** the product is being built by people with direct experience inside German tennis-club boards.
@@ -220,7 +220,7 @@ For tennis-club boards in Germany that are carrying too much administrative work
 - Speak to all relevant board members, not only unpaid volunteers, while recognizing that voluntary administrative work is a major pressure point.
 - Use familiar language: Vorstand, Vorsitzende/r, Kassenwart/in, Schriftführer/in, Sportwart/in, Jugendwart/in, Platzbelegung, Mannschaft, Medenspiel, Turnier, Protokoll, Sponsor, Jahreshauptversammlung.
 - Avoid condescension toward older or less technical board members.
-- Do not call ClubOS “just a chatbot.”
+- Do not call KlubOS “just a chatbot.”
 - Do not claim that a module is live, an integration exists, or an output is fully automated unless the repository or current product evidence supports it.
 - Do not invent slogans, legal details, customer logos, testimonials, pricing exceptions, or brand guidelines that are not documented.
 
@@ -323,7 +323,7 @@ Do not negotiate or promise discounts, legal terms, service levels, or feature a
 
 ## 13. Data protection and trust
 
-ClubOS may process sensitive club and member data, including names, addresses, bank details, memberships, financial information, documents, and meeting records. Treat privacy and security as product requirements.
+KlubOS may process sensitive club and member data, including names, addresses, bank details, memberships, financial information, documents, and meeting records. Treat privacy and security as product requirements.
 
 - Do not expose, copy, or enrich sensitive member data unless the task explicitly requires it and the handling is authorized.
 - Do not send club or personal data to external AI/search tools without authorization and an appropriate data-handling basis.
@@ -355,7 +355,7 @@ The broader Notion product vision describes React/TypeScript, Supabase for datab
 
 1. Start from the user’s requested outcome and the current repository state.
 2. Default to German tennis clubs in Germany unless the task explicitly broadens the scope.
-3. Treat ClubOS as a multi-widget operating hub. The AI assistant is one component and orchestration layer, not the whole product.
+3. Treat KlubOS as a multi-widget operating hub. The AI assistant is one component and orchestration layer, not the whole product.
 4. Use the actual repository pages as product evidence: dashboard, Vereins-KI, members, finances, sponsors, court planning, events, club search, and settings.
 5. Treat “planned,” “vision,” “strategy,” “prototype,” and “risk” statements as different from shipped, validated, or legally approved facts.
 6. Optimize for saving board time and making limited human capacity go further.
@@ -370,7 +370,7 @@ The broader Notion product vision describes React/TypeScript, Supabase for datab
 
 ## 17. Source pages
 
-- [ClubOS](https://app.notion.com/p/dddce3a5cb6f43df9bf81fd294b7cef4)
+- [KlubOS](https://app.notion.com/p/dddce3a5cb6f43df9bf81fd294b7cef4)
 - [Business Plan](https://app.notion.com/p/0f1a8b0d1984401e9411aa4aa6cdc5b1)
 - [Product Vision / Solution](https://app.notion.com/p/37bf49daed5280abb80be74b96c2db04)
 - [ICP](https://app.notion.com/p/37bf49daed52803c958adb2021ca80b4)
@@ -388,13 +388,13 @@ The broader Notion product vision describes React/TypeScript, Supabase for datab
 
 ## 18. Visual identity and UI system
 
-The current website and software surfaces establish a clear ClubOS visual language. Treat `/Users/lito/Desktop/ClubOS Zentrale/ClubOS/clubos-ci.md` as the detailed repository reference and keep new UI work aligned with it.
+The current website and software surfaces establish a clear KlubOS visual language. Treat `klubos-ci.md` as the detailed repository reference and keep new UI work aligned with it.
 
 - **Primary font:** Satoshi, with the existing fallback stack `Avenir Next`, `Manrope`, system UI. Use 400 for body, 500 for controls, 600 for headings, 700–800 sparingly for display numbers and hero moments.
-- **Core palette:** warm off-white `#F3F1F0`, white `#FFFFFF`, warm surface `#ECE8E5`, dark warm text `#1B1816`, muted text `#6A625E`, dim text `#A29A96`, border `#DED8D4`, and ClubOS Terracotta `#BB5522` with hover `#9F461B`. The Terracotta is intentionally inspired by the clay courts of Roland-Garros and is a direct tennis signal in the brand.
+- **Core palette:** warm off-white `#F3F1F0`, white `#FFFFFF`, warm surface `#ECE8E5`, dark warm text `#1B1816`, muted text `#6A625E`, dim text `#A29A96`, border `#DED8D4`, and KlubOS Terracotta `#BB5522` with hover `#9F461B`. The Terracotta is intentionally inspired by the clay courts of Roland-Garros and is a direct tennis signal in the brand.
 - **Semantic colors:** danger `#BA3F36`, warning `#A8761D`, success `#3E7A56`.
 - **Shape:** thin `0.5px` borders, radius tokens `8px / 12px / 16px`, 999px pills, soft shadows and light glass/blur surfaces.
 - **Experience:** calm, warm, precise, board-first and operational. Show concrete widgets and useful outputs; avoid neon AI aesthetics, cold blue SaaS defaults, or excessive decoration.
-- **Logo:** use the existing `mr8as03a-clubos_logo_white_transparent.png` asset. Do not recreate the wordmark as ordinary text or introduce a competing logo.
+- **Logo:** use the existing `mr8as03a-klubos_logo_white_transparent.png` asset. Do not recreate the wordmark as ordinary text or introduce a competing logo.
 - **Secondary colors** such as green, blue, pink, violet, orange, and sand are for status, charts, tennis illustrations, or widget previews—not replacements for Terracotta as the primary brand accent.
-- **Source of truth:** reuse tokens from `css/style.css`; document any new visual token in `clubos-ci.md` and the Notion Brand & Identity page.
+- **Source of truth:** reuse tokens from `css/style.css`; document any new visual token in `klubos-ci.md` and the Notion Brand & Identity page.

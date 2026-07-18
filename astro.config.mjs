@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://clubos.de',
+  site: 'https://klubos.de',
   output: 'static',
   compressHTML: true,
   build: {
