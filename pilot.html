@@ -509,7 +509,7 @@
       <h2>Der Pilot ist vorbereitet.</h2>
       <p id="pilot-success-copy">Die Angaben sind für das erste Gespräch zusammengefasst. Nach der Freigabe wird euer Vereinsbereich automatisch vorbereitet.</p>
       <div class="pilot-success-actions">
-        <a class="btn btn-primary" id="pilot-mail-link" href="mailto:hallo@klubos.de">Anfrage per E-Mail öffnen</a>
+        <a class="btn btn-primary" id="pilot-mail-link" href="mailto:dohm@klubos.de">Anfrage per E-Mail öffnen</a>
         <a class="btn btn-ghost" href="index.html">Zur Website</a>
       </div>
       <div class="pilot-success-note">Der klickbare Prototyp nutzt Beispieltermine. Vor dem Go-live wird der Kalender direkt verbunden und die Anfrage automatisch in den Pilotprozess übernommen.</div>
@@ -645,7 +645,7 @@
       }));
       localStorage.setItem('klubos_pilot_request', JSON.stringify({ ...state, createdAt: new Date().toISOString() }));
     } catch (_) {}
-    mailLink.href = 'mailto:hallo@klubos.de?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    mailLink.href = 'mailto:dohm@klubos.de?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
     success.hidden = false;
     panels.forEach((panel) => { panel.hidden = true; });
     rail.forEach((item) => { item.classList.remove('is-active'); item.classList.add('is-done'); });
