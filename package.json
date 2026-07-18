@@ -1,10 +1,10 @@
 {
-  "name": "clubos",
+  "name": "klubos",
   "type": "module",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "sync:assets": "mkdir -p public/css public/js public/legacy && cp css/style.css public/css/ && cp js/app.js public/js/ && cp mr8as03a-clubos_logo_white_transparent.png public/ && cp *.html public/legacy/",
+    "sync:assets": "mkdir -p public/css public/js public/legacy && cp css/style.css public/css/ && cp js/app.js public/js/ && cp mr8as03a-klubos_logo_white_transparent.png public/ && cp *.html public/legacy/ && cp dashboard.html datenschutz.html einstellungen.html events.html finanzen.html impressum.html login.html mitglieder.html platzplanung.html pilot.html signup.html sponsoren.html vereinssuche.html vereins-ki.html public/",
     "dev": "npm run sync:assets && astro dev",
     "build": "npm run sync:assets && astro build",
     "preview": "astro preview",

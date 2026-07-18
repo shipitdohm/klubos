@@ -3,56 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Konto erstellen — ClubOS</title>
+<title>Zugang erhalten — KlubOS</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <div class="page-center">
   <div class="auth-card" data-od-id="auth-card-signup">
-    <a href="index.html" class="logo" aria-label="ClubOS">
-      <img src="mr8as03a-clubos_logo_white_transparent.png" alt="ClubOS" class="brand-logo-image auth-logo-image">
+    <a href="index.html" class="logo" aria-label="KlubOS">
+      <img src="mr8as03a-klubos_logo_white_transparent.png" alt="KlubOS" class="brand-logo-image auth-logo-image">
     </a>
 
-    <h2 style="font-size:1.25rem;font-weight:600;letter-spacing:-0.02em;margin-bottom:0.375rem">Konto erstellen</h2>
-    <p style="font-size:0.875rem;color:var(--fg-muted);margin-bottom:1.75rem">Richte deinen Vereinszugang ein.</p>
+    <h2 style="font-size:1.25rem;font-weight:600;letter-spacing:-0.02em;margin-bottom:0.375rem">Zugang erhalten</h2>
+    <p style="font-size:0.875rem;color:var(--fg-muted);margin-bottom:1.75rem">KlubOS-Zugänge werden nach einem Pilotgespräch per Einladung eingerichtet.</p>
 
-    <form id="signup-form" onsubmit="return handleSignup(event)">
-      <div class="form-group">
-        <label class="form-label" for="verein">Vereinsname</label>
-        <input class="input" id="verein" type="text" placeholder="z. B. TSV Musterstadt 1890" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="name">Dein Name</label>
-        <input class="input" id="name" type="text" placeholder="Vor- und Nachname" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="signup-email">E-Mail</label>
-        <input class="input" id="signup-email" type="email" placeholder="vorsitz@dein-verein.de" required autocomplete="email">
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="signup-password">Passwort</label>
-        <input class="input" id="signup-password" type="password" placeholder="Mindestens 8 Zeichen" required minlength="8" autocomplete="new-password">
-      </div>
+    <div style="padding:1rem;border:0.5px solid rgba(187,85,34,0.2);border-radius:12px;background:rgba(187,85,34,0.055);color:var(--fg-muted);font-size:0.8125rem;line-height:1.55;margin-bottom:1.25rem">
+      Du möchtest KlubOS für deinen Verein kennenlernen? Wähle zuerst einen passenden Pilot-Workflow und vereinbare ein Gespräch.
+    </div>
 
-      <div style="margin-bottom:1.25rem">
-        <p style="font-size:0.75rem;color:var(--fg-dim);line-height:1.5">
-          Mit der Erstellung eines Kontos stimmst du unseren <a href="#" style="color:var(--accent)">Allgemeinen Geschäftsbedingungen</a> und der <a href="#" style="color:var(--accent)">Datenschutzerklärung</a> zu.
-        </p>
-      </div>
+    <a href="pilot.html" class="btn btn-primary btn-lg" style="width:100%">Pilot besprechen</a>
 
-      <button type="submit" class="btn btn-primary btn-lg" style="width:100%">
-        Konto erstellen
-      </button>
-    </form>
+    <p style="margin-top:1.25rem;font-size:0.75rem;color:var(--fg-dim);line-height:1.5">Du hast bereits eine Einladung erhalten? Nutze den Einladungslink aus deiner E-Mail oder logge dich direkt ein.</p>
 
     <hr class="form-divider">
     <p style="text-align:center;font-size:0.8125rem;color:var(--fg-muted)">
-      Bereits registriert? <a href="login.html" style="color:var(--accent);font-weight:500">Einloggen</a>
+      Bereits eingeladen? <a href="login.html" style="color:var(--accent);font-weight:500">Einloggen</a>
     </p>
   </div>
 </div>
 
-<script src="js/app.js"></script>
 </body>
 </html>

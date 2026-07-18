@@ -1,13 +1,13 @@
-# ClubOS — Corporate Identity & UI-System
+# KlubOS — Corporate Identity & UI-System
 
 Stand: 15.07.2026
 Quelle: die aktuell implementierten Website- und Software-Oberflächen in diesem Repository.
 
-Diese Datei beschreibt die visuelle Basis von ClubOS. Sie ist aus den tatsächlich verwendeten Styles und Komponenten abgeleitet und soll bei neuen Seiten, Widgets, Präsentationen und Marketingmaterialien als Referenz dienen.
+Diese Datei beschreibt die visuelle Basis von KlubOS. Sie ist aus den tatsächlich verwendeten Styles und Komponenten abgeleitet und soll bei neuen Seiten, Widgets, Präsentationen und Marketingmaterialien als Referenz dienen.
 
 ## 1. Markenkern
 
-ClubOS wirkt wie ein ruhiger, intelligenter Arbeits-Hub für Vereinsvorstände: warm, präzise, vertrauenswürdig und praktisch. Die Gestaltung soll administrative Komplexität reduzieren und nicht selbst kompliziert wirken.
+KlubOS wirkt wie ein ruhiger, intelligenter Arbeits-Hub für Vereinsvorstände: warm, präzise, vertrauenswürdig und praktisch. Die Gestaltung soll administrative Komplexität reduzieren und nicht selbst kompliziert wirken.
 
 Die Marke verbindet:
 
@@ -21,7 +21,7 @@ Die Marke verbindet:
 
 ### Primärschrift
 
-**Satoshi** ist die aktuelle ClubOS-UI- und Markenschrift.
+**Satoshi** ist die aktuelle KlubOS-UI- und Markenschrift.
 
 ```css
 font-family: 'Satoshi', 'Avenir Next', 'Manrope', -apple-system,
@@ -69,13 +69,13 @@ Typografische Muster:
 | `--fg-muted` | `#6A625E` | erklärender Text, sekundäre Labels |
 | `--fg-dim` | `#A29A96` | Meta-Informationen, Eyebrows, deaktivierte Inhalte |
 | `--border` | `#DED8D4` | feine Umrandungen und Trennlinien |
-| `--accent` | `#BB5522` | ClubOS Terracotta: CTA, aktive Zustände, AI-Akzent, Links |
+| `--accent` | `#BB5522` | KlubOS Terracotta: CTA, aktive Zustände, AI-Akzent, Links |
 | `--accent-hover` | `#9F461B` | dunklere Hover- und Pressed-Variante |
 | `--danger` | `#BA3F36` | Fehler, kritische oder überfällige Zustände |
 | `--warning` | `#A8761D` | Warnungen, offene oder anstehende Zustände |
 | `--success` | `#3E7A56` | Erfolg, erledigt, bezahlt, bestätigt |
 
-Die zentrale Markenfarbe ist **Terracotta `#BB5522`**. Sie ist bewusst vom Clay-Court von Roland-Garros inspiriert und trägt damit den Tennisbezug von ClubOS direkt in die visuelle Identität. Sie soll als fokussierter Handlungs- und Orientierungsakzent eingesetzt werden, nicht als vollflächige Grundfarbe.
+Die zentrale Markenfarbe ist **Terracotta `#BB5522`**. Sie ist bewusst vom Clay-Court von Roland-Garros inspiriert und trägt damit den Tennisbezug von KlubOS direkt in die visuelle Identität. Sie soll als fokussierter Handlungs- und Orientierungsakzent eingesetzt werden, nicht als vollflächige Grundfarbe.
 
 ### Transparenzen und atmosphärische Farben
 
@@ -117,7 +117,7 @@ Aktuelle Basistokens:
 
 ## 5. Schatten, Glas und Raum
 
-ClubOS nutzt eine zurückhaltende Glass-/Operating-System-Anmutung:
+KlubOS nutzt eine zurückhaltende Glass-/Operating-System-Anmutung:
 
 - Weiße oder fast weiße Flächen mit `backdrop-filter: blur(...)`.
 - Weiche Schatten wie `0 14px 40px rgba(17, 24, 39, 0.10)`.
@@ -153,7 +153,7 @@ ClubOS nutzt eine zurückhaltende Glass-/Operating-System-Anmutung:
 
 - Line-Icons in SVG, `currentColor`, ca. 1–2px Strichstärke.
 - Icons sind Orientierungshilfe, nicht Dekoration.
-- Das aktuelle ClubOS-Wortzeichen liegt als weiße transparente PNG-Datei `mr8as03a-clubos_logo_white_transparent.png` vor (2160 × 630). Es wird auf hellen Flächen per CSS-Filter abgedunkelt und auf dunklen Flächen weiß verwendet.
+- Das aktuelle KlubOS-Wortzeichen liegt als weiße transparente PNG-Datei `mr8as03a-klubos_logo_white_transparent.png` vor (2160 × 630). Es wird auf hellen Flächen per CSS-Filter abgedunkelt und auf dunklen Flächen weiß verwendet.
 - Das Wortzeichen ist ein Bild-Asset und keine frei gesetzte Satoshi-Überschrift. Für den Markenauftritt keine eigene alternative Wortmarke erfinden.
 
 ## 7. Bewegung
@@ -167,7 +167,7 @@ ClubOS nutzt eine zurückhaltende Glass-/Operating-System-Anmutung:
 
 ### Do
 
-- Terrakotta für Handlungen, Fokus und ClubOS-Orientierung verwenden.
+- Terrakotta für Handlungen, Fokus und KlubOS-Orientierung verwenden.
 - Mit warmen Neutraltönen und Weißraum arbeiten.
 - Konkrete Vorstandsarbeit in Widgets sichtbar machen.
 - Daten, Status und nächste Aktion klar priorisieren.

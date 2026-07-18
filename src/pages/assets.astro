@@ -1,0 +1,17 @@
+---
+const destination = '/assets.html';
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content={`0;url=${destination}`} />
+    <link rel="canonical" href={destination} />
+    <title>Assets &amp; Brand Kit — KlubOS</title>
+  </head>
+  <body>
+    <p>Weiter zum <a href={destination}>KlubOS Assets &amp; Brand Kit</a> …</p>
+    <script is:inline>window.location.replace('/assets.html');</script>
+  </body>
+</html>
