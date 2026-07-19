@@ -648,6 +648,7 @@ input, textarea { font-family: inherit; color: inherit; }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1.25rem;
   z-index: 50;
   background: rgba(255, 255, 255, 0.86);
   backdrop-filter: blur(12px);
@@ -685,6 +686,7 @@ input, textarea { font-family: inherit; color: inherit; }
   transition: color 0.15s;
 }
 .landing-nav a:hover { color: var(--fg); }
+.landing-login-link { margin-left: 0.35rem; }
 
 .hero {
   min-height: 100vh;
@@ -1004,6 +1006,8 @@ input, textarea { font-family: inherit; color: inherit; }
     grid-template-columns: 1fr;
   }
   .landing-nav { display: none; }
+  .landing-header { gap: 0.75rem; padding: 0.75rem 1rem; }
+  .landing-login-link { margin-left: auto; }
   .page-header {
     flex-direction: column;
     align-items: flex-start;
