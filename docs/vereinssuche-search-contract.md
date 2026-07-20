@@ -12,8 +12,9 @@ Die Vereinssuche soll in Deutschland echte Tennisvereine im Internet finden und 
 
 - Der DTB-nuLiga-Ergebnisdienst ist die autorisierte Primärquelle für einen auszugebenden Vereinsdatensatz.
 - OpenStreetMap darf als diagnostische Vergleichsquelle abgefragt werden, aber ein nicht-offizieller OSM-Kandidat wird niemals als eindeutiger Onboarding-Treffer ausgegeben. Ohne bestätigten offiziellen Treffer lautet der sichere Zustand `safe_no_match` oder `not_found` und enthält keine Ergebniszeile.
+- Für unsichere oder nicht bestätigte Suchbegriffe sind `ambiguous`, `not_found` und `safe_no_match` sichere Leerzustände, solange `resultCount: 0` gilt. Eine Regression darf deshalb einen dieser ausdrücklich erlaubten Leerzustände liefern, aber niemals eine fremde oder nicht-offizielle Ergebniszeile.
 - Ein zusätzlicher Ortsname darf nur entfernt werden, wenn er in der offiziellen Vereinsadresse bzw. dem offiziellen Datensatz als Ort/Region belegt ist. Freies Wegschneiden beliebiger letzter Wörter ist kein zulässiges Matching.
-- Die erwarteten 32 Fälle, vier P1-Regressionen und 100 Aliasvarianten sind in `scripts/vereinssuche-regression-matrix.v0.8.3.json` versioniert. Die Datei ist ein Erwartungsvertrag, kein Ersatz für den unabhängigen Live-Gate.
+- Die erwarteten 32 Fälle, vier P1-Regressionen und 100 Aliasvarianten sind in `scripts/vereinssuche-regression-matrix.v0.8.3.json` versioniert und werden zusätzlich öffentlich unter [`/scripts/vereinssuche-regression-matrix.v0.8.3.json`](https://klubos.de/scripts/vereinssuche-regression-matrix.v0.8.3.json) ausgeliefert. Die Datei ist ein Erwartungsvertrag, kein Ersatz für den unabhängigen Live-Gate.
 
 ## Fester Ablauf
 

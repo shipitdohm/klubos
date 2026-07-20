@@ -7,6 +7,9 @@ assert.equal(regressionMatrix.contractVersion, 'VS-0.8.3');
 assert.equal(regressionMatrix.matrix32.length, 32);
 assert.equal(regressionMatrix.alias100.length, 100);
 assert.equal(regressionMatrix.p1Regressions.length, 4);
+for (const state of ['unique_official_match', 'ambiguous', 'not_found', 'safe_no_match']) {
+  assert.ok(Array.isArray(regressionMatrix.statePolicy[state]), `matrix missing state policy: ${state}`);
+}
 for (const row of [...regressionMatrix.matrix32, ...regressionMatrix.p1Regressions, ...regressionMatrix.alias100]) {
   for (const field of ['query', 'expectedState', 'expectedCanonicalId', 'allowedSourceNames', 'reason', 'priority']) {
     assert.ok(Object.hasOwn(row, field), `matrix row missing ${field}: ${row.query}`);
