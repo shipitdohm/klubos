@@ -1,3 +1,11 @@
+import {
+  buildSearchVariants,
+  canonicalClubName,
+  isSafeOsmMatch,
+  normalize,
+  stableClubKey,
+} from './vereinssuche-normalization.js';
+
 const NOMINATIM_ENDPOINT = 'https://nominatim.openstreetmap.org/search';
 const OVERPASS_ENDPOINTS = [
   'https://lz4.overpass-api.de/api/interpreter',
@@ -11,7 +19,7 @@ const OSM_SOURCE_URL = 'https://www.openstreetmap.org/';
 const SOURCE_NAME = `${NULIGA_SOURCE_NAME} + ${OSM_SOURCE_NAME} als Fallback`;
 const SOURCE_URL = NULIGA_SOURCE_URL;
 const NOMINATIM_POLICY_URL = 'https://operations.osmfoundation.org/policies/nominatim/';
-const USER_AGENT = 'KlubOS-Vereinssuche/0.6 (+https://klubos.de; contact: hello@klubos.de)';
+const USER_AGENT = 'KlubOS-Vereinssuche/0.7 (+https://klubos.de; contact: hello@klubos.de)';
 const CACHE_TTL_MS = 30_000;
 const NOMINATIM_MIN_INTERVAL_MS = 1_000;
 const NULIGA_TIMEOUT_MS = 12_000;
@@ -76,6 +84,17 @@ export default async function handler(request, response) {
       return sendJson(response, 200, payload);
     }
 
+    if (official.status === 'ambiguous') {
+      const payload = buildPayload(query, checkedAt, null, {
+        sourceName: NULIGA_SOURCE_NAME,
+        sourceUrl: NULIGA_SOURCE_URL,
+        sources: [NULIGA_SOURCE_NAME],
+        matchState: 'ambiguous',
+      });
+      cache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, payload });
+      return sendJson(response, 200, payload);
+    }
+
     const osm = await searchOsmSingle(query, checkedAt);
     if (osm.status === 'match') {
       const payload = buildPayload(query, checkedAt, osm.club, {
@@ -122,6 +141,28 @@ export default async function handler(request, response) {
 }
 
 async function searchNuLiga(query, checkedAt) {
+  const variants = buildSearchVariants(query);
+  let sawAmbiguous = false;
+  let sawUnavailable = false;
+  let successfulRequest = false;
+
+  for (const variant of variants) {
+    const result = await searchNuLigaVariant(variant, checkedAt);
+    if (result.status === 'match') {
+      if (isSafeOsmMatch(result.club, query)) return result;
+      continue;
+    }
+    if (result.status === 'ambiguous') sawAmbiguous = true;
+    if (result.status === 'unavailable') sawUnavailable = true;
+    if (result.status !== 'unavailable') successfulRequest = true;
+  }
+
+  if (sawAmbiguous) return { status: 'ambiguous' };
+  if (sawUnavailable && !successfulRequest) return { status: 'unavailable' };
+  return { status: 'no_match' };
+}
+
+async function searchNuLigaVariant(query, checkedAt) {
   try {
     const response = await fetch(NULIGA_ENDPOINT, {
       method: 'POST',
@@ -480,6 +521,7 @@ function makeClub({
   return {
     id,
     officialId,
+    canonicalName: canonicalClubName(name),
     name: String(name).trim(),
     city: String(city || '').trim(),
     country,
@@ -507,7 +549,7 @@ function makeClub({
 function rankAndDedupe(results, query) {
   const byKey = new Map();
   for (const result of results) {
-    const key = `${normalize(result.name)}|${normalize(result.city)}`;
+    const key = stableClubKey(result);
     const existing = byKey.get(key);
     if (!existing || resultQuality(result, query) > resultQuality(existing, query)) {
       byKey.set(key, result);
@@ -529,18 +571,8 @@ function resultQuality(result, query) {
 }
 
 function chooseSingleResult(results, query) {
-  if (!results.length) return null;
-  if (results.length === 1) return results[0];
-
-  const strongMatches = results.filter((result) => strongNameMatch(result.name, query));
-  return strongMatches.length === 1 ? strongMatches[0] : null;
-}
-
-function strongNameMatch(name, query) {
-  const queryTokens = normalize(query).split(' ');
-  if (queryTokens[0] === 'tc') queryTokens[0] = 'tennisclub';
-  const expandedQuery = queryTokens.filter(Boolean).join(' ');
-  return expandedQuery.length >= 5 && normalize(name).includes(expandedQuery);
+  const exactMatches = results.filter((result) => isSafeOsmMatch(result, query));
+  return exactMatches.length === 1 ? exactMatches[0] : null;
 }
 
 function chooseSearchBbox(items) {
@@ -585,15 +617,6 @@ function osmId(item) {
 
 function osmUrl(item) {
   return `https://www.openstreetmap.org/${item.osm_type || item.type}/${item.osm_id || item.id}`;
-}
-
-function normalize(value) {
-  return String(value || '')
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim();
 }
 
 function buildPayload(query, checkedAt, club, meta) {
