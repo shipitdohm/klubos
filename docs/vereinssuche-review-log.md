@@ -189,3 +189,14 @@ Jede relevante Änderung bekommt hier einen Eintrag. Der Specialist trägt zuers
 - Hypothesis / offene Annahme: Die Priorisierung reduziert Upstream-Mehrdeutigkeit, ohne generische Begriffe automatisch zu einem Verein zu machen; der unabhängige Live-Gate muss dies gegen 32 plus mindestens 100 Varianten bestätigen.
 - Lokale Tests: Aliasvertrag `18` Anker/`113` Varianten inklusive erwarteter `nuliga:DTB:35409`-/`nuliga:DTB:26504`-Identitäten erfolgreich; beide `node --check`-Prüfungen und `git diff --check` erfolgreich. Direkter Astro-Build nach dem VS-0.7.8-Versionbump steht noch aus.
 - Nächster Schritt: VS-0.7.8 bauen, pushen, die sechs Zündorf-/Halle-Fälle öffentlich verifizieren und danach den unabhängigen 32+100-Gate ausschließlich gegen VS-0.7.8 starten.
+
+### 2026-07-20 — VS-0.7.9 offizieller Alias-Retry nach Mehrdeutigkeit
+
+- Commit/Diff: Working tree auf Basis `b4078f5`; `api/vereinssuche.js` wiederholt bei offizieller Mehrdeutigkeit genau die bevorzugte vollständige `TC`-Aliasvariante (zusammengesetzter Name zuerst) und akzeptiert nur einen kanonisch exakten offiziellen Treffer. `vereinssuche.html` und der Adapter werden auf VS-0.7.9 angehoben. OSM wird durch den Retry nicht erweitert.
+- Specialist-Status: `IN_WORK` — lokale Änderung steht vor Build, Push und öffentlicher Verifikation.
+- Observed: VS-0.7.8 löst `Tennisclub Blau-Weiss Halle e.V.` und `Tennisclub Blau-Weiss Halle Halle` offiziell auf, während der Alias `TC Blau Weiss Halle` in einer frischen Antwort noch `ambiguous` blieb; die direkte offizielle Schreibweise `TC Blau-Weiss Halle` liefert `nuliga:DTB:26504`.
+- Claimed: VS-0.7.9 versucht nach dem normalen Aliaslauf einmal die vollständige offizielle `TC`-Variante erneut. Nur kanonische Gleichheit wird akzeptiert; ein erweiterter oder mehrdeutiger Kandidat bleibt abgelehnt.
+- Inferred: Ein Upstream-/Variantensuchlauf kann einen vollständigen offiziellen Kandidaten trotz vorhandener korrekter Schreibweise zu früh hinter einer verkürzten Mehrdeutigkeit verlieren; der begrenzte Retry schließt diese Lücke ohne Fuzzy-Match.
+- Hypothesis / offene Annahme: Der Retry verbessert die Robustheit gegen nuLiga-Varianten-/Providerreihenfolge, ersetzt aber keine echte DTB-ID-Synchronisierung und darf bei weiterem `ambiguous` keinen Verein raten.
+- Lokale Tests: Nach Abschluss des Versionbumps erneut Aliasvertrag, beide `node --check`-Prüfungen, `git diff --check` und Astro-Build ausführen; der unabhängige Live-Gate bleibt maßgeblich.
+- Nächster Schritt: VS-0.7.9 bauen, pushen, die sechs Zündorf-/Halle-Fälle inklusive Cache-Trennung öffentlich prüfen und danach den unabhängigen 32+100-Gate ausschließlich gegen VS-0.7.9 starten.

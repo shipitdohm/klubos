@@ -20,7 +20,7 @@ const OSM_SOURCE_URL = 'https://www.openstreetmap.org/';
 const SOURCE_NAME = `${NULIGA_SOURCE_NAME} + ${OSM_SOURCE_NAME} als Fallback`;
 const SOURCE_URL = NULIGA_SOURCE_URL;
 const NOMINATIM_POLICY_URL = 'https://operations.osmfoundation.org/policies/nominatim/';
-const USER_AGENT = 'KlubOS-Vereinssuche/0.7.8 (+https://klubos.de; contact: hello@klubos.de)';
+const USER_AGENT = 'KlubOS-Vereinssuche/0.7.9 (+https://klubos.de; contact: hello@klubos.de)';
 const CACHE_TTL_MS = 30_000;
 const NOMINATIM_MIN_INTERVAL_MS = 1_000;
 const NULIGA_TIMEOUT_MS = 12_000;
@@ -178,10 +178,25 @@ async function searchNuLiga(query, checkedAt) {
     if (result.status !== 'unavailable') successfulRequest = true;
   }
 
+  const preferredVariant = choosePreferredOfficialVariant(variants);
+  if (sawAmbiguous && preferredVariant) {
+    const retry = await searchNuLigaVariant(preferredVariant, checkedAt);
+    if (retry.status === 'match' && canonicalClubName(retry.club.name) === canonicalClubName(preferredVariant)) {
+      return retry;
+    }
+  }
+
   if (extendedOfficialCandidate && !sawAmbiguous) return { status: 'match', club: extendedOfficialCandidate.club };
   if (sawAmbiguous) return { status: 'ambiguous' };
   if (sawUnavailable && !successfulRequest) return { status: 'unavailable' };
   return { status: 'no_match' };
+}
+
+function choosePreferredOfficialVariant(variants) {
+  return variants.find((variant) => /^TC\s+/i.test(variant) && /\b(?:blau|rot|gruen|grün)-(?:weiss|weiß)\b/i.test(variant))
+    || variants.find((variant) => /^TC\s+/i.test(variant))
+    || variants[0]
+    || '';
 }
 
 function isOfficialNameExtension(club, variant) {
