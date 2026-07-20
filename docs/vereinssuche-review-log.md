@@ -211,3 +211,14 @@ Jede relevante Änderung bekommt hier einen Eintrag. Der Specialist trägt zuers
 - Hypothesis / offene Annahme: Getrennte Schreibweisencaches erhöhen die Upstream-Abfragen moderat; der vorhandene 30-Sekunden-TTL und die Nominatim-Drosselung bleiben bestehen. Die unabhängige Matrix muss prüfen, dass keine Cachevariante falsche Mehrdeutigkeit oder falsche Entität erzeugt.
 - Lokale Tests: Nach dem Versionbump erneut Aliasvertrag, `node --check`, `git diff --check` und Astro-Build ausführen. Kein Live-Suchclaim vor Push.
 - Nächster Schritt: VS-0.8.0 bauen, pushen, direkte und aliasierte Halle-/Zündorf-Schreibweisen mit getrennten Cache-Keys prüfen und danach den unabhängigen 32+100-Gate ausschließlich gegen VS-0.8.0 starten.
+
+### 2026-07-20 — VS-0.8.1 vollständige Compound-Variante zuerst
+
+- Commit/Diff: Working tree auf Basis `aaaedd9`; `api/vereinssuche-normalization.js` priorisiert die compound-/Bindestrich-Variante auch gegenüber der ungetrennten `TC Blau Weiss Halle`-Rohform. `TC Blau Weiss Halle` und `Tennisclub Blau Weiss Halle` beginnen dadurch mit `TC Blau-Weiss Halle`. `api/vereinssuche.js` und `vereinssuche.html` werden auf VS-0.8.1 angehoben.
+- Specialist-Status: `IN_WORK` — lokale Änderung steht vor Build, Push und öffentlicher Verifikation.
+- Observed: VS-0.8.0 trennte die Cache-Keys korrekt; `TC Blau-Weiss Halle`, `Tennisclub Blau-Weiss Halle e.V.` und Zündorf waren offiziell. `TC Blau Weiss Halle` blieb trotz vorhandener Compound-Variante `ambiguous`, weil die Rohform zuerst abgefragt wurde.
+- Claimed: Die vollständige offizielle Compound-Variante wird jetzt als erste Live-Abfrage verwendet; der bestehende exakte Retry und die getrennten Schreibweisencaches bleiben aktiv.
+- Inferred: Damit wird die funktionierende offizielle DTB-Form direkt verwendet, bevor nuLiga eine ungetrennte Rohform als mehrdeutig klassifiziert.
+- Hypothesis / offene Annahme: Die erste Variantenauswahl behebt die verbleibende Halle-Lücke, ohne Fuzzy-Matching oder OSM-Ersatz einzuführen; der unabhängige Gate muss dies bestätigen.
+- Lokale Tests: Neue First-Variant-Assertions für Halle, Aliasvertrag mit 18 Ankern/113 Varianten, beide `node --check`-Prüfungen, `git diff --check` und Astro-Build erfolgreich auszuführen.
+- Nächster Schritt: VS-0.8.1 bauen, pushen, `TC Blau Weiss Halle` öffentlich verifizieren und danach 32+100 ausschließlich gegen VS-0.8.1 prüfen lassen.

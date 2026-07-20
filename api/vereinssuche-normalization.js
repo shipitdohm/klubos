@@ -49,7 +49,7 @@ function buildIdentityPreservingVariants(value) {
   for (const base of bases) {
     if (!base) continue;
     const compound = hyphenateCompound(base);
-    for (const prefixed of [...prefixVariants(base), ...prefixVariants(compound)]) {
+    for (const prefixed of [...prefixVariants(compound), ...prefixVariants(base)]) {
       variants.add(prefixed);
     }
     variants.add(compound);
