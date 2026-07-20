@@ -36,6 +36,7 @@ for (const anchor of realClubAnchors) {
 assert.equal(canonicalClubName('TC Großhesselohe'), canonicalClubName('Tennisclub Grosshesselohe e.V.'));
 assert.equal(canonicalClubName('TC Kirchhörde'), canonicalClubName('Tennis-Club Kirchhoerde e. V.'));
 assert.ok(buildSearchVariants('Tennisclub Blau Weiß Zündorf').includes('TC Blau-Weiß Zündorf'));
+assert.ok(buildSearchVariants('TC Weiden Köln').includes('TC Weiden'));
 assert.equal(isSafeOsmMatch({ name: 'Tennisclub Oberhaid e.V.', city: 'Oberhaid' }, 'Tennisclub Bamberg'), false);
 assert.equal(isSafeOsmMatch({ name: 'Tennisclub Neuss-Weckhoven e.V.', city: 'Neuss' }, 'Tennisclub Neuss'), false);
 assert.equal(isSafeOsmMatch({ name: 'Tennisclub Kirchhörde eV', city: 'Dortmund' }, 'TC Kirchhörde'), true);

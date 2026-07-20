@@ -52,22 +52,24 @@ export function buildSearchVariants(query) {
     if (locationFragment && normalize(locationFragment).length >= 6 && rawTokens.length >= 3) {
       queue.unshift(locationFragment);
     }
+    if (/^(?:tc|tennisclub|tennis[ -]+club)$/i.test(rawTokens[0]) && rawTokens.length >= 3) {
+      queue.unshift(`${rawTokens[0]} ${rawTokens.slice(1, -1).join(' ')}`);
+    }
 
-    const addPrefixVariants = (value) => {
+    const addPrefixVariants = (value, prioritize = false) => {
       const prefix = value.match(/^\s*(tc|tennisclub|tennis[ -]+club)\b\s*(.*)$/i);
       if (!prefix) return;
       const rest = prefix[2].trim();
       if (!rest) return;
-      queue.push(`TC ${rest}`);
-      queue.push(`Tennisclub ${rest}`);
-      queue.push(`Tennis-Club ${rest}`);
+      const next = [`TC ${rest}`, `Tennisclub ${rest}`, `Tennis-Club ${rest}`];
+      if (prioritize) queue.unshift(...next);
+      else queue.push(...next);
     };
     addPrefixVariants(current);
 
     const compound = current.replace(/\b(blau|rot|gruen|grün|schwarz|gelb|gold)\s+(weiss|weiß|blau|rot|gruen|grün|schwarz|gelb|gold)(?=\s|$)/gi, '$1-$2');
     if (compound !== current) {
-      queue.push(compound);
-      addPrefixVariants(compound);
+      addPrefixVariants(compound, true);
     }
 
     const ascii = current.replace(/[äöüÄÖÜß]/g, (character) => ({
