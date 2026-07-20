@@ -19,7 +19,7 @@ const OSM_SOURCE_URL = 'https://www.openstreetmap.org/';
 const SOURCE_NAME = `${NULIGA_SOURCE_NAME} + ${OSM_SOURCE_NAME} als Fallback`;
 const SOURCE_URL = NULIGA_SOURCE_URL;
 const NOMINATIM_POLICY_URL = 'https://operations.osmfoundation.org/policies/nominatim/';
-const USER_AGENT = 'KlubOS-Vereinssuche/0.7 (+https://klubos.de; contact: hello@klubos.de)';
+const USER_AGENT = 'KlubOS-Vereinssuche/0.7.1 (+https://klubos.de; contact: hello@klubos.de)';
 const CACHE_TTL_MS = 30_000;
 const NOMINATIM_MIN_INTERVAL_MS = 1_000;
 const NULIGA_TIMEOUT_MS = 12_000;
@@ -148,10 +148,7 @@ async function searchNuLiga(query, checkedAt) {
 
   for (const variant of variants) {
     const result = await searchNuLigaVariant(variant, checkedAt);
-    if (result.status === 'match') {
-      if (isSafeOsmMatch(result.club, query)) return result;
-      continue;
-    }
+    if (result.status === 'match') return result;
     if (result.status === 'ambiguous') sawAmbiguous = true;
     if (result.status === 'unavailable') sawUnavailable = true;
     if (result.status !== 'unavailable') successfulRequest = true;
