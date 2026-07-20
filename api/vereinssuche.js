@@ -4,6 +4,7 @@ import {
   isSafeOsmMatch,
   isCanonicalReduction,
   isCanonicalLocationQualifier,
+  hasColorCompound,
   normalize,
   stableClubKey,
 } from './vereinssuche-normalization.js';
@@ -21,7 +22,7 @@ const OSM_SOURCE_URL = 'https://www.openstreetmap.org/';
 const SOURCE_NAME = NULIGA_SOURCE_NAME;
 const SOURCE_URL = NULIGA_SOURCE_URL;
 const NOMINATIM_POLICY_URL = 'https://operations.osmfoundation.org/policies/nominatim/';
-const USER_AGENT = 'KlubOS-Vereinssuche/0.8.3 (+https://klubos.de; contact: hello@klubos.de)';
+const USER_AGENT = 'KlubOS-Vereinssuche/0.8.4 (+https://klubos.de; contact: hello@klubos.de)';
 const CACHE_TTL_MS = 30_000;
 const NOMINATIM_MIN_INTERVAL_MS = 1_000;
 const NULIGA_TIMEOUT_MS = 12_000;
@@ -169,7 +170,7 @@ async function searchNuLiga(query, checkedAt) {
   }
 
   if (extendedOfficialCandidate && !sawAmbiguous) return { status: 'match', club: extendedOfficialCandidate.club };
-  if (sawAmbiguous) return { status: 'ambiguous' };
+  if (sawAmbiguous) return hasColorCompound(query) ? { status: 'no_match' } : { status: 'ambiguous' };
   if (sawUnavailable && !successfulRequest) return { status: 'unavailable' };
   return { status: 'no_match' };
 }

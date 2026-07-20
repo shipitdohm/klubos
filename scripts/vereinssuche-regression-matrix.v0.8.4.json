@@ -1,0 +1,1383 @@
+{
+  "contractVersion": "VS-0.8.4",
+  "generatedAt": "2026-07-20",
+  "sourcePolicy": "official_dtb_only_for_onboarding",
+  "notes": [
+    "This is an expected-result contract, not a claim that every case has already been live-tested in this version.",
+    "A safe_no_match has zero results; a non-official OSM candidate may be withheld and must never be returned as a unique onboarding result.",
+    "Transport errors are recorded separately from expectedState and never converted into a match."
+  ],
+  "statePolicy": {
+    "unique_official_match": ["unique_official_match"],
+    "ambiguous": ["ambiguous", "not_found"],
+    "not_found": ["not_found"],
+    "safe_no_match": ["safe_no_match", "not_found"]
+  },
+  "matrix32": [
+    {
+      "query": "TC Großhesselohe",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:23375",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "known official club; DACH federation coverage",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Großhesselohe",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:23375",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub alias",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Grosshesselohe",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:23375",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "ASCII umlaut alias",
+      "priority": "P2"
+    },
+    {
+      "query": "TC GH",
+      "expectedState": "not_found",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "unverified short abbreviation must not guess",
+      "priority": "P1"
+    },
+    {
+      "query": "TSC Hansa",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26401",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official club abbreviation",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Hansa Dortmund",
+      "expectedState": "ambiguous",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "generic expanded name remains uncertain",
+      "priority": "P1"
+    },
+    {
+      "query": "TC Kirchhörde",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official baseline",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Kirchhörde",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub alias",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Kirchhorde",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "ASCII umlaut alias",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Kirchhorde",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "ASCII umlaut plus TC/Tennisclub alias",
+      "priority": "P2"
+    },
+    {
+      "query": "TCK",
+      "expectedState": "ambiguous",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "unverified short abbreviation must not guess",
+      "priority": "P1"
+    },
+    {
+      "query": "Kirchhörde",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "location/name fragment with unique official match",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Weiden",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36146",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official baseline",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Weiden",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36146",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub alias",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Weiden Köln",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36146",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "city qualifier",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau-Weiß Zündorf",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official baseline",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau Weiß Zündorf",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and spacing alias",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau-Weiss Zundorf",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "ASCII umlaut and hyphen alias",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau Weiss Zundorf",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "ASCII umlaut, spacing and TC/Tennisclub alias",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Rot-Weiss Porz",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official baseline",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Rot-Weiss Porz",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub alias",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Grün-Gold Köln",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "OSM candidate must not become an onboarding result without official DTB confirmation",
+      "priority": "P1"
+    },
+    {
+      "query": "Tennisclub Grün-Gold Köln",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "OSM candidate must not become an onboarding result without official DTB confirmation",
+      "priority": "P1"
+    },
+    {
+      "query": "TC Bredeney",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35605",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official baseline",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Bredeney",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35605",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub alias",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau-Weiss Halle",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official baseline",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau-Weiss Halle",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub alias",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau Weiss Halle",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "ASCII spacing/compound alias",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau-Weiss Halle e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub plus e.V. alias",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Augsburg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22467",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official baseline",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Augsburg",
+      "expectedState": "ambiguous",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "generic expanded name remains uncertain",
+      "priority": "P1"
+    },
+    {
+      "query": "zzzzz tennisclub",
+      "expectedState": "not_found",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "negative no-result sentinel",
+      "priority": "P1"
+    }
+  ],
+  "p1Regressions": [
+    {
+      "query": "TC Grün-Gold Köln",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "OSM candidate must not become an onboarding result without official DTB confirmation",
+      "priority": "P1"
+    },
+    {
+      "query": "Tennisclub Grün-Gold Köln Köln",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "OSM candidate must not become an onboarding result without official DTB confirmation",
+      "priority": "P1"
+    },
+    {
+      "query": "TC Rot-Weiss Porz Köln",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "city qualifier after official alias",
+      "priority": "P1"
+    },
+    {
+      "query": "Tennisclub Rot-Weiss Porz Köln",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub plus city qualifier",
+      "priority": "P1"
+    }
+  ],
+  "alias100": [
+    {
+      "query": "TC Großhesselohe",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:23375",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Großhesselohe",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:23375",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Grosshesselohe",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:23375",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Grosshesselohe",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:23375",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Großhesselohe e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:23375",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Großhesselohe e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:23375",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Großhesselohe Grosshesselohe",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:23375",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Großhesselohe Grosshesselohe",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:23375",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Großhesselohe",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:23375",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Großhesselohe",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:23375",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Kirchhörde",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Kirchhörde",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Kirchhorde",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Kirchhorde",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Kirchhörde e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Kirchhörde e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Kirchhörde Dortmund",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Kirchhörde Dortmund",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Kirchhörde",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Kirchhörde",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26403",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII, e.V., city and hyphen aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Weiden",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36146",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city qualifier aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Weiden",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36146",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city qualifier aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Weiden",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36146",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city qualifier aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Weiden",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36146",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city qualifier aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Weiden e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36146",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city qualifier aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Weiden e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36146",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city qualifier aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Weiden Köln",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36146",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city qualifier aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Weiden Köln",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36146",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city qualifier aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Weiden",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36146",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city qualifier aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Weiden",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36146",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city qualifier aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Rot-Weiss Porz",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, city qualifier and compound aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Rot-Weiss Porz",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, city qualifier and compound aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Rot-Weiss Porz",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, city qualifier and compound aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Rot-Weiss Porz",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, city qualifier and compound aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Rot-Weiss Porz e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, city qualifier and compound aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Rot-Weiss Porz e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, city qualifier and compound aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Rot-Weiss Porz Köln",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, city qualifier and compound aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Rot-Weiss Porz Köln",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, city qualifier and compound aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Rot Weiss Porz",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, city qualifier and compound aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Rot Weiss Porz",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:36144",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, city qualifier and compound aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau-Weiß Zündorf",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII umlaut, spacing and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau Weiß Zündorf",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII umlaut, spacing and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau-Weiss Zundorf",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII umlaut, spacing and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau Weiss Zundorf",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII umlaut, spacing and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau-Weiß Zündorf e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII umlaut, spacing and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau Weiß Zündorf e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII umlaut, spacing and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau-Weiß Zündorf Köln",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII umlaut, spacing and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau Weiß Zündorf Köln",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII umlaut, spacing and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau Weiß Zündorf",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII umlaut, spacing and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau Weiß Zündorf",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35409",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, ASCII umlaut, spacing and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Bredeney",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35605",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Bredeney",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35605",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Bredeney",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35605",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Bredeney",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35605",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Bredeney e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35605",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Bredeney e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35605",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Bredeney Essen",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35605",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Bredeney Essen",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35605",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Bredeney",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35605",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Bredeney",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:35605",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Augsburg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22467",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official TC form versus generic Tennisclub form",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Augsburg",
+      "expectedState": "ambiguous",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official TC form versus generic Tennisclub form",
+      "priority": "P1"
+    },
+    {
+      "query": "TC Augsburg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22467",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official TC form versus generic Tennisclub form",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Augsburg",
+      "expectedState": "ambiguous",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official TC form versus generic Tennisclub form",
+      "priority": "P1"
+    },
+    {
+      "query": "TC Augsburg e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22467",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official TC form versus generic Tennisclub form",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Augsburg e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22467",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official TC form versus generic Tennisclub form",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Augsburg Augsburg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22467",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official TC form versus generic Tennisclub form",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Augsburg Augsburg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22467",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official TC form versus generic Tennisclub form",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Augsburg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22467",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official TC form versus generic Tennisclub form",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Augsburg",
+      "expectedState": "ambiguous",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "official TC form versus generic Tennisclub form",
+      "priority": "P1"
+    },
+    {
+      "query": "TC Bamberg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22107",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Bamberg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22107",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Bamberg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22107",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Bamberg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22107",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Bamberg e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22107",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Bamberg e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22107",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Bamberg Bamberg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22107",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Bamberg Bamberg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22107",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Bamberg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22107",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Bamberg",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:22107",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau-Weiss Halle",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, compound, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau-Weiss Halle",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, compound, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau-Weiss Halle",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, compound, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau-Weiss Halle",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, compound, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau-Weiss Halle e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, compound, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau-Weiss Halle e.V.",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, compound, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau-Weiss Halle Halle",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, compound, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau-Weiss Halle Halle",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, compound, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Blau Weiss Halle",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, compound, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "Tennisclub Blau Weiss Halle",
+      "expectedState": "unique_official_match",
+      "expectedCanonicalId": "nuliga:DTB:26504",
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "TC/Tennisclub, compound, e.V. and city aliases",
+      "priority": "P2"
+    },
+    {
+      "query": "TC Grün-Gold Köln",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "non-official OSM candidates are withheld from onboarding",
+      "priority": "P1"
+    },
+    {
+      "query": "Tennisclub Grün-Gold Köln",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "non-official OSM candidates are withheld from onboarding",
+      "priority": "P1"
+    },
+    {
+      "query": "TC Grun-Gold Koln",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "non-official OSM candidates are withheld from onboarding",
+      "priority": "P1"
+    },
+    {
+      "query": "Tennisclub Grun-Gold Koln",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "non-official OSM candidates are withheld from onboarding",
+      "priority": "P1"
+    },
+    {
+      "query": "TC Grün-Gold Köln e.V.",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "non-official OSM candidates are withheld from onboarding",
+      "priority": "P1"
+    },
+    {
+      "query": "Tennisclub Grün-Gold Köln e.V.",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "non-official OSM candidates are withheld from onboarding",
+      "priority": "P1"
+    },
+    {
+      "query": "TC Grün-Gold Köln Köln",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "non-official OSM candidates are withheld from onboarding",
+      "priority": "P1"
+    },
+    {
+      "query": "Tennisclub Grün-Gold Köln Köln",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "non-official OSM candidates are withheld from onboarding",
+      "priority": "P1"
+    },
+    {
+      "query": "TC Grün Gold Köln",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "non-official OSM candidates are withheld from onboarding",
+      "priority": "P1"
+    },
+    {
+      "query": "Tennisclub Grün Gold Köln",
+      "expectedState": "safe_no_match",
+      "expectedCanonicalId": null,
+      "allowedSourceNames": [
+        "DTB nuLiga (offizieller Verbands-Ergebnisdienst)"
+      ],
+      "reason": "non-official OSM candidates are withheld from onboarding",
+      "priority": "P1"
+    }
+  ]
+}
+

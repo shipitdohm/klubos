@@ -94,6 +94,10 @@ export function isCanonicalLocationQualifier(query, candidate, location) {
   return remaining.length > 0 && remaining.every((token) => locationTokens.includes(token));
 }
 
+export function hasColorCompound(value) {
+  return /\b(?:blau|rot|gruen|grün|schwarz|gelb|gold)[ -]+(?:weiss|weiß|blau|rot|gruen|grün|schwarz|gelb|gold)\b/i.test(String(value || ''));
+}
+
 function normalizeClubTokens(value) {
   const tokens = applyKnownAsciiAliases(normalize(value)).split(' ').filter(Boolean);
   while (tokens.length && ['e', 'v', 'ev', 'eg'].includes(tokens.at(-1))) tokens.pop();

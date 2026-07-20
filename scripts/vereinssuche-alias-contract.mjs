@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
-import { buildSearchVariants, canonicalClubName, isCanonicalLocationQualifier, isCanonicalReduction, isSafeOsmMatch } from '../api/vereinssuche-normalization.js';
+import { buildSearchVariants, canonicalClubName, hasColorCompound, isCanonicalLocationQualifier, isCanonicalReduction, isSafeOsmMatch } from '../api/vereinssuche-normalization.js';
 
-const regressionMatrix = JSON.parse(fs.readFileSync(new URL('./vereinssuche-regression-matrix.v0.8.3.json', import.meta.url), 'utf8'));
-assert.equal(regressionMatrix.contractVersion, 'VS-0.8.3');
+const regressionMatrix = JSON.parse(fs.readFileSync(new URL('./vereinssuche-regression-matrix.v0.8.4.json', import.meta.url), 'utf8'));
+assert.equal(regressionMatrix.contractVersion, 'VS-0.8.4');
 assert.equal(regressionMatrix.matrix32.length, 32);
 assert.equal(regressionMatrix.alias100.length, 100);
 assert.equal(regressionMatrix.p1Regressions.length, 4);
@@ -70,6 +70,9 @@ assert.ok(isCanonicalReduction('TC Augsburg Augsburg', 'TC Augsburg'));
 assert.ok(isCanonicalLocationQualifier('TC Rot-Weiss Porz Köln', 'TC Rot-Weiss Porz', 'Köln'));
 assert.ok(isCanonicalLocationQualifier('Tennisclub Rot-Weiss Porz Köln', 'TC Rot-Weiss Porz', 'Köln'));
 assert.ok(!isCanonicalLocationQualifier('Tennisclub Köln', 'TC Köln', 'Köln'));
+assert.ok(hasColorCompound('TC Grün Gold Köln'));
+assert.ok(hasColorCompound('TC Grün-Gold Köln'));
+assert.ok(!hasColorCompound('Tennisclub Köln'));
 assert.ok(!isCanonicalReduction('Tennisclub Köln', 'TC Köln'));
 assert.ok(buildSearchVariants('TC Rot-Weiss Porz Köln').includes('TC Rot-Weiss Porz'));
 assert.ok(buildSearchVariants('Tennisclub Rot-Weiss Porz Köln').includes('Tennisclub Rot-Weiss Porz'));
