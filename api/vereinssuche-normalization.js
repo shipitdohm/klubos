@@ -7,6 +7,7 @@ const GERMAN_ORTHOGRAPHY = [
 
 const KNOWN_ASCII_NAME_ALIASES = [
   ['kirchhorde', 'kirchhoerde'],
+  ['zundorf', 'zuendorf'],
 ];
 
 export function normalize(value) {
@@ -25,6 +26,28 @@ export function normalize(value) {
 export function canonicalClubName(value) {
   const tokens = normalizeClubTokens(value);
   return tokens.join(' ');
+}
+
+function buildIdentityPreservingVariants(value) {
+  const variants = new Set();
+  const bases = [
+    value,
+    stripOfficialSuffix(value),
+    applyKnownAsciiAliases(stripOfficialSuffix(value)),
+    collapseTrailingDuplicateLocation(applyKnownAsciiAliases(stripOfficialSuffix(value))),
+  ];
+
+  for (const base of bases) {
+    if (!base) continue;
+    variants.add(base);
+    const compound = hyphenateCompound(base);
+    variants.add(compound);
+    for (const prefixed of [...prefixVariants(base), ...prefixVariants(compound)]) {
+      variants.add(prefixed);
+    }
+  }
+
+  return [...variants];
 }
 
 export function isCanonicalReduction(original, candidate) {
@@ -61,7 +84,8 @@ function normalizeClubTokens(value) {
 export function buildSearchVariants(query) {
   const variants = [];
   const seen = new Set();
-  const queue = [String(query || '').trim()];
+  const initial = String(query || '').trim();
+  const queue = [...buildIdentityPreservingVariants(initial), initial];
 
   while (queue.length && variants.length < 12) {
     const current = queue.shift().replace(/\s+/g, ' ').trim();
@@ -70,9 +94,7 @@ export function buildSearchVariants(query) {
     seen.add(key);
     variants.push(current);
 
-    const withoutSuffix = current
-      .replace(/[,\s]+(?:e\.?\s*v\.?|e\.?\s*g\.?|ev|eg)\s*$/i, '')
-      .trim();
+    const withoutSuffix = stripOfficialSuffix(current);
     if (withoutSuffix !== current) queue.push(withoutSuffix);
 
     const knownAsciiAlias = applyKnownAsciiAliases(current);
@@ -98,7 +120,7 @@ export function buildSearchVariants(query) {
     };
     addPrefixVariants(current);
 
-    const compound = current.replace(/\b(blau|rot|gruen|grün|schwarz|gelb|gold)\s+(weiss|weiß|blau|rot|gruen|grün|schwarz|gelb|gold)(?=\s|$)/gi, '$1-$2');
+    const compound = hyphenateCompound(current);
     if (compound !== current) {
       addPrefixVariants(compound, true);
     }
@@ -116,9 +138,20 @@ export function buildSearchVariants(query) {
   return variants;
 }
 
+function hyphenateCompound(value) {
+  return String(value || '').replace(/\b(blau|rot|gruen|grün|schwarz|gelb|gold)\s+(weiss|weiß|blau|rot|gruen|grün|schwarz|gelb|gold)(?=\s|$)/gi, '$1-$2');
+}
+
+function prefixVariants(value) {
+  const prefix = String(value || '').match(/^\s*(tc|tennisclub|tennis[ -]+club)\b\s*(.*)$/i);
+  if (!prefix || !prefix[2].trim()) return [];
+  const rest = prefix[2].trim();
+  return [`TC ${rest}`, `Tennisclub ${rest}`, `Tennis-Club ${rest}`];
+}
+
 function stripOfficialSuffix(value) {
   return String(value || '')
-    .replace(/(?:^|\s)(?:e\s*v|e\s*g|ev|eg)\s*$/i, '')
+    .replace(/(?:^|[\s,])(?:e\.?\s*v\.?|e\.?\s*g\.?|ev|eg)\s*$/i, '')
     .trim();
 }
 
@@ -136,7 +169,7 @@ function applyKnownAsciiAliases(value) {
 
 function collapseTrailingDuplicateLocation(value) {
   const tokens = String(value || '').split(' ').filter(Boolean);
-  while (tokens.length >= 3 && ['tc', 'tennisclub', 'tennisverein'].includes(tokens[0]) && tokens.at(-1) === tokens.at(-2)) {
+  while (tokens.length >= 3 && ['tc', 'tennisclub', 'tennisverein'].includes(normalize(tokens[0])) && tokens.at(-1).toLocaleLowerCase('de-DE') === tokens.at(-2).toLocaleLowerCase('de-DE')) {
     tokens.pop();
   }
   return tokens.join(' ');

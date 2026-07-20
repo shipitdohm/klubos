@@ -20,7 +20,7 @@ const OSM_SOURCE_URL = 'https://www.openstreetmap.org/';
 const SOURCE_NAME = `${NULIGA_SOURCE_NAME} + ${OSM_SOURCE_NAME} als Fallback`;
 const SOURCE_URL = NULIGA_SOURCE_URL;
 const NOMINATIM_POLICY_URL = 'https://operations.osmfoundation.org/policies/nominatim/';
-const USER_AGENT = 'KlubOS-Vereinssuche/0.7.6 (+https://klubos.de; contact: hello@klubos.de)';
+const USER_AGENT = 'KlubOS-Vereinssuche/0.7.7 (+https://klubos.de; contact: hello@klubos.de)';
 const CACHE_TTL_MS = 30_000;
 const NOMINATIM_MIN_INTERVAL_MS = 1_000;
 const NULIGA_TIMEOUT_MS = 12_000;
@@ -159,11 +159,12 @@ async function searchNuLiga(query, checkedAt) {
   let successfulRequest = false;
   let extendedOfficialCandidate = null;
 
-  for (const [variantIndex, variant] of variants.entries()) {
+  for (const variant of variants) {
     const result = await searchNuLigaVariant(variant, checkedAt);
     if (result.status === 'match') {
       if (canonicalClubName(result.club.name) === canonicalClubName(variant)) return result;
-      if ((variantIndex === 0 || isCanonicalReduction(query, variant))
+      const isOriginalQuery = variant === String(query || '').trim();
+      if ((isOriginalQuery || isCanonicalReduction(query, variant))
         && isOfficialCandidateMatch(result.club.name, variant)) return result;
       if (isLocationFragmentMatch(result.club, variant, query)) return result;
       if (!extendedOfficialCandidate && isOfficialNameExtension(result.club, variant)) {

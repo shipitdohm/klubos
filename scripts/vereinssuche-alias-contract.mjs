@@ -1,6 +1,17 @@
 import assert from 'node:assert/strict';
 import { buildSearchVariants, canonicalClubName, isCanonicalReduction, isSafeOsmMatch } from '../api/vereinssuche-normalization.js';
 
+const expectedOfficialIdentities = [
+  {
+    canonicalId: 'nuliga:DTB:35409',
+    aliases: ['TC Blau-Weiß Zündorf', 'TC Blau-Weiss Zundorf', 'Tennisclub Blau Weiss Zundorf'],
+  },
+  {
+    canonicalId: 'nuliga:DTB:26504',
+    aliases: ['TC Blau-Weiß Halle', 'TC Blau-Weiss Halle', 'Tennisclub Blau-Weiss Halle e.V.', 'TC Blau Weiss Halle'],
+  },
+];
+
 const realClubAnchors = [
   'TC Kirchhörde',
   'TSC Hansa Dortmund',
@@ -47,6 +58,13 @@ assert.ok(buildSearchVariants('TC Weiden Köln').includes('TC Weiden'));
 assert.ok(buildSearchVariants('TC Kirchhorde').includes('TC Kirchhoerde'));
 assert.ok(buildSearchVariants('TC Augsburg e.V.').includes('TC Augsburg'));
 assert.ok(buildSearchVariants('TC Augsburg Augsburg').includes('TC Augsburg'));
+for (const identity of expectedOfficialIdentities) {
+  const canonical = canonicalClubName(identity.aliases[0]);
+  for (const alias of identity.aliases) {
+    assert.equal(canonicalClubName(alias), canonical, `${identity.canonicalId}: ${alias}`);
+    assert.ok(buildSearchVariants(alias).some((variant) => canonicalClubName(variant) === canonical), `${identity.canonicalId}: ${alias}`);
+  }
+}
 assert.equal(isSafeOsmMatch({ name: 'Tennisclub Oberhaid e.V.', city: 'Oberhaid' }, 'Tennisclub Bamberg'), false);
 assert.equal(isSafeOsmMatch({ name: 'Tennisclub Neuss-Weckhoven e.V.', city: 'Neuss' }, 'Tennisclub Neuss'), false);
 assert.equal(isSafeOsmMatch({ name: 'Tennisclub Kirchhörde eV', city: 'Dortmund' }, 'TC Kirchhörde'), true);
