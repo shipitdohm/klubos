@@ -3,6 +3,7 @@ import {
   canonicalClubName,
   isSafeOsmMatch,
   isCanonicalReduction,
+  isCanonicalLocationQualifier,
   normalize,
   stableClubKey,
 } from './vereinssuche-normalization.js';
@@ -17,10 +18,10 @@ const NULIGA_SOURCE_NAME = 'DTB nuLiga (offizieller Verbands-Ergebnisdienst)';
 const NULIGA_SOURCE_URL = 'https://dtb.liga.nu/';
 const OSM_SOURCE_NAME = 'OpenStreetMap (Nominatim + Overpass)';
 const OSM_SOURCE_URL = 'https://www.openstreetmap.org/';
-const SOURCE_NAME = `${NULIGA_SOURCE_NAME} + ${OSM_SOURCE_NAME} als Fallback`;
+const SOURCE_NAME = NULIGA_SOURCE_NAME;
 const SOURCE_URL = NULIGA_SOURCE_URL;
 const NOMINATIM_POLICY_URL = 'https://operations.osmfoundation.org/policies/nominatim/';
-const USER_AGENT = 'KlubOS-Vereinssuche/0.8.2 (+https://klubos.de; contact: hello@klubos.de)';
+const USER_AGENT = 'KlubOS-Vereinssuche/0.8.3 (+https://klubos.de; contact: hello@klubos.de)';
 const CACHE_TTL_MS = 30_000;
 const NOMINATIM_MIN_INTERVAL_MS = 1_000;
 const NULIGA_TIMEOUT_MS = 12_000;
@@ -57,7 +58,7 @@ export default async function handler(request, response) {
       error: 'source_unavailable',
       message: 'Die öffentliche Suchquelle ist momentan nicht erreichbar. Bitte versuche es gleich noch einmal.',
       sourceName: SOURCE_NAME,
-      sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
+      sources: [NULIGA_SOURCE_NAME],
       matchState: 'source_unavailable',
       reviewSentinel: true,
       checkedAt: new Date().toISOString(),
@@ -96,46 +97,26 @@ export default async function handler(request, response) {
       return sendJson(response, 200, payload);
     }
 
-    const osm = await searchOsmSingle(query, checkedAt);
     if (official.status === 'unavailable') {
-      if (osm.status === 'unavailable') {
-        return sendJson(response, 502, {
-          error: 'source_unavailable',
-          message: 'Die offiziellen Tennisquellen sind momentan nicht erreichbar. Bitte versuche es gleich noch einmal.',
-          sourceName: SOURCE_NAME,
-          sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
-          checkedAt,
-        });
-      }
       return sendJson(response, 502, {
         error: 'source_unavailable',
         message: 'Die offizielle Verbandsquelle ist momentan nicht erreichbar. Bitte versuche es gleich noch einmal.',
         sourceName: NULIGA_SOURCE_NAME,
-        sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
+        sources: [NULIGA_SOURCE_NAME],
         matchState: 'source_unavailable',
-        partial: true,
         checkedAt,
       });
     }
 
-    if (osm.status === 'match') {
-      const payload = buildPayload(query, checkedAt, osm.club, {
-        sourceName: OSM_SOURCE_NAME,
-        sourceUrl: osm.club.sourceUrl,
-        sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
-        matchState: 'unique_osm_match',
-        partial: false,
-      });
-      cache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, payload });
-      return sendJson(response, 200, payload);
-    }
+    const osm = await searchOsmSingle(query, checkedAt);
 
     const payload = buildPayload(query, checkedAt, null, {
       sourceName: SOURCE_NAME,
       sourceUrl: SOURCE_URL,
-      sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
-      matchState: official.status === 'ambiguous' || osm.status === 'ambiguous' ? 'ambiguous' : 'not_found',
-      partial: official.status === 'unavailable' || osm.status === 'unavailable',
+      sources: [NULIGA_SOURCE_NAME],
+      matchState: osm.status === 'match' ? 'safe_no_match' : 'not_found',
+      partial: osm.status === 'unavailable',
+      safeNoMatchReason: osm.status === 'match' ? 'non_official_osm_candidate_withheld' : undefined,
     });
 
     cache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, payload });
@@ -145,7 +126,7 @@ export default async function handler(request, response) {
       error: 'source_unavailable',
       message: 'Die öffentliche Suchquelle ist momentan nicht erreichbar. Bitte versuche es gleich noch einmal.',
       sourceName: SOURCE_NAME,
-      sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
+      sources: [NULIGA_SOURCE_NAME],
       checkedAt,
       detail: process.env.NODE_ENV === 'development' ? safeError(error) : undefined,
     });
@@ -166,6 +147,7 @@ async function searchNuLiga(query, checkedAt) {
       const isOriginalQuery = variant === String(query || '').trim();
       if ((isOriginalQuery || isCanonicalReduction(query, variant))
         && isOfficialCandidateMatch(result.club.name, variant)) return result;
+      if (isCanonicalLocationQualifier(query, result.club.name, `${result.club.city} ${result.club.region}`)) return result;
       if (isLocationFragmentMatch(result.club, variant, query)) return result;
       if (!extendedOfficialCandidate && isOfficialNameExtension(result.club, variant)) {
         if (isGenericClubQuery(variant) && !hasOnlyShortOfficialPrefix(result.club, variant)) sawAmbiguous = true;
@@ -705,6 +687,7 @@ function buildPayload(query, checkedAt, club, meta) {
     sourceUrl: meta.sourceUrl,
     sources: meta.sources,
     matchState: meta.matchState,
+    safeNoMatchReason: meta.safeNoMatchReason,
     attribution: meta.sourceName === OSM_SOURCE_NAME
       ? 'Daten © OpenStreetMap-Mitwirkende, ODbL 1.0'
       : 'Offizielle Vereinsdaten aus dem DTB-nuLiga-Ergebnisdienst',
@@ -724,9 +707,9 @@ function emptyResponse(query) {
     checkedAt: new Date().toISOString(),
     sourceName: SOURCE_NAME,
     sourceUrl: SOURCE_URL,
-    sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
+    sources: [NULIGA_SOURCE_NAME],
     matchState: 'empty_query',
-    attribution: 'DTB nuLiga als Primärquelle, OpenStreetMap nur als Einzel-Treffer-Fallback',
+    attribution: 'Offizielle Vereinsdaten aus dem DTB-nuLiga-Ergebnisdienst',
     attributionUrl: NULIGA_SOURCE_URL,
     resultCount: 0,
     results: [],

@@ -626,7 +626,7 @@ body {
 </head>
 <body>
 
-<main class="vs-shell" data-version="VS-0.8.2-official-alias-safe" data-od-id="vereinssuche-shell">
+<main class="vs-shell" data-version="VS-0.8.3-official-alias-safe" data-od-id="vereinssuche-shell">
   <div class="vs-frame">
     <a href="index.html" class="vs-brand-outside" aria-label="KlubOS Startseite" data-od-id="vereinssuche-brand">
       <img src="mr8as03a-klubos_logo_white_transparent.png" alt="KlubOS">
@@ -635,9 +635,9 @@ body {
     <section class="vs-card" data-od-id="vereinssuche-card">
       <section class="vs-result" id="vs-result" data-od-id="vereinssuche-result">
         <div class="vs-search-panel" id="vs-search-panel" data-od-id="vereinssuche-search-panel">
-          <div class="vs-search-eyebrow">Vereinssuche · Live-Quelle VS-0.8.2</div>
+          <div class="vs-search-eyebrow">Vereinssuche · Live-Quelle VS-0.8.3</div>
           <h1 class="vs-search-title" data-od-id="vereinssuche-search-title">Deinen Verein finden</h1>
-          <p class="vs-search-copy">KlubOS gleicht deinen Vereinsnamen zuerst mit dem offiziellen DTB-nuLiga-Ergebnisdienst ab und normalisiert Kürzel, Schreibweisen und Umlaute. Unsichere OSM-Ähnlichkeit wird nicht still als anderer Verein ausgegeben.</p>
+          <p class="vs-search-copy">KlubOS gleicht deinen Vereinsnamen zuerst mit dem offiziellen DTB-nuLiga-Ergebnisdienst ab und normalisiert Kürzel, Schreibweisen und Umlaute. Nicht-offizielle OSM-Kandidaten werden bewusst nicht als Onboarding-Treffer übernommen.</p>
           <form class="vs-search-form" id="vs-search-form" data-od-id="vereinssuche-search-form" onsubmit="return handleClubSearch(event)">
             <label for="vs-query">Vereinsname</label>
             <div class="vs-search-row">
@@ -879,7 +879,8 @@ body {
 
   function showNotFound(query, payload) {
     setMode('error');
-    setStatus('error', payload.matchState === 'ambiguous' ? 'Kein eindeutiger Treffer' : 'Kein Verein gefunden', 'DTB-nuLiga und die öffentliche Fallback-Quelle wurden geprüft (' + formatDate(payload.checkedAt) + '). Bitte ergänze den vollständigen Vereinsnamen.');
+    const safeNoMatch = payload.matchState === 'safe_no_match';
+    setStatus('error', safeNoMatch ? 'Kein offizieller Treffer' : payload.matchState === 'ambiguous' ? 'Kein eindeutiger Treffer' : 'Kein Verein gefunden', safeNoMatch ? 'Ein nicht-offizieller Kartenkandidat wurde bewusst nicht als Vereinsdatensatz übernommen (' + formatDate(payload.checkedAt) + '). Bitte ergänze den vollständigen Vereinsnamen oder prüfe die offizielle Verbandsquelle.' : 'Der offizielle DTB-nuLiga-Ergebnisdienst wurde geprüft (' + formatDate(payload.checkedAt) + '). Bitte ergänze den vollständigen Vereinsnamen.');
     resultsList.innerHTML = '';
     clubName.textContent = query || 'Kein Treffer';
     renderFallbackLogo(getInitials(query || 'Verein'));
@@ -896,7 +897,7 @@ body {
 
   function showUnavailable() {
     setMode('error');
-    setStatus('error', 'Live-Suche momentan nicht verfügbar', 'DTB-nuLiga und die öffentliche Fallback-Quelle antworten gerade nicht. Bitte versuche es gleich noch einmal.');
+    setStatus('error', 'Live-Suche momentan nicht verfügbar', 'Der offizielle DTB-nuLiga-Ergebnisdienst antwortet gerade nicht. Bitte versuche es gleich noch einmal.');
     resultsList.innerHTML = '';
     sourceNote.innerHTML = '';
     renderFallbackLogo('OSM');

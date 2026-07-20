@@ -79,6 +79,21 @@ export function isCanonicalReduction(original, candidate) {
     .some((reduction) => canonicalClubName(reduction) === candidateCanonical && reduction !== source);
 }
 
+export function isCanonicalLocationQualifier(query, candidate, location) {
+  const queryTokens = canonicalClubName(query).split(' ').filter(Boolean);
+  const candidateTokens = canonicalClubName(candidate).split(' ').filter(Boolean);
+  const locationTokens = normalize(location).split(' ').filter(Boolean);
+  if (!queryTokens.length || !candidateTokens.length || !locationTokens.length || queryTokens.length <= candidateTokens.length) return false;
+
+  const remaining = [...queryTokens];
+  for (const token of candidateTokens) {
+    const index = remaining.indexOf(token);
+    if (index < 0) return false;
+    remaining.splice(index, 1);
+  }
+  return remaining.length > 0 && remaining.every((token) => locationTokens.includes(token));
+}
+
 function normalizeClubTokens(value) {
   const tokens = applyKnownAsciiAliases(normalize(value)).split(' ').filter(Boolean);
   while (tokens.length && ['e', 'v', 'ev', 'eg'].includes(tokens.at(-1))) tokens.pop();
@@ -123,6 +138,9 @@ export function buildSearchVariants(query) {
     if (/^(?:tc|tennisclub|tennis[ -]+club)$/i.test(rawTokens[0])
       && rawTokens.length >= 3
       && !hasHyphenatedCompound(current)) {
+      queue.unshift(`${rawTokens[0]} ${rawTokens.slice(1, -1).join(' ')}`);
+    }
+    if (/^(?:tc|tennisclub|tennis[ -]+club)$/i.test(rawTokens[0]) && rawTokens.length >= 4) {
       queue.unshift(`${rawTokens[0]} ${rawTokens.slice(1, -1).join(' ')}`);
     }
 
