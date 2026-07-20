@@ -19,7 +19,7 @@ const OSM_SOURCE_URL = 'https://www.openstreetmap.org/';
 const SOURCE_NAME = `${NULIGA_SOURCE_NAME} + ${OSM_SOURCE_NAME} als Fallback`;
 const SOURCE_URL = NULIGA_SOURCE_URL;
 const NOMINATIM_POLICY_URL = 'https://operations.osmfoundation.org/policies/nominatim/';
-const USER_AGENT = 'KlubOS-Vereinssuche/0.7.2 (+https://klubos.de; contact: hello@klubos.de)';
+const USER_AGENT = 'KlubOS-Vereinssuche/0.7.3 (+https://klubos.de; contact: hello@klubos.de)';
 const CACHE_TTL_MS = 30_000;
 const NOMINATIM_MIN_INTERVAL_MS = 1_000;
 const NULIGA_TIMEOUT_MS = 12_000;
@@ -96,26 +96,37 @@ export default async function handler(request, response) {
     }
 
     const osm = await searchOsmSingle(query, checkedAt);
+    if (official.status === 'unavailable') {
+      if (osm.status === 'unavailable') {
+        return sendJson(response, 502, {
+          error: 'source_unavailable',
+          message: 'Die offiziellen Tennisquellen sind momentan nicht erreichbar. Bitte versuche es gleich noch einmal.',
+          sourceName: SOURCE_NAME,
+          sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
+          checkedAt,
+        });
+      }
+      return sendJson(response, 502, {
+        error: 'source_unavailable',
+        message: 'Die offizielle Verbandsquelle ist momentan nicht erreichbar. Bitte versuche es gleich noch einmal.',
+        sourceName: NULIGA_SOURCE_NAME,
+        sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
+        matchState: 'source_unavailable',
+        partial: true,
+        checkedAt,
+      });
+    }
+
     if (osm.status === 'match') {
       const payload = buildPayload(query, checkedAt, osm.club, {
         sourceName: OSM_SOURCE_NAME,
         sourceUrl: osm.club.sourceUrl,
         sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
-        matchState: official.status === 'unavailable' ? 'unique_osm_fallback' : 'unique_osm_match',
-        partial: official.status === 'unavailable',
+        matchState: 'unique_osm_match',
+        partial: false,
       });
       cache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, payload });
       return sendJson(response, 200, payload);
-    }
-
-    if (official.status === 'unavailable' && osm.status === 'unavailable') {
-      return sendJson(response, 502, {
-        error: 'source_unavailable',
-        message: 'Die offiziellen Tennisquellen sind momentan nicht erreichbar. Bitte versuche es gleich noch einmal.',
-        sourceName: SOURCE_NAME,
-        sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
-        checkedAt,
-      });
     }
 
     const payload = buildPayload(query, checkedAt, null, {
@@ -147,12 +158,13 @@ async function searchNuLiga(query, checkedAt) {
   let successfulRequest = false;
   let extendedOfficialCandidate = null;
 
-  for (const variant of variants) {
+  for (const [variantIndex, variant] of variants.entries()) {
     const result = await searchNuLigaVariant(variant, checkedAt);
     if (result.status === 'match') {
       if (canonicalClubName(result.club.name) === canonicalClubName(variant)) return result;
+      if (variantIndex === 0 && isOfficialCandidateMatch(result.club.name, variant)) return result;
       if (!extendedOfficialCandidate && isOfficialNameExtension(result.club, variant)) {
-        if (isGenericClubQuery(variant)) sawAmbiguous = true;
+        if (isGenericClubQuery(variant) && !hasOnlyShortOfficialPrefix(result.club, variant)) sawAmbiguous = true;
         else extendedOfficialCandidate = result;
       }
       continue;
@@ -172,13 +184,28 @@ function isOfficialNameExtension(club, variant) {
   const queryTokens = canonicalClubName(variant).split(' ').filter(Boolean);
   const nameTokens = canonicalClubName(club.name).split(' ').filter(Boolean);
   const locationTokens = normalize(`${club.city} ${club.region}`).split(' ').filter(Boolean);
+  const extraTokens = nameTokens.filter((token) => !queryTokens.includes(token));
   return queryTokens.every((token) => nameTokens.includes(token))
-    && nameTokens.filter((token) => !queryTokens.includes(token)).every((token) => locationTokens.includes(token));
+    && extraTokens.length > 0
+    && extraTokens.every((token) => token.length <= 4 || locationTokens.includes(token));
 }
 
 function isGenericClubQuery(variant) {
   const tokens = canonicalClubName(variant).split(' ').filter(Boolean);
   return tokens[0] === 'tennisclub' && tokens.length === 2;
+}
+
+function hasOnlyShortOfficialPrefix(club, variant) {
+  const queryTokens = canonicalClubName(variant).split(' ').filter(Boolean);
+  const nameTokens = canonicalClubName(club.name).split(' ').filter(Boolean);
+  const extraTokens = nameTokens.filter((token) => !queryTokens.includes(token));
+  return extraTokens.length > 0 && extraTokens.every((token) => token.length <= 4);
+}
+
+function isOfficialCandidateMatch(name, query) {
+  const queryTokens = canonicalClubName(query).split(' ').filter(Boolean);
+  const candidateTokens = canonicalClubName(name).split(' ').filter(Boolean);
+  return queryTokens.length > 0 && queryTokens.every((token) => candidateTokens.includes(token));
 }
 
 async function searchNuLigaVariant(query, checkedAt) {
@@ -207,12 +234,13 @@ async function searchNuLigaVariant(query, checkedAt) {
     }
 
     const candidates = parseNuLigaCandidates(html);
-    const exact = candidates.filter((candidate) => normalize(candidate.name) === normalize(query));
-    if (candidates.length !== 1 && exact.length !== 1) {
+    const exact = candidates.filter((candidate) => canonicalClubName(candidate.name) === canonicalClubName(query));
+    const compatible = candidates.filter((candidate) => isOfficialCandidateMatch(candidate.name, query));
+    if (candidates.length !== 1 && exact.length !== 1 && compatible.length !== 1) {
       return candidates.length > 1 ? { status: 'ambiguous' } : { status: 'no_match' };
     }
 
-    const candidate = exact[0] || candidates[0];
+    const candidate = exact[0] || compatible[0] || candidates[0];
     const detailResponse = await fetch(toNuLigaUrl(candidate.href), {
       headers: { Accept: 'text/html', 'User-Agent': USER_AGENT },
       signal: AbortSignal.timeout(NULIGA_TIMEOUT_MS),

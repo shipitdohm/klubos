@@ -23,8 +23,10 @@ export function canonicalClubName(value) {
   while (tokens.length && ['e', 'v', 'ev', 'eg'].includes(tokens.at(-1))) tokens.pop();
 
   if (tokens[0] === 'tc') tokens[0] = 'tennisclub';
-  if (tokens[0] === 'tennis' && tokens[1] === 'club') tokens.splice(0, 2, 'tennisclub');
-  if (tokens[0] === 'tennis' && tokens[1] === 'verein') tokens.splice(0, 2, 'tennisverein');
+  for (let index = 0; index < tokens.length - 1; index += 1) {
+    if (tokens[index] === 'tennis' && tokens[index + 1] === 'club') tokens.splice(index, 2, 'tennisclub');
+    if (tokens[index] === 'tennis' && tokens[index + 1] === 'verein') tokens.splice(index, 2, 'tennisverein');
+  }
   return tokens.join(' ');
 }
 
@@ -72,9 +74,10 @@ export function isSafeOsmMatch(club, query) {
   const clubName = canonicalClubName(club?.name);
   const queryName = canonicalClubName(query);
   if (!clubName || !queryName) return false;
+  const queryTokens = queryName.split(' ').filter(Boolean);
+  if (queryTokens.length <= 2 && queryTokens[0].length <= 4 && queryTokens[0] !== 'tc') return false;
   if (clubName === queryName) return true;
 
-  const queryTokens = queryName.split(' ');
   const clubTokens = clubName.split(' ');
   const cityTokens = normalize(club?.city).split(' ').filter(Boolean);
   const clubIsSubset = clubTokens.every((token) => queryTokens.includes(token));
