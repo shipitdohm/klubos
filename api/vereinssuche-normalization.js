@@ -5,6 +5,10 @@ const GERMAN_ORTHOGRAPHY = [
   ['ue', 'ü'],
 ];
 
+const KNOWN_ASCII_NAME_ALIASES = [
+  ['kirchhorde', 'kirchhoerde'],
+];
+
 export function normalize(value) {
   return String(value || '')
     .toLowerCase()
@@ -19,7 +23,28 @@ export function normalize(value) {
 }
 
 export function canonicalClubName(value) {
-  const tokens = normalize(value).split(' ').filter(Boolean);
+  const tokens = normalizeClubTokens(value);
+  return tokens.join(' ');
+}
+
+export function isCanonicalReduction(original, candidate) {
+  const originalCanonical = canonicalClubName(original);
+  const candidateCanonical = canonicalClubName(candidate);
+  if (!originalCanonical || originalCanonical !== candidateCanonical) return false;
+
+  const source = normalize(original);
+  const reductions = new Set([
+    stripOfficialSuffix(source),
+    applyKnownAsciiAliases(source),
+    collapseTrailingDuplicateLocation(source),
+  ]);
+  return [...reductions]
+    .filter(Boolean)
+    .some((reduction) => canonicalClubName(reduction) === candidateCanonical && reduction !== source);
+}
+
+function normalizeClubTokens(value) {
+  const tokens = applyKnownAsciiAliases(normalize(value)).split(' ').filter(Boolean);
   while (tokens.length && ['e', 'v', 'ev', 'eg'].includes(tokens.at(-1))) tokens.pop();
 
   if (tokens[0] === 'tc') tokens[0] = 'tennisclub';
@@ -27,7 +52,10 @@ export function canonicalClubName(value) {
     if (tokens[index] === 'tennis' && tokens[index + 1] === 'club') tokens.splice(index, 2, 'tennisclub');
     if (tokens[index] === 'tennis' && tokens[index + 1] === 'verein') tokens.splice(index, 2, 'tennisverein');
   }
-  return tokens.join(' ');
+  while (tokens.length >= 3 && ['tennisclub', 'tennisverein'].includes(tokens[0]) && tokens.at(-1) === tokens.at(-2)) {
+    tokens.pop();
+  }
+  return tokens;
 }
 
 export function buildSearchVariants(query) {
@@ -46,6 +74,9 @@ export function buildSearchVariants(query) {
       .replace(/[,\s]+(?:e\.?\s*v\.?|e\.?\s*g\.?|ev|eg)\s*$/i, '')
       .trim();
     if (withoutSuffix !== current) queue.push(withoutSuffix);
+
+    const knownAsciiAlias = applyKnownAsciiAliases(current);
+    if (knownAsciiAlias !== current) queue.unshift(knownAsciiAlias);
 
     const rawTokens = current.split(/\s+/).filter(Boolean);
     const locationFragment = rawTokens.at(-1)?.replace(/^[^\p{L}\d]+|[^\p{L}\d]+$/gu, '');
@@ -83,6 +114,32 @@ export function buildSearchVariants(query) {
   }
 
   return variants;
+}
+
+function stripOfficialSuffix(value) {
+  return String(value || '')
+    .replace(/(?:^|\s)(?:e\s*v|e\s*g|ev|eg)\s*$/i, '')
+    .trim();
+}
+
+function applyKnownAsciiAliases(value) {
+  let result = String(value || '');
+  for (const [ascii, canonical] of KNOWN_ASCII_NAME_ALIASES) {
+    result = result.replace(new RegExp(`\\b${ascii}\\b`, 'gi'), (match) => {
+      if (match === match.toUpperCase()) return canonical.toUpperCase();
+      if (match[0] === match[0].toUpperCase()) return `${canonical[0].toUpperCase()}${canonical.slice(1)}`;
+      return canonical;
+    });
+  }
+  return result;
+}
+
+function collapseTrailingDuplicateLocation(value) {
+  const tokens = String(value || '').split(' ').filter(Boolean);
+  while (tokens.length >= 3 && ['tc', 'tennisclub', 'tennisverein'].includes(tokens[0]) && tokens.at(-1) === tokens.at(-2)) {
+    tokens.pop();
+  }
+  return tokens.join(' ');
 }
 
 export function isSafeOsmMatch(club, query) {

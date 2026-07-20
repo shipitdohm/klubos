@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { buildSearchVariants, canonicalClubName, isSafeOsmMatch } from '../api/vereinssuche-normalization.js';
+import { buildSearchVariants, canonicalClubName, isCanonicalReduction, isSafeOsmMatch } from '../api/vereinssuche-normalization.js';
 
 const realClubAnchors = [
   'TC Kirchhörde',
@@ -35,8 +35,18 @@ for (const anchor of realClubAnchors) {
 
 assert.equal(canonicalClubName('TC Großhesselohe'), canonicalClubName('Tennisclub Grosshesselohe e.V.'));
 assert.equal(canonicalClubName('TC Kirchhörde'), canonicalClubName('Tennis-Club Kirchhoerde e. V.'));
+assert.equal(canonicalClubName('TC Kirchhorde'), canonicalClubName('TC Kirchhörde'));
+assert.equal(canonicalClubName('TC Augsburg e.V.'), canonicalClubName('TC Augsburg'));
+assert.equal(canonicalClubName('TC Augsburg Augsburg'), canonicalClubName('TC Augsburg'));
+assert.ok(isCanonicalReduction('TC Kirchhorde', 'TC Kirchhoerde'));
+assert.ok(isCanonicalReduction('TC Augsburg e.V.', 'TC Augsburg'));
+assert.ok(isCanonicalReduction('TC Augsburg Augsburg', 'TC Augsburg'));
+assert.ok(!isCanonicalReduction('Tennisclub Köln', 'TC Köln'));
 assert.ok(buildSearchVariants('Tennisclub Blau Weiß Zündorf').includes('TC Blau-Weiß Zündorf'));
 assert.ok(buildSearchVariants('TC Weiden Köln').includes('TC Weiden'));
+assert.ok(buildSearchVariants('TC Kirchhorde').includes('TC Kirchhoerde'));
+assert.ok(buildSearchVariants('TC Augsburg e.V.').includes('TC Augsburg'));
+assert.ok(buildSearchVariants('TC Augsburg Augsburg').includes('TC Augsburg'));
 assert.equal(isSafeOsmMatch({ name: 'Tennisclub Oberhaid e.V.', city: 'Oberhaid' }, 'Tennisclub Bamberg'), false);
 assert.equal(isSafeOsmMatch({ name: 'Tennisclub Neuss-Weckhoven e.V.', city: 'Neuss' }, 'Tennisclub Neuss'), false);
 assert.equal(isSafeOsmMatch({ name: 'Tennisclub Kirchhörde eV', city: 'Dortmund' }, 'TC Kirchhörde'), true);
