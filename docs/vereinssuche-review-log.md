@@ -77,3 +77,12 @@ Jede relevante Änderung bekommt hier einen Eintrag. Der Specialist trägt zuers
 - Test-Ergebnis: `pnpm run build` erfolgreich (`Astro 7 page(s) built`, `Complete!`). Deterministischer Mock-Test bestätigt `websiteState: unverified_source_tag`, `websiteVerified: false` und 1004 ms Abstand zwischen zwei parallelen Nominatim-Anfragen. Öffentlicher Test bleibt bis zum Redeploy blockiert.
 - Bekannte Einschränkungen: Die Drosselung gilt ohne Shared KV/Redis nur pro warmer Function-Instanz; eine streng anwendungsweite Rate-Limit-Garantie über mehrere Vercel-Instanzen benötigt einen gemeinsamen Limiter. OSM-Website-Tags bleiben bewusst ungeprüft und dürfen nicht als verifiziert-offizielle Website dargestellt werden.
 - Nächster konkreter Schritt: Gründer stellt Zugriff auf das bestehende Vercel-Projekt/Repository-Deployment bereit oder führt den dokumentierten Redeploy aus; danach öffentlicher `curl`-/Browser-Test. Bei erneutem Review-Fail ist Fehlversuch 3/3 erreicht und der Gründer muss einbezogen werden.
+
+### 2026-07-20 — VS-0.4 auf GitHub gepusht, Vercel Preview erfolgreich
+
+- Commit/Diff: `c321cb4` auf `agent/live-vereinssuche-deploy` in `shipitdohm/clubos`; Draft-PR [#3](https://github.com/shipitdohm/clubos/pull/3) gegen `main`.
+- Specialist-Status: `BLOCKED_PENDING_PRODUCTION_MERGE`
+- Reviewer-Status: `ausstehend` für den öffentlich gemergten Stand.
+- Observed: GitHub/Vercel meldet den Preview-Deployment-Check `SUCCESS` für den Commit; Deployment-ID `5520565747`, Umgebung `Preview`. Die Production-Domain `klubos.de` wurde dadurch noch nicht verändert.
+- Claimed: Der auf GitHub liegende Branch enthält den geprüften VS-0.4-Stand inklusive `/api/vereinssuche.js` und `vercel.json`.
+- Nächster konkreter Schritt: Draft-PR prüfen und nach Freigabe nach `main` mergen; danach öffentlich `curl` und Browser gegen `https://klubos.de` ausführen. Erst dann kann der Search Reviewer den dritten Release-Gate-Lauf durchführen.
