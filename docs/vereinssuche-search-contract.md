@@ -1,12 +1,19 @@
 # KlubOS Vereinssuche — gemeinsamer Suchvertrag
 
 Status: Arbeitsvertrag für Search Specialist und Search Reviewer
-Version: 1.0
+Version: 1.1
 Letzte Prüfung: 2026-07-20
 
 ## Ziel
 
 Die Vereinssuche soll in Deutschland echte Tennisvereine im Internet finden und für das KlubOS-Onboarding verlässlich darstellen. TC Kirchhörde ist ein Testfall, aber kein zulässiger Ersatz für eine echte Suche.
+
+## Quellenregel für Onboarding ab VS-0.8.3
+
+- Der DTB-nuLiga-Ergebnisdienst ist die autorisierte Primärquelle für einen auszugebenden Vereinsdatensatz.
+- OpenStreetMap darf als diagnostische Vergleichsquelle abgefragt werden, aber ein nicht-offizieller OSM-Kandidat wird niemals als eindeutiger Onboarding-Treffer ausgegeben. Ohne bestätigten offiziellen Treffer lautet der sichere Zustand `safe_no_match` oder `not_found` und enthält keine Ergebniszeile.
+- Ein zusätzlicher Ortsname darf nur entfernt werden, wenn er in der offiziellen Vereinsadresse bzw. dem offiziellen Datensatz als Ort/Region belegt ist. Freies Wegschneiden beliebiger letzter Wörter ist kein zulässiges Matching.
+- Die erwarteten 32 Fälle, vier P1-Regressionen und 100 Aliasvarianten sind in `scripts/vereinssuche-regression-matrix.v0.8.3.json` versioniert. Die Datei ist ein Erwartungsvertrag, kein Ersatz für den unabhängigen Live-Gate.
 
 ## Fester Ablauf
 
