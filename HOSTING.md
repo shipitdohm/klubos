@@ -179,6 +179,12 @@ npm run preview    # serve production build locally
 
 `npm run sync:assets` copies `css/`, `js/`, logo, and legacy HTML into `public/` before dev/build.
 
+### Vereinssuche live source requirement
+
+`VS-0.3-live-osm` uses `/api/vereinssuche.js` as a server-side function and queries OpenStreetMap Nominatim/Overpass. The static Render service above does not execute the `api/` directory, so the live search must be deployed on Vercel or backed by a separate Node/serverless API. A static-only deployment is not a valid production test of the Vereinssuche.
+
+`VS-0.4-live-osm` adds an explicit Vercel function configuration for `api/vereinssuche.js` with a 60-second ceiling. Vercel still requires the project to be redeployed from this repository root; editing `vercel.json` alone does not change the currently live deployment. The release gate is the public check `curl -i https://klubos.de/api/vereinssuche?q=TC%20Kirchh%C3%B6rde` plus a browser search on the deployed page.
+
 ### Migration path from HTML prototype
 
 1. **Done:** Astro shell with shared CSS/JS and layouts

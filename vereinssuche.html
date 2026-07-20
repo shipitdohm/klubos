@@ -105,6 +105,8 @@ body {
 }
 
 .vs-result.is-result .vs-status-panel,
+.vs-result.is-result .vs-results-summary,
+.vs-result.is-result .vs-results-list,
 .vs-result.is-result .vs-club-head,
 .vs-result.is-result .vs-fields,
 .vs-result.is-result .vs-actions,
@@ -122,15 +124,21 @@ body {
 
 .vs-result.is-search .vs-club-head,
 .vs-result.is-search .vs-fields,
+.vs-result.is-search .vs-results-summary,
+.vs-result.is-search .vs-results-list,
 .vs-result.is-search .vs-actions,
 .vs-result.is-search .vs-error-actions,
 .vs-result.is-loading .vs-status-panel,
+.vs-result.is-loading .vs-results-summary,
+.vs-result.is-loading .vs-results-list,
 .vs-result.is-loading .vs-club-head,
 .vs-result.is-loading .vs-fields,
 .vs-result.is-loading .vs-actions,
 .vs-result.is-loading .vs-error-actions,
 .vs-result.is-error .vs-club-head,
 .vs-result.is-error .vs-fields,
+.vs-result.is-error .vs-results-summary,
+.vs-result.is-error .vs-results-list,
 .vs-result.is-error .vs-actions {
   display: none;
 }
@@ -337,6 +345,103 @@ body {
   display: none;
 }
 
+.vs-results-summary {
+  display: none;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--fg-muted);
+  font-size: 0.78rem;
+}
+
+.vs-results-summary strong {
+  color: var(--fg);
+  font-size: 0.9rem;
+}
+
+.vs-results-list {
+  display: none;
+  gap: 0.55rem;
+  max-height: 228px;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+}
+
+.vs-result-option {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.7rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.68rem;
+  border: 0.5px solid var(--border);
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.76);
+  color: var(--fg);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.vs-result-option:hover,
+.vs-result-option:focus-visible,
+.vs-result-option.is-selected {
+  border-color: rgba(187, 85, 34, 0.4);
+  background: rgba(187, 85, 34, 0.055);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.vs-result-option-logo {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(187, 85, 34, 0.1);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 760;
+}
+
+.vs-result-option-name {
+  overflow: hidden;
+  font-size: 0.88rem;
+  font-weight: 680;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vs-result-option-meta {
+  margin-top: 0.13rem;
+  overflow: hidden;
+  color: var(--fg-muted);
+  font-size: 0.72rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vs-result-option-arrow {
+  color: var(--fg-dim);
+  font-size: 1rem;
+}
+
+.vs-source-note {
+  display: none;
+  margin-top: -0.25rem;
+  color: var(--fg-muted);
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.vs-result.is-result .vs-source-note {
+  display: block;
+}
+
+.vs-source-note a {
+  color: var(--accent);
+}
+
 .vs-club-head {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -502,7 +607,7 @@ body {
 </head>
 <body>
 
-<main class="vs-shell" data-od-id="vereinssuche-shell">
+<main class="vs-shell" data-version="VS-0.4-live-osm" data-od-id="vereinssuche-shell">
   <div class="vs-frame">
     <a href="index.html" class="vs-brand-outside" aria-label="KlubOS Startseite" data-od-id="vereinssuche-brand">
       <img src="mr8as03a-klubos_logo_white_transparent.png" alt="KlubOS">
@@ -511,21 +616,21 @@ body {
     <section class="vs-card" data-od-id="vereinssuche-card">
       <section class="vs-result" id="vs-result" data-od-id="vereinssuche-result">
         <div class="vs-search-panel" id="vs-search-panel" data-od-id="vereinssuche-search-panel">
-          <div class="vs-search-eyebrow">Vereinssuche</div>
+          <div class="vs-search-eyebrow">Vereinssuche · Live-Quelle VS-0.4</div>
           <h1 class="vs-search-title" data-od-id="vereinssuche-search-title">Deinen Verein finden</h1>
-          <p class="vs-search-copy">Wir prüfen Website, Vereinsname und Verbandsdaten. Kürzel wie TC werden dabei automatisch auch ausgeschrieben geprüft.</p>
+          <p class="vs-search-copy">ClubOS durchsucht bei jeder Anfrage öffentliche OpenStreetMap-Daten nach deutschen Tennisvereinen. Namen, Städte und Kürzel werden tolerant abgeglichen; Website-Tags aus der Quelle bleiben als ungeprüft markiert.</p>
           <form class="vs-search-form" id="vs-search-form" data-od-id="vereinssuche-search-form" onsubmit="return handleClubSearch(event)">
             <label for="vs-query">Vereinsname</label>
             <div class="vs-search-row">
-              <input id="vs-query" type="search" autocomplete="organization" value="TC Kirchhörde" placeholder="z. B. TC Kirchhörde">
+              <input id="vs-query" type="search" autocomplete="organization" value="" placeholder="z. B. TC Kirchhörde, Köln oder TSC Hansa">
               <button class="btn btn-primary" type="submit" data-od-id="vereinssuche-submit">Verein suchen</button>
             </div>
           </form>
         </div>
 
         <div class="vs-animation-panel" id="vs-animation-panel" data-od-id="vereinssuche-animation">
-          <div class="vs-animation-title">Wir spielen den Treffer kurz sauber frei.</div>
-          <div class="vs-animation-copy">Website und Verbandsdaten werden abgeglichen.</div>
+          <div class="vs-animation-title">Live-Suche wird vorbereitet.</div>
+          <div class="vs-animation-copy">OpenStreetMap und die öffentliche Vereinsdatenbank werden abgefragt.</div>
           <div class="vs-court" aria-hidden="true">
             <span class="vs-ball"></span>
           </div>
@@ -534,10 +639,16 @@ body {
         <div class="vs-status-panel is-success" id="vs-status-panel" data-od-id="vereinssuche-status">
           <div class="vs-status-icon" id="vs-status-icon" aria-hidden="true"></div>
           <div>
-            <div class="vs-status-title" id="vs-status-title">Öffentliche Vereinsdaten gefunden</div>
-            <div class="vs-status-text" id="vs-status-text">Website und Verband sind als öffentliche Quellen verknüpft.</div>
+          <div class="vs-status-title" id="vs-status-title">Noch kein Verein ausgewählt</div>
+            <div class="vs-status-text" id="vs-status-text">Die Ergebnisse werden aus einer öffentlichen Internetquelle geladen.</div>
           </div>
         </div>
+
+        <div class="vs-results-summary" id="vs-results-summary">
+          <strong id="vs-results-count">0 Treffer</strong>
+          <span id="vs-results-query"></span>
+        </div>
+        <div class="vs-results-list" id="vs-results-list" aria-label="Suchergebnisse"></div>
 
         <div class="vs-club-head">
           <div class="vs-club-logo-card" id="vs-logo-card" data-od-id="vereinssuche-club-logo"></div>
@@ -565,6 +676,8 @@ body {
           </div>
         </div>
 
+        <div class="vs-source-note" id="vs-source-note"></div>
+
         <div class="vs-preview-note">
           <div aria-hidden="true">✦</div>
           <div><strong>Read-only Vorschau</strong><p>Das sind öffentliche Vereinsdaten – noch kein geschützter KlubOS-Arbeitsbereich. Im Pilot wird daraus euer Vorstandshub.</p></div>
@@ -588,7 +701,6 @@ body {
 <script>
 (function() {
   const result = document.getElementById('vs-result');
-  const form = document.getElementById('vs-search-form');
   const queryEl = document.getElementById('vs-query');
   const statusPanel = document.getElementById('vs-status-panel');
   const statusIcon = document.getElementById('vs-status-icon');
@@ -598,6 +710,11 @@ body {
   const clubName = document.getElementById('vs-club-name');
   const pilotLink = document.getElementById('vs-pilot-link');
   const notFoundPilotLink = document.getElementById('vs-not-found-pilot-link');
+  const resultsSummary = document.getElementById('vs-results-summary');
+  const resultsCount = document.getElementById('vs-results-count');
+  const resultsQuery = document.getElementById('vs-results-query');
+  const resultsList = document.getElementById('vs-results-list');
+  const sourceNote = document.getElementById('vs-source-note');
 
   const fields = {
     verein: document.getElementById('r-verein'),
@@ -606,27 +723,23 @@ body {
     website: document.getElementById('r-website'),
   };
 
-  const clubs = [
-    {
-      name: 'TC Kirchhörde',
-      legalName: 'Tennis-Club Kirchhörde e.V.',
-      aliases: ['tc kirchhörde', 'tc kirchhoerde', 'tennis club kirchhörde', 'tennis-club kirchhörde', 'tennis club kirchhoerde', 'tennis-club kirchhoerde', 'tennisclub kirchhoerde', 'tck', 'tckirchhoerde'],
-      website: 'https://tennisclubkirchhoerde.de/',
-      logo: 'https://tennisclubkirchhoerde.de/wp-content/uploads/2022/11/TCK_Logo.png',
-      ort: 'Dortmund-Kirchhörde',
-      verband: 'Westfälischer Tennis-Verband',
-    },
-  ];
-
   const icons = {
     success: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>',
     search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2" stroke-linecap="round"/></svg>',
   };
 
+  let currentResults = [];
+  let activeRequest = null;
+  let requestSequence = 0;
+
   const initialQuery = new URLSearchParams(window.location.search).get('verein') || '';
   queryEl.value = initialQuery;
-  showSearch();
+  if (initialQuery) {
+    runSearch(initialQuery);
+  } else {
+    showSearch();
+  }
 
   window.handleClubSearch = function(event) {
     event.preventDefault();
@@ -640,104 +753,130 @@ body {
   }
 
   function showSearch() {
+    if (activeRequest) activeRequest.abort();
     setMode('search');
-    window.setTimeout(() => {
-      queryEl.focus({ preventScroll: true });
-      queryEl.select();
-    }, 0);
+    resultsList.innerHTML = '';
+    sourceNote.innerHTML = '';
+    window.setTimeout(() => queryEl.focus({ preventScroll: true }), 0);
   }
 
-  function runSearch(rawQuery) {
+  async function runSearch(rawQuery) {
     const query = String(rawQuery || '').trim();
     if (!query) {
-      showSearch();
+      setStatus('error', 'Suchbegriff fehlt', 'Bitte gib einen Vereinsnamen, eine Stadt oder ein Kürzel ein.');
+      setMode('search');
+      queryEl.focus({ preventScroll: true });
       return;
     }
+
+    if (activeRequest) activeRequest.abort();
+    const sequence = ++requestSequence;
+    activeRequest = new AbortController();
     setMode('loading');
+    setStatus('search', 'Live-Suche läuft …', 'OpenStreetMap wird jetzt im Internet abgefragt.');
 
-    window.setTimeout(() => {
-      const club = findClub(query);
-      if (club) {
-        showClub(club);
+    try {
+      const endpoint = '/api/vereinssuche?q=' + encodeURIComponent(query);
+      const response = await fetch(endpoint, {
+        headers: { Accept: 'application/json' },
+        signal: activeRequest.signal,
+      });
+      if (!response.ok) throw new Error('search_endpoint_' + response.status);
+      const payload = await response.json();
+      if (sequence !== requestSequence) return;
+      currentResults = Array.isArray(payload.results) ? payload.results : [];
+      if (currentResults.length) {
+        showResults(payload);
       } else {
-        showNotFound(query);
+        showNotFound(query, payload);
       }
-    }, 1450);
+    } catch (error) {
+      if (error.name === 'AbortError') return;
+      if (sequence !== requestSequence) return;
+      showUnavailable();
+    } finally {
+      if (sequence === requestSequence) activeRequest = null;
+    }
   }
 
-  function findClub(query) {
-    const variants = expandClubQuery(query);
-    return clubs.find((club) => {
-      const haystack = [
-        club.name,
-        club.legalName,
-        club.website,
-        club.ort,
-        club.verband,
-        ...(club.aliases || []),
-      ].map(normalize);
-
-      return variants.some((variant) => haystack.some((item) => item.includes(variant) || variant.includes(item)));
-    });
-  }
-
-  function expandClubQuery(query) {
-    const normalized = normalize(query);
-    const replacements = [
-      ['tc', 'tennis club'],
-      ['tc', 'tennis-club'],
-      ['tsc', 'tennis sportclub'],
-      ['tsc', 'tennis-sportclub'],
-      ['tv', 'turnverein'],
-      ['tv', 'tennisverein'],
-      ['sc', 'sportclub'],
-      ['sc', 'sport-club'],
-    ];
-    const variants = new Set([normalized]);
-
-    replacements.forEach(([abbr, full]) => {
-      const pattern = new RegExp('(^| )' + abbr + '( |$)', 'g');
-      if (pattern.test(normalized)) {
-        variants.add(normalized.replace(pattern, '$1' + full + '$2').trim());
-      }
-    });
-
-    return Array.from(variants).filter(Boolean);
-  }
-
-  function normalize(value) {
-    return String(value || '')
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[-/]+/g, ' ')
-      .replace(/[^a-z0-9]+/g, ' ')
-      .trim();
-  }
-
-  function showClub(club) {
+  function showResults(payload) {
     setMode('result');
-    setStatus('success', 'Öffentliche Vereinsdaten gefunden', 'Logo, Website und Verband sind als öffentliche Quellen verknüpft.');
-    clubName.textContent = club.name;
-    renderLogo(club);
-    fields.verein.value = club.legalName;
-    fields.ort.value = club.ort;
-    fields.verband.value = club.verband;
-    fields.website.value = club.website;
-    const params = new URLSearchParams({ verein: club.legalName, ort: club.ort, verband: club.verband, website: club.website, source: 'vereinssuche' });
-    pilotLink.href = 'pilot.html?' + params.toString();
+    const count = currentResults.length;
+    const partialText = payload.partial ? ' · Teilantwort wegen Quellenlimit' : '';
+    setStatus('success', count + (count === 1 ? ' Verein gefunden' : ' Vereine gefunden'), payload.sourceName + ' · geprüft ' + formatDate(payload.checkedAt) + partialText);
+    resultsCount.textContent = count + (count === 1 ? ' Treffer' : ' Treffer');
+    resultsQuery.textContent = 'Live-Ergebnis für „' + payload.query + '“';
+    resultsList.innerHTML = '';
+    currentResults.forEach((club, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'vs-result-option' + (index === 0 ? ' is-selected' : '');
+      button.dataset.resultIndex = String(index);
+      button.setAttribute('aria-label', club.name + (club.city ? ', ' + club.city : ''));
+      button.innerHTML = '<span class="vs-result-option-logo">' + escapeHtml(getInitials(club.name)) + '</span>' +
+        '<span><span class="vs-result-option-name"></span><span class="vs-result-option-meta"></span></span>' +
+        '<span class="vs-result-option-arrow" aria-hidden="true">›</span>';
+      button.querySelector('.vs-result-option-name').textContent = club.name;
+      button.querySelector('.vs-result-option-meta').textContent = [club.city, club.confidence ? 'Confidence ' + club.confidence : ''].filter(Boolean).join(' · ');
+      button.addEventListener('click', () => selectClub(index));
+      resultsList.appendChild(button);
+    });
+    selectClub(0, false);
   }
 
-  function showNotFound(query) {
+  function selectClub(index, scrollIntoView = true) {
+    const club = currentResults[index];
+    if (!club) return;
+    resultsList.querySelectorAll('.vs-result-option').forEach((option, optionIndex) => {
+      option.classList.toggle('is-selected', optionIndex === index);
+    });
+    clubName.textContent = club.name;
+    renderFallbackLogo(getInitials(club.name));
+    fields.verein.value = club.name;
+    fields.ort.value = club.city || 'Nicht in Quelle hinterlegt';
+    fields.verband.value = 'Nicht in OpenStreetMap hinterlegt';
+    setWebsiteLabel(club.websiteState);
+    fields.website.value = club.website || 'Nicht in Quelle hinterlegt';
+    const params = new URLSearchParams({
+      verein: club.name,
+      ort: club.city || '',
+      verband: '',
+      website: club.website || '',
+      source: 'vereinssuche',
+      sourceUrl: club.sourceUrl || '',
+    });
+    pilotLink.href = 'pilot.html?' + params.toString();
+    renderSourceNote(club);
+    if (scrollIntoView) document.querySelector('.vs-club-head').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function showNotFound(query, payload) {
     setMode('error');
-    setStatus('error', 'Leider konnten wir keinen passenden Verein finden', '');
+    setStatus('error', 'Keine Treffer aus der Live-Quelle', 'OpenStreetMap wurde geprüft (' + formatDate(payload.checkedAt) + '). Es wurden keine passenden deutschen Tennisvereine zurückgegeben.');
+    resultsList.innerHTML = '';
     clubName.textContent = query || 'Kein Treffer';
     renderFallbackLogo(getInitials(query || 'Verein'));
     fields.verein.value = query || '';
     fields.ort.value = '';
     fields.verband.value = '';
     fields.website.value = '';
+    setWebsiteLabel('');
+    sourceNote.innerHTML = '';
     notFoundPilotLink.href = 'pilot.html?verein=' + encodeURIComponent(query || '');
+  }
+
+  function showUnavailable() {
+    setMode('error');
+    setStatus('error', 'Live-Suche momentan nicht verfügbar', 'Es wurden keine lokalen Ersatzdaten verwendet. Bitte versuche es gleich noch einmal.');
+    resultsList.innerHTML = '';
+    sourceNote.innerHTML = '';
+    renderFallbackLogo('OSM');
+    setWebsiteLabel('');
+  }
+
+  function setWebsiteLabel(state) {
+    const label = document.querySelector('label[for="r-website"]');
+    if (label) label.textContent = state === 'unverified_source_tag' ? 'Website · OSM-Tag ungeprüft' : 'Website';
   }
 
   function setStatus(type, title, text) {
@@ -748,17 +887,27 @@ body {
     statusText.textContent = text;
   }
 
-  function renderLogo(club) {
-    logoCard.innerHTML = '';
-    const img = document.createElement('img');
-    img.alt = club.name + ' Wappen';
-    img.src = club.logo;
-    img.onerror = () => renderFallbackLogo(getInitials(club.name));
-    logoCard.appendChild(img);
+  function renderFallbackLogo(initials) {
+    logoCard.innerHTML = '<div class="vs-crest-fallback" title="Neutrales Logo-Fallback">' + escapeHtml(initials || 'V') + '</div>';
   }
 
-  function renderFallbackLogo(initials) {
-    logoCard.innerHTML = '<div class="vs-crest-fallback">' + escapeHtml(initials || 'V') + '</div>';
+  function renderSourceNote(club) {
+    sourceNote.innerHTML = '';
+    sourceNote.append('Quelle: ' + (club.sourceName || 'OpenStreetMap') + ' · geprüft ' + formatDate(club.checkedAt) + ' · ');
+    if (club.sourceUrl) {
+      const link = document.createElement('a');
+      link.href = club.sourceUrl;
+      link.target = '_blank';
+      link.rel = 'noreferrer noopener';
+      link.textContent = 'Datensatz öffnen';
+      sourceNote.appendChild(link);
+    }
+  }
+
+  function formatDate(value) {
+    if (!value) return 'unbekannt';
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? 'unbekannt' : date.toLocaleString('de-DE', { dateStyle: 'medium', timeStyle: 'short' });
   }
 
   function getInitials(name) {
@@ -784,11 +933,13 @@ body {
   }
 
   window.resetSearch = function() {
+    currentResults = [];
+    queryEl.value = '';
     showSearch();
   };
 
   window.confirmAndProceed = function() {
-    const params = new URLSearchParams({ verein: fields.verein.value, ort: fields.ort.value, verband: fields.verband.value, website: fields.website.value, source: 'vereinssuche' });
+    const params = new URLSearchParams({ verein: fields.verein.value, ort: fields.ort.value, website: fields.website.value, source: 'vereinssuche' });
     window.location.href = 'pilot.html?' + params.toString();
   };
 })();
