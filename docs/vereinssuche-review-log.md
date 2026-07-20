@@ -86,3 +86,13 @@ Jede relevante Änderung bekommt hier einen Eintrag. Der Specialist trägt zuers
 - Observed: GitHub/Vercel meldet den Preview-Deployment-Check `SUCCESS` für den Commit; Deployment-ID `5520565747`, Umgebung `Preview`. Die Production-Domain `klubos.de` wurde dadurch noch nicht verändert.
 - Claimed: Der auf GitHub liegende Branch enthält den geprüften VS-0.4-Stand inklusive `/api/vereinssuche.js` und `vercel.json`.
 - Nächster konkreter Schritt: Draft-PR prüfen und nach Freigabe nach `main` mergen; danach öffentlich `curl` und Browser gegen `https://klubos.de` ausführen. Erst dann kann der Search Reviewer den dritten Release-Gate-Lauf durchführen.
+
+### 2026-07-20 — VS-0.4 Production-Verifikation nach Merge
+
+- Commit/Diff: Merge-Commit `4808e20e2bd6bbec0f3b8ce06fb25cb7587b1ccd` auf `main`; PR #3 ist gemergt.
+- Specialist-Status: `READY_FOR_REVIEW`
+- Reviewer-Status: `ausstehend` — dritter unabhängiger Release-Gate-Lauf erforderlich.
+- Observed: `curl -i https://klubos.de/api/vereinssuche?q=TC%20Kirchh%C3%B6rde` liefert öffentlich HTTP 200 JSON von Vercel. Die Antwort enthält `sourceName: OpenStreetMap (Nominatim + Overpass)`, `sourceUrl`, `checkedAt`, `confidence`, `websiteState: unverified_source_tag` und `logoState: fallback`.
+- Öffentliche API-Regression: `TC Kirchhörde` → 2 Treffer; `Tennisclub Köln` → 8; `Tennisclub Koln` → 8; `zzzzzz tennisclub` → 0. Alle Antworten waren HTTP 200.
+- Öffentlicher Browser: `https://klubos.de/vereinssuche.html` zeigt VS-0.4; `TC Kirchhörde` zeigt zwei Ergebnisbuttons, Quelle `OpenStreetMap Overpass`, Status `2 Vereine gefunden`, Website-Label `Website · OSM-Tag ungeprüft` und den neutralen `TK`-Fallback.
+- Nächster konkreter Schritt: Search Reviewer führt den dritten unabhängigen öffentlichen Browser-/Quellen-/Regressionstest aus und dokumentiert PASS/FAIL. Die strenge anwendungsweite Nominatim-Garantie über mehrere Serverless-Instanzen bleibt als Shared-KV/Redis-Folgearbeit offen.
