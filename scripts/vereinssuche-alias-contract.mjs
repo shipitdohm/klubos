@@ -58,6 +58,8 @@ assert.ok(buildSearchVariants('TC Weiden Köln').includes('TC Weiden'));
 assert.ok(buildSearchVariants('TC Kirchhorde').includes('TC Kirchhoerde'));
 assert.ok(buildSearchVariants('TC Augsburg e.V.').includes('TC Augsburg'));
 assert.ok(buildSearchVariants('TC Augsburg Augsburg').includes('TC Augsburg'));
+assert.ok(buildSearchVariants('TC Blau-Weiss Zundorf').includes('TC Blau-Weiss Zündorf'));
+assert.ok(buildSearchVariants('Tennisclub Blau Weiss Zundorf').includes('Tennisclub Blau-Weiss Zündorf'));
 for (const identity of expectedOfficialIdentities) {
   const canonical = canonicalClubName(identity.aliases[0]);
   for (const alias of identity.aliases) {

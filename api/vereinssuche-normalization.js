@@ -10,6 +10,11 @@ const KNOWN_ASCII_NAME_ALIASES = [
   ['zundorf', 'zuendorf'],
 ];
 
+const KNOWN_ASCII_UNICODE_SEARCH_ALIASES = [
+  ['kirchhorde', 'kirchhörde'],
+  ['zundorf', 'zündorf'],
+];
+
 export function normalize(value) {
   return String(value || '')
     .toLowerCase()
@@ -34,6 +39,7 @@ function buildIdentityPreservingVariants(value) {
     value,
     stripOfficialSuffix(value),
     applyKnownAsciiAliases(stripOfficialSuffix(value)),
+    applyKnownUnicodeSearchAliases(stripOfficialSuffix(value)),
     collapseTrailingDuplicateLocation(applyKnownAsciiAliases(stripOfficialSuffix(value))),
   ];
 
@@ -99,6 +105,8 @@ export function buildSearchVariants(query) {
 
     const knownAsciiAlias = applyKnownAsciiAliases(current);
     if (knownAsciiAlias !== current) queue.unshift(knownAsciiAlias);
+    const knownUnicodeSearchAlias = applyKnownUnicodeSearchAliases(current);
+    if (knownUnicodeSearchAlias !== current) queue.unshift(knownUnicodeSearchAlias);
 
     const rawTokens = current.split(/\s+/).filter(Boolean);
     const locationFragment = rawTokens.at(-1)?.replace(/^[^\p{L}\d]+|[^\p{L}\d]+$/gu, '');
@@ -162,6 +170,18 @@ function applyKnownAsciiAliases(value) {
       if (match === match.toUpperCase()) return canonical.toUpperCase();
       if (match[0] === match[0].toUpperCase()) return `${canonical[0].toUpperCase()}${canonical.slice(1)}`;
       return canonical;
+    });
+  }
+  return result;
+}
+
+function applyKnownUnicodeSearchAliases(value) {
+  let result = String(value || '');
+  for (const [ascii, unicode] of KNOWN_ASCII_UNICODE_SEARCH_ALIASES) {
+    result = result.replace(new RegExp(`\\b${ascii}\\b`, 'gi'), (match) => {
+      if (match === match.toUpperCase()) return unicode.toUpperCase();
+      if (match[0] === match[0].toUpperCase()) return `${unicode[0].toUpperCase()}${unicode.slice(1)}`;
+      return unicode;
     });
   }
   return result;
