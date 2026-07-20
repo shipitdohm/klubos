@@ -118,6 +118,10 @@ body {
   display: flex;
 }
 
+.vs-result.is-result .vs-results-list {
+  display: none;
+}
+
 .vs-result.is-error .vs-error-actions {
   display: flex;
 }
@@ -616,9 +620,9 @@ body {
     <section class="vs-card" data-od-id="vereinssuche-card">
       <section class="vs-result" id="vs-result" data-od-id="vereinssuche-result">
         <div class="vs-search-panel" id="vs-search-panel" data-od-id="vereinssuche-search-panel">
-          <div class="vs-search-eyebrow">Vereinssuche · Live-Quelle VS-0.4</div>
+          <div class="vs-search-eyebrow">Vereinssuche · Live-Quelle VS-0.5</div>
           <h1 class="vs-search-title" data-od-id="vereinssuche-search-title">Deinen Verein finden</h1>
-          <p class="vs-search-copy">KlubOS durchsucht bei jeder Anfrage öffentliche OpenStreetMap-Daten nach deutschen Tennisvereinen. Namen, Städte und Kürzel werden tolerant abgeglichen; Website-Tags aus der Quelle bleiben als ungeprüft markiert.</p>
+          <p class="vs-search-copy">KlubOS gleicht deinen Vereinsnamen zuerst mit dem offiziellen DTB-nuLiga-Ergebnisdienst ab. Wenn dort kein eindeutiger Treffer vorliegt, wird nur ein eindeutig zuordenbarer OSM-Fallback übernommen – sonst gibt es keinen Treffer.</p>
           <form class="vs-search-form" id="vs-search-form" data-od-id="vereinssuche-search-form" onsubmit="return handleClubSearch(event)">
             <label for="vs-query">Vereinsname</label>
             <div class="vs-search-row">
@@ -630,7 +634,7 @@ body {
 
         <div class="vs-animation-panel" id="vs-animation-panel" data-od-id="vereinssuche-animation">
           <div class="vs-animation-title">Live-Suche wird vorbereitet.</div>
-          <div class="vs-animation-copy">OpenStreetMap und die öffentliche Vereinsdatenbank werden abgefragt.</div>
+          <div class="vs-animation-copy">DTB-nuLiga und die öffentliche Fallback-Quelle werden abgefragt.</div>
           <div class="vs-court" aria-hidden="true">
             <span class="vs-ball"></span>
           </div>
@@ -648,7 +652,7 @@ body {
           <strong id="vs-results-count">0 Treffer</strong>
           <span id="vs-results-query"></span>
         </div>
-        <div class="vs-results-list" id="vs-results-list" aria-label="Suchergebnisse"></div>
+        <div class="vs-results-list" id="vs-results-list" aria-label="Eindeutiger Treffer" aria-hidden="true"></div>
 
         <div class="vs-club-head">
           <div class="vs-club-logo-card" id="vs-logo-card" data-od-id="vereinssuche-club-logo"></div>
@@ -673,6 +677,14 @@ body {
           <div class="vs-field">
             <label for="r-website">Website</label>
             <input class="value" id="r-website" type="text" readonly>
+          </div>
+          <div class="vs-field">
+            <label for="r-mitglieder">Mitglieder</label>
+            <input class="value" id="r-mitglieder" type="text" readonly>
+          </div>
+          <div class="vs-field">
+            <label for="r-plaetze">Plätze</label>
+            <input class="value" id="r-plaetze" type="text" readonly>
           </div>
         </div>
 
@@ -721,6 +733,8 @@ body {
     ort: document.getElementById('r-ort'),
     verband: document.getElementById('r-verband'),
     website: document.getElementById('r-website'),
+    mitglieder: document.getElementById('r-mitglieder'),
+    plaetze: document.getElementById('r-plaetze'),
   };
 
   const icons = {
@@ -773,7 +787,7 @@ body {
     const sequence = ++requestSequence;
     activeRequest = new AbortController();
     setMode('loading');
-    setStatus('search', 'Live-Suche läuft …', 'OpenStreetMap wird jetzt im Internet abgefragt.');
+    setStatus('search', 'Live-Suche läuft …', 'DTB-nuLiga wird jetzt im Internet abgefragt.');
 
     try {
       const endpoint = '/api/vereinssuche?q=' + encodeURIComponent(query);
@@ -801,26 +815,13 @@ body {
 
   function showResults(payload) {
     setMode('result');
-    const count = currentResults.length;
+    const count = 1;
     const partialText = payload.partial ? ' · Teilantwort wegen Quellenlimit' : '';
     setStatus('success', count + (count === 1 ? ' Verein gefunden' : ' Vereine gefunden'), payload.sourceName + ' · geprüft ' + formatDate(payload.checkedAt) + partialText);
-    resultsCount.textContent = count + (count === 1 ? ' Treffer' : ' Treffer');
-    resultsQuery.textContent = 'Live-Ergebnis für „' + payload.query + '“';
+    resultsCount.textContent = '1 eindeutiger Treffer';
+    resultsQuery.textContent = 'Live abgeglichen für „' + payload.query + '“';
     resultsList.innerHTML = '';
-    currentResults.forEach((club, index) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'vs-result-option' + (index === 0 ? ' is-selected' : '');
-      button.dataset.resultIndex = String(index);
-      button.setAttribute('aria-label', club.name + (club.city ? ', ' + club.city : ''));
-      button.innerHTML = '<span class="vs-result-option-logo">' + escapeHtml(getInitials(club.name)) + '</span>' +
-        '<span><span class="vs-result-option-name"></span><span class="vs-result-option-meta"></span></span>' +
-        '<span class="vs-result-option-arrow" aria-hidden="true">›</span>';
-      button.querySelector('.vs-result-option-name').textContent = club.name;
-      button.querySelector('.vs-result-option-meta').textContent = [club.city, club.confidence ? 'Confidence ' + club.confidence : ''].filter(Boolean).join(' · ');
-      button.addEventListener('click', () => selectClub(index));
-      resultsList.appendChild(button);
-    });
+    resultsList.style.display = 'none';
     selectClub(0, false);
   }
 
@@ -834,9 +835,11 @@ body {
     renderFallbackLogo(getInitials(club.name));
     fields.verein.value = club.name;
     fields.ort.value = club.city || 'Nicht in Quelle hinterlegt';
-    fields.verband.value = 'Nicht in OpenStreetMap hinterlegt';
+    fields.verband.value = [club.association, club.region].filter(Boolean).join(' · ') || 'Nicht in Verbandsquelle hinterlegt';
     setWebsiteLabel(club.websiteState);
     fields.website.value = club.website || 'Nicht in Quelle hinterlegt';
+    fields.mitglieder.value = club.membershipCount ? club.membershipCount.toLocaleString('de-DE') : 'Nicht in Quelle hinterlegt';
+    fields.plaetze.value = formatCourts(club.courts);
     const params = new URLSearchParams({
       verein: club.name,
       ort: club.city || '',
@@ -852,7 +855,7 @@ body {
 
   function showNotFound(query, payload) {
     setMode('error');
-    setStatus('error', 'Keine Treffer aus der Live-Quelle', 'OpenStreetMap wurde geprüft (' + formatDate(payload.checkedAt) + '). Es wurden keine passenden deutschen Tennisvereine zurückgegeben.');
+    setStatus('error', payload.matchState === 'ambiguous' ? 'Kein eindeutiger Treffer' : 'Kein Verein gefunden', 'DTB-nuLiga und die öffentliche Fallback-Quelle wurden geprüft (' + formatDate(payload.checkedAt) + '). Bitte ergänze den vollständigen Vereinsnamen.');
     resultsList.innerHTML = '';
     clubName.textContent = query || 'Kein Treffer';
     renderFallbackLogo(getInitials(query || 'Verein'));
@@ -860,6 +863,8 @@ body {
     fields.ort.value = '';
     fields.verband.value = '';
     fields.website.value = '';
+    fields.mitglieder.value = '';
+    fields.plaetze.value = '';
     setWebsiteLabel('');
     sourceNote.innerHTML = '';
     notFoundPilotLink.href = 'pilot.html?verein=' + encodeURIComponent(query || '');
@@ -867,7 +872,7 @@ body {
 
   function showUnavailable() {
     setMode('error');
-    setStatus('error', 'Live-Suche momentan nicht verfügbar', 'Es wurden keine lokalen Ersatzdaten verwendet. Bitte versuche es gleich noch einmal.');
+    setStatus('error', 'Live-Suche momentan nicht verfügbar', 'DTB-nuLiga und die öffentliche Fallback-Quelle antworten gerade nicht. Bitte versuche es gleich noch einmal.');
     resultsList.innerHTML = '';
     sourceNote.innerHTML = '';
     renderFallbackLogo('OSM');
@@ -876,7 +881,10 @@ body {
 
   function setWebsiteLabel(state) {
     const label = document.querySelector('label[for="r-website"]');
-    if (label) label.textContent = state === 'unverified_source_tag' ? 'Website · OSM-Tag ungeprüft' : 'Website';
+    if (!label) return;
+    if (state === 'official_source_link_unverified') label.textContent = 'Website · Verbandsangabe';
+    else if (state === 'unverified_source_tag') label.textContent = 'Website · OSM-Tag ungeprüft';
+    else label.textContent = 'Website';
   }
 
   function setStatus(type, title, text) {
@@ -902,6 +910,14 @@ body {
       link.textContent = 'Datensatz öffnen';
       sourceNote.appendChild(link);
     }
+    if (club.boardRoles?.length) {
+      sourceNote.append(' · Vorstand: ' + club.boardRoles.slice(0, 3).map((role) => role.role + ' ' + role.name).join(' · '));
+    }
+  }
+
+  function formatCourts(courts) {
+    if (!Array.isArray(courts) || !courts.length) return 'Nicht in Quelle hinterlegt';
+    return courts.map((court) => [court.count, court.type].filter(Boolean).join(' ')).join(' · ');
   }
 
   function formatDate(value) {

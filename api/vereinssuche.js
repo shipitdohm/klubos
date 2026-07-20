@@ -3,12 +3,18 @@ const OVERPASS_ENDPOINTS = [
   'https://lz4.overpass-api.de/api/interpreter',
   'https://overpass-api.de/api/interpreter',
 ];
-const SOURCE_NAME = 'OpenStreetMap (Nominatim + Overpass)';
-const SOURCE_URL = 'https://www.openstreetmap.org/';
+const NULIGA_ENDPOINT = 'https://dtb.liga.nu/cgi-bin/WebObjects/nuLigaTENDE.woa/wa/clubSearch';
+const NULIGA_SOURCE_NAME = 'DTB nuLiga (offizieller Verbands-Ergebnisdienst)';
+const NULIGA_SOURCE_URL = 'https://dtb.liga.nu/';
+const OSM_SOURCE_NAME = 'OpenStreetMap (Nominatim + Overpass)';
+const OSM_SOURCE_URL = 'https://www.openstreetmap.org/';
+const SOURCE_NAME = `${NULIGA_SOURCE_NAME} + ${OSM_SOURCE_NAME} als Fallback`;
+const SOURCE_URL = NULIGA_SOURCE_URL;
 const NOMINATIM_POLICY_URL = 'https://operations.osmfoundation.org/policies/nominatim/';
-const USER_AGENT = 'KlubOS-Vereinssuche/0.4 (+https://klubos.de; contact: hello@klubos.de)';
+const USER_AGENT = 'KlubOS-Vereinssuche/0.5 (+https://klubos.de; contact: hello@klubos.de)';
 const CACHE_TTL_MS = 30_000;
 const NOMINATIM_MIN_INTERVAL_MS = 1_000;
+const NULIGA_TIMEOUT_MS = 12_000;
 const runtimeState = globalThis.__klubosSearchRuntime || (globalThis.__klubosSearchRuntime = {
   cache: new Map(),
   nominatimTail: Promise.resolve(),
@@ -44,44 +50,48 @@ export default async function handler(request, response) {
   const checkedAt = new Date().toISOString();
 
   try {
-    const nominatim = await fetchNominatim(query);
-    const directResults = nominatim.results.map(normalizeNominatim).filter(Boolean);
-    const bbox = chooseSearchBbox(nominatim.results);
-    let overpassResults = [];
-    let overpassError = null;
-
-    if (bbox && shouldExpandSearch(query, directResults)) {
-      try {
-        const overpass = await fetchOverpass(bbox);
-        overpassResults = overpass.elements.map((element) => normalizeOverpass(element, bbox.city)).filter(Boolean);
-      } catch (error) {
-        overpassError = safeError(error);
-      }
+    const official = await searchNuLiga(query, checkedAt);
+    if (official.status === 'match') {
+      const payload = buildPayload(query, checkedAt, official.club, {
+        sourceName: NULIGA_SOURCE_NAME,
+        sourceUrl: official.club.sourceUrl,
+        sources: [NULIGA_SOURCE_NAME],
+        matchState: 'unique_official_match',
+      });
+      cache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, payload });
+      return sendJson(response, 200, payload);
     }
 
-    if (overpassError && directResults.length === 0) {
+    const osm = await searchOsmSingle(query, checkedAt);
+    if (osm.status === 'match') {
+      const payload = buildPayload(query, checkedAt, osm.club, {
+        sourceName: OSM_SOURCE_NAME,
+        sourceUrl: osm.club.sourceUrl,
+        sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
+        matchState: official.status === 'unavailable' ? 'unique_osm_fallback' : 'unique_osm_match',
+        partial: official.status === 'unavailable',
+      });
+      cache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, payload });
+      return sendJson(response, 200, payload);
+    }
+
+    if (official.status === 'unavailable' && osm.status === 'unavailable') {
       return sendJson(response, 502, {
         error: 'source_unavailable',
-        message: 'Die regionale Tennisquelle ist momentan nicht erreichbar. Bitte versuche es gleich noch einmal.',
+        message: 'Die offiziellen Tennisquellen sind momentan nicht erreichbar. Bitte versuche es gleich noch einmal.',
         sourceName: SOURCE_NAME,
+        sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
         checkedAt,
-        partial: true,
       });
     }
 
-    const results = rankAndDedupe([...directResults, ...overpassResults], query).slice(0, 12);
-    const payload = {
-      query,
-      checkedAt,
+    const payload = buildPayload(query, checkedAt, null, {
       sourceName: SOURCE_NAME,
       sourceUrl: SOURCE_URL,
-      attribution: 'Daten © OpenStreetMap-Mitwirkende, ODbL 1.0',
-      attributionUrl: 'https://www.openstreetmap.org/copyright',
-      policyUrl: NOMINATIM_POLICY_URL,
-      resultCount: results.length,
-      partial: Boolean(overpassError),
-      results,
-    };
+      sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
+      matchState: official.status === 'ambiguous' || osm.status === 'ambiguous' ? 'ambiguous' : 'not_found',
+      partial: official.status === 'unavailable' || osm.status === 'unavailable',
+    });
 
     cache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, payload });
     return sendJson(response, 200, payload);
@@ -90,10 +100,222 @@ export default async function handler(request, response) {
       error: 'source_unavailable',
       message: 'Die öffentliche Suchquelle ist momentan nicht erreichbar. Bitte versuche es gleich noch einmal.',
       sourceName: SOURCE_NAME,
+      sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
       checkedAt,
       detail: process.env.NODE_ENV === 'development' ? safeError(error) : undefined,
     });
   }
+}
+
+async function searchNuLiga(query, checkedAt) {
+  try {
+    const response = await fetch(NULIGA_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        Accept: 'text/html',
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        'User-Agent': USER_AGENT,
+      },
+      body: new URLSearchParams({
+        searchFor: query,
+        federation: 'DTB',
+        WOSubmitAction: 'clubSearch',
+      }),
+      signal: AbortSignal.timeout(NULIGA_TIMEOUT_MS),
+    });
+
+    if (!response.ok) throw new Error(`nuLiga returned ${response.status}`);
+    const html = await response.text();
+    const finalUrl = response.url || NULIGA_SOURCE_URL;
+    if (isNuLigaClubPage(html)) {
+      const club = parseNuLigaClubPage(html, finalUrl, checkedAt);
+      return club ? { status: 'match', club } : { status: 'no_match' };
+    }
+
+    const candidates = parseNuLigaCandidates(html);
+    const exact = candidates.filter((candidate) => normalize(candidate.name) === normalize(query));
+    if (candidates.length !== 1 && exact.length !== 1) {
+      return candidates.length > 1 ? { status: 'ambiguous' } : { status: 'no_match' };
+    }
+
+    const candidate = exact[0] || candidates[0];
+    const detailResponse = await fetch(toNuLigaUrl(candidate.href), {
+      headers: { Accept: 'text/html', 'User-Agent': USER_AGENT },
+      signal: AbortSignal.timeout(NULIGA_TIMEOUT_MS),
+    });
+    if (!detailResponse.ok) throw new Error(`nuLiga detail returned ${detailResponse.status}`);
+    const detailHtml = await detailResponse.text();
+    const club = parseNuLigaClubPage(detailHtml, detailResponse.url || toNuLigaUrl(candidate.href), checkedAt);
+    return club ? { status: 'match', club } : { status: 'no_match' };
+  } catch (error) {
+    return { status: 'unavailable', error: safeError(error) };
+  }
+}
+
+async function searchOsmSingle(query, checkedAt) {
+  try {
+    const nominatim = await fetchNominatim(query);
+    const directResults = nominatim.results.map((item) => normalizeNominatim(item, checkedAt)).filter(Boolean);
+    const bbox = chooseSearchBbox(nominatim.results);
+    let overpassResults = [];
+    let overpassError = null;
+
+    if (bbox && shouldExpandSearch(query, directResults)) {
+      try {
+        const overpass = await fetchOverpass(bbox);
+        overpassResults = overpass.elements.map((element) => normalizeOverpass(element, bbox.city, checkedAt)).filter(Boolean);
+      } catch (error) {
+        overpassError = safeError(error);
+      }
+    }
+
+    const club = chooseSingleResult(rankAndDedupe([...directResults, ...overpassResults], query), query);
+    if (club) return { status: 'match', club };
+    if (overpassError && directResults.length === 0) return { status: 'unavailable', error: overpassError };
+    return { status: directResults.length + overpassResults.length > 1 ? 'ambiguous' : 'no_match' };
+  } catch (error) {
+    return { status: 'unavailable', error: safeError(error) };
+  }
+}
+
+function isNuLigaClubPage(html) {
+  return /id=["']title["']/i.test(html) && /<h1[\s\S]*?Vereinsinfo<\/h1>/i.test(html);
+}
+
+function parseNuLigaCandidates(html) {
+  const candidates = [];
+  const seen = new Set();
+  const pattern = /<a\b[^>]*href=["']([^"']*clubInfoDisplay[^"']*)["'][^>]*>([\s\S]*?)<\/a>/gi;
+  let match;
+  while ((match = pattern.exec(html))) {
+    const href = decodeHtml(match[1]);
+    const name = htmlToText(match[2]);
+    if (!href.includes('club=') || !name || /Vereinsinfo|Mannschaften|Begegnungen|LK-/i.test(name)) continue;
+    const key = toNuLigaUrl(href);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    candidates.push({ href, name });
+  }
+  return candidates;
+}
+
+function toNuLigaUrl(href) {
+  const url = new URL(href, NULIGA_SOURCE_URL);
+  if (url.hostname !== 'dtb.liga.nu') throw new Error('Unexpected nuLiga host');
+  return url.toString();
+}
+
+function parseNuLigaClubPage(html, sourceUrl, checkedAt) {
+  const titleMatch = html.match(/<div\s+id=["']title["'][^>]*>([\s\S]*?)<\/div>/i);
+  const name = htmlToText(titleMatch?.[1] || '');
+  if (!name || /Willkommen zu nuLiga/i.test(name)) return null;
+
+  const headerMatch = html.match(/<h1[\s\S]*?Vereinsinfo<\/h1>[\s\S]*?<p>([\s\S]*?)<\/p>/i);
+  const headerText = htmlToText(headerMatch?.[1] || '');
+  const associationMatch = headerText.match(/(.+?Tennis-Verband\s+e\.V\.),\s*(?:Region|Bezirk):\s*([^,\n]+?)(?:\s+VNr:|$)/i);
+  const idMatch = headerText.match(/VNr:\s*([0-9]+)/i);
+  const addressCell = extractNuLigaCell(html, 'Platzadresse');
+  const addressText = htmlToText(addressCell);
+  const addressLine = addressText.split(/\bTel\b|\bFax\b|\bE-Mail\b/i)[0].trim();
+  const postalMatch = addressLine.match(/\b(\d{5})\s+([^,]+?)(?:,|$)/);
+  const city = postalMatch ? postalMatch[2].trim() : '';
+  const website = firstWebsiteFromHtml(addressCell);
+  const canonicalMatch = html.match(/<a\s+href=["']([^"']*clubInfoDisplay[^"']*club=\d+)["'][^>]*>\s*Vereinsinfo\s*<\/a>/i);
+  const source = new URL(canonicalMatch ? toNuLigaUrl(canonicalMatch[1]) : sourceUrl, NULIGA_SOURCE_URL);
+  const federation = source.searchParams.get('federation') || '';
+  const clubId = source.searchParams.get('club') || '';
+
+  return makeClub({
+    id: `nuliga:${federation || 'DTB'}:${clubId || normalize(name)}`,
+    officialId: idMatch?.[1] ? `nuLiga:${idMatch[1]}` : clubId ? `nuLiga:${federation || 'DTB'}:${clubId}` : '',
+    name,
+    city,
+    country: 'DE',
+    sport: 'tennis',
+    website,
+    websiteState: website ? 'official_source_link_unverified' : 'not_provided',
+    websiteVerified: false,
+    sourceUrl: source.toString(),
+    sourceName: NULIGA_SOURCE_NAME,
+    checkedAt,
+    confidence: 'high',
+    address: addressLine,
+    association: associationMatch?.[1]?.trim() || '',
+    region: associationMatch?.[2]?.trim() || '',
+    membershipCount: parseNuLigaMembershipCount(html),
+    courts: parseNuLigaCourts(html),
+    boardRoles: parseNuLigaBoardRoles(html),
+  });
+}
+
+function extractNuLigaCell(html, label) {
+  const labelPattern = new RegExp(`<b>\\s*${label}\\s*<\\/b>[\\s\\S]*?<td[^>]*>([\\s\\S]*?)<\\/td>\\s*<\\/tr>`, 'i');
+  return html.match(labelPattern)?.[1] || '';
+}
+
+function parseNuLigaMembershipCount(html) {
+  const table = html.match(/<table[^>]*stocktaking-members[\s\S]*?<\/table>/i)?.[0] || '';
+  const totalRow = table.match(/<tfoot[\s\S]*?Gesamt[\s\S]*?<\/tr>/i)?.[0] || '';
+  const numbers = [...totalRow.matchAll(/>(\d[\d.]*)<\/td>/g)].map((match) => Number(match[1].replace(/\./g, ''))).filter(Number.isFinite);
+  return numbers.at(-1) || null;
+}
+
+function parseNuLigaCourts(html) {
+  const table = html.match(/<h2>Pl(?:ä|&auml;)tze<\/h2>[\s\S]*?<table[\s\S]*?<\/table>/i)?.[0] || '';
+  const courts = [];
+  for (const row of table.matchAll(/<tr>([\s\S]*?)<\/tr>/gi)) {
+    const cells = [...row[1].matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map((match) => htmlToText(match[1]));
+    if (cells.length >= 3 && /Freiplätze|Hallenplätze/i.test(cells[1])) {
+      const count = Number(cells[0].replace(/\D/g, '')) || null;
+      courts.push({ count, type: cells[1], surface: cells[2] });
+    }
+  }
+  return courts;
+}
+
+function parseNuLigaBoardRoles(html) {
+  const start = html.search(/<h2>Funktion(?:ä|&auml;)re<\/h2>/i);
+  if (start < 0) return [];
+  const end = html.indexOf('</table>', start);
+  const table = html.slice(start, end > start ? end : start + 20_000);
+  const roles = [];
+  for (const row of table.matchAll(/<tr>([\s\S]*?)<\/tr>/gi)) {
+    const cells = [...row[1].matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map((match) => htmlToText(match[1]));
+    if (cells.length < 2 || !/Vorsitz|Schatz|Sportwart|Jugendwart|Schriftführ|Präsident|Webmaster|Verwaltung/i.test(cells[0])) continue;
+    roles.push({ role: cells[0], name: cells[1] });
+  }
+  return roles.slice(0, 20);
+}
+
+function firstWebsiteFromHtml(html) {
+  const match = String(html || '').match(/<a\s+href=["'](https?:\/\/[^"']+)["'][^>]*>/i);
+  return match ? firstWebsite(decodeHtml(match[1])) : '';
+}
+
+function htmlToText(value) {
+  return decodeHtml(String(value || '')
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<[^>]+>/g, ' '))
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function decodeHtml(value) {
+  return String(value || '')
+    .replace(/&nbsp;|&#160;/gi, ' ')
+    .replace(/&amp;|&#38;/gi, '&')
+    .replace(/&quot;|&#34;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&uuml;/gi, 'ü')
+    .replace(/&ouml;/gi, 'ö')
+    .replace(/&auml;/gi, 'ä')
+    .replace(/&Uuml;/g, 'Ü')
+    .replace(/&Ouml;/g, 'Ö')
+    .replace(/&Auml;/g, 'Ä')
+    .replace(/&szlig;/gi, 'ß')
+    .replace(/&#(\d+);/g, (_, code) => String.fromCodePoint(Number(code)));
 }
 
 async function fetchNominatim(query) {
@@ -172,7 +394,7 @@ async function fetchOverpass(bbox) {
   throw lastError || new Error('Overpass unavailable');
 }
 
-function normalizeNominatim(item) {
+function normalizeNominatim(item, checkedAt) {
   if (!item || item.address?.country_code !== 'de') return null;
 
   const tags = item.extratags || {};
@@ -193,10 +415,11 @@ function normalizeNominatim(item) {
     evidence: 'name' in item ? evidence : '',
     confidence: tags.website || tags.sport ? 'high' : 'medium',
     address: item.display_name || '',
+    checkedAt,
   });
 }
 
-function normalizeOverpass(item, fallbackCity) {
+function normalizeOverpass(item, fallbackCity, checkedAt) {
   const tags = item?.tags || {};
   const name = tags.name || tags['official_name'] || '';
   if (!name || !/tennis/i.test(tags.sport || '')) return null;
@@ -214,26 +437,54 @@ function normalizeOverpass(item, fallbackCity) {
     evidence: tags.sport,
     confidence: tags.website ? 'high' : 'medium',
     address: [tags['addr:street'], tags['addr:housenumber'], tags['addr:postcode'], city].filter(Boolean).join(', '),
+    checkedAt,
   });
 }
 
-function makeClub({ id, name, city, website, sourceUrl, sourceName, center, confidence, address }) {
+function makeClub({
+  id,
+  officialId = '',
+  name,
+  city,
+  country = 'DE',
+  sport = 'tennis',
+  website,
+  websiteState,
+  websiteVerified = false,
+  sourceUrl,
+  sourceName,
+  checkedAt,
+  center,
+  confidence,
+  address,
+  association = '',
+  region = '',
+  membershipCount = null,
+  courts = [],
+  boardRoles = [],
+}) {
   return {
     id,
+    officialId,
     name: String(name).trim(),
     city: String(city || '').trim(),
-    country: 'DE',
-    sport: 'tennis',
+    country,
+    sport,
     website: website || '',
-    websiteState: website ? 'unverified_source_tag' : 'not_provided',
-    websiteVerified: false,
+    websiteState: websiteState || (website ? 'unverified_source_tag' : 'not_provided'),
+    websiteVerified,
     logoUrl: '',
     logoState: 'fallback',
     sourceUrl,
     sourceName,
-    checkedAt: new Date().toISOString(),
+    checkedAt: checkedAt || new Date().toISOString(),
     confidence,
     address,
+    association,
+    region,
+    membershipCount,
+    courts,
+    boardRoles,
     latitude: Number(center?.lat) || null,
     longitude: Number(center?.lon) || null,
   };
@@ -261,6 +512,21 @@ function resultQuality(result, query) {
   if (/\be.?s*v.?\b/i.test(result.name)) score += 8;
   if (result.city) score += 6;
   return score;
+}
+
+function chooseSingleResult(results, query) {
+  if (!results.length) return null;
+  if (results.length === 1) return results[0];
+
+  const strongMatches = results.filter((result) => strongNameMatch(result.name, query));
+  return strongMatches.length === 1 ? strongMatches[0] : null;
+}
+
+function strongNameMatch(name, query) {
+  const queryTokens = normalize(query).split(' ');
+  if (queryTokens[0] === 'tc') queryTokens[0] = 'tennisclub';
+  const expandedQuery = queryTokens.filter(Boolean).join(' ');
+  return expandedQuery.length >= 5 && normalize(name).includes(expandedQuery);
 }
 
 function chooseSearchBbox(items) {
@@ -316,15 +582,38 @@ function normalize(value) {
     .trim();
 }
 
+function buildPayload(query, checkedAt, club, meta) {
+  const results = club ? [club] : [];
+  return {
+    query,
+    checkedAt,
+    sourceName: meta.sourceName,
+    sourceUrl: meta.sourceUrl,
+    sources: meta.sources,
+    matchState: meta.matchState,
+    attribution: meta.sourceName === OSM_SOURCE_NAME
+      ? 'Daten © OpenStreetMap-Mitwirkende, ODbL 1.0'
+      : 'Offizielle Vereinsdaten aus dem DTB-nuLiga-Ergebnisdienst',
+    attributionUrl: meta.sourceName === OSM_SOURCE_NAME
+      ? 'https://www.openstreetmap.org/copyright'
+      : NULIGA_SOURCE_URL,
+    policyUrl: meta.sourceName === OSM_SOURCE_NAME ? NOMINATIM_POLICY_URL : undefined,
+    resultCount: results.length,
+    partial: Boolean(meta.partial),
+    results,
+  };
+}
+
 function emptyResponse(query) {
   return {
     query,
     checkedAt: new Date().toISOString(),
     sourceName: SOURCE_NAME,
     sourceUrl: SOURCE_URL,
-    attribution: 'Daten © OpenStreetMap-Mitwirkende, ODbL 1.0',
-    attributionUrl: 'https://www.openstreetmap.org/copyright',
-    policyUrl: NOMINATIM_POLICY_URL,
+    sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
+    matchState: 'empty_query',
+    attribution: 'DTB nuLiga als Primärquelle, OpenStreetMap nur als Einzel-Treffer-Fallback',
+    attributionUrl: NULIGA_SOURCE_URL,
     resultCount: 0,
     results: [],
   };
