@@ -178,3 +178,14 @@ Jede relevante Änderung bekommt hier einen Eintrag. Der Specialist trägt zuers
 - Lokale Tests: Aliasvertrag erweitert um die erwarteten kanonischen Identitäten und neuen Aliasformen; `node scripts/vereinssuche-alias-contract.mjs` erfolgreich mit 18 Ankern und 113 Varianten; beide `node --check`-Prüfungen, `git diff --check` und direkter Astro-Build erfolgreich (`7 page(s) built`, `Complete!`). Kein Live-Suchclaim vor Push.
 - Follow-up innerhalb VS-0.7.7: Für die Upstream-Suche wird zusätzlich die belegte Unicode-Variante `Zundorf` → `Zündorf` priorisiert; der kanonische Schlüssel bleibt umlautneutral `zuendorf`.
 - Nächster Schritt: VS-0.7.7 lokal bauen und testen, pushen, die 32er-Matrix plus mindestens 100 sequenzielle Live-Aliasvarianten wiederholen und anschließend den unabhängigen Search Reviewer ausschließlich gegen VS-0.7.7 beauftragen.
+
+### 2026-07-20 — VS-0.7.8 Priorisierung offizieller zusammengesetzter Namen
+
+- Commit/Diff: Working tree auf Basis `92dbc91`; `api/vereinssuche-normalization.js` priorisiert nun die vollständige offizielle `TC`-Form aus suffixbereinigten, Unicode-/ASCII- und Bindestrichvarianten vor verkürzten Suchformen. Dadurch wird `TC Blau-Weiss Halle` vor `TC Blau-Weiss` abgefragt. `api/vereinssuche.js` und `vereinssuche.html` werden auf VS-0.7.8 angehoben.
+- Specialist-Status: `IN_WORK` — lokale Korrektur und Regressionstests erfolgreich; Push, öffentliche Verifikation und neuer unabhängiger Gate stehen aus.
+- Observed: VS-0.7.7 lieferte die ASCII-Zündorf-Varianten nach frischem Cache-Fenster offiziell als `nuliga:DTB:35409`; `Tennisclub Blau-Weiss Halle e.V.` blieb jedoch `ambiguous`, obwohl der direkte offizielle Basisfall `TC Blau-Weiss Halle` bereits als `nuliga:DTB:26504` bekannt ist.
+- Claimed: Die Variantenreihenfolge fragt für Halle zuerst `TC Blau-Weiss Halle`, für ASCII-Zündorf zuerst `TC Blau-Weiss Zündorf` und für kombinierte Tennisclub-/Bindestrichvarianten die vollständige Namensform ab. Kürzere Formen bleiben nur nachgeordnet. Die erwartete-ID-Matrix aus VS-0.7.7 bleibt bestehen.
+- Inferred: Die verbleibende Halle-Mehrdeutigkeit entstand durch zu frühe verkürzte Kandidatenabfragen, nicht durch einen OSM-Ersatz oder fehlende offizielle Quelle.
+- Hypothesis / offene Annahme: Die Priorisierung reduziert Upstream-Mehrdeutigkeit, ohne generische Begriffe automatisch zu einem Verein zu machen; der unabhängige Live-Gate muss dies gegen 32 plus mindestens 100 Varianten bestätigen.
+- Lokale Tests: Aliasvertrag `18` Anker/`113` Varianten inklusive erwarteter `nuliga:DTB:35409`-/`nuliga:DTB:26504`-Identitäten erfolgreich; beide `node --check`-Prüfungen und `git diff --check` erfolgreich. Direkter Astro-Build nach dem VS-0.7.8-Versionbump steht noch aus.
+- Nächster Schritt: VS-0.7.8 bauen, pushen, die sechs Zündorf-/Halle-Fälle öffentlich verifizieren und danach den unabhängigen 32+100-Gate ausschließlich gegen VS-0.7.8 starten.

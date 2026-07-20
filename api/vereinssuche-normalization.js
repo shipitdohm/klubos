@@ -35,22 +35,25 @@ export function canonicalClubName(value) {
 
 function buildIdentityPreservingVariants(value) {
   const variants = new Set();
+  const stripped = stripOfficialSuffix(value);
+  const unicode = applyKnownUnicodeSearchAliases(stripped);
+  const ascii = applyKnownAsciiAliases(stripped);
   const bases = [
+    unicode,
+    ascii,
+    collapseTrailingDuplicateLocation(unicode),
+    stripped,
     value,
-    stripOfficialSuffix(value),
-    applyKnownAsciiAliases(stripOfficialSuffix(value)),
-    applyKnownUnicodeSearchAliases(stripOfficialSuffix(value)),
-    collapseTrailingDuplicateLocation(applyKnownAsciiAliases(stripOfficialSuffix(value))),
   ];
 
   for (const base of bases) {
     if (!base) continue;
-    variants.add(base);
     const compound = hyphenateCompound(base);
-    variants.add(compound);
     for (const prefixed of [...prefixVariants(base), ...prefixVariants(compound)]) {
       variants.add(prefixed);
     }
+    variants.add(compound);
+    variants.add(base);
   }
 
   return [...variants];
