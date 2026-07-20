@@ -49,6 +49,10 @@ function buildIdentityPreservingVariants(value) {
   for (const base of bases) {
     if (!base) continue;
     const compound = hyphenateCompound(base);
+    for (const orthographic of germanVariants(compound)) {
+      for (const prefixed of prefixVariants(orthographic)) variants.add(prefixed);
+      variants.add(orthographic);
+    }
     for (const prefixed of [...prefixVariants(compound), ...prefixVariants(base)]) {
       variants.add(prefixed);
     }
@@ -116,7 +120,9 @@ export function buildSearchVariants(query) {
     if (locationFragment && normalize(locationFragment).length >= 6 && rawTokens.length >= 3) {
       queue.unshift(locationFragment);
     }
-    if (/^(?:tc|tennisclub|tennis[ -]+club)$/i.test(rawTokens[0]) && rawTokens.length >= 3) {
+    if (/^(?:tc|tennisclub|tennis[ -]+club)$/i.test(rawTokens[0])
+      && rawTokens.length >= 3
+      && !hasHyphenatedCompound(current)) {
       queue.unshift(`${rawTokens[0]} ${rawTokens.slice(1, -1).join(' ')}`);
     }
 
@@ -151,6 +157,10 @@ export function buildSearchVariants(query) {
 
 function hyphenateCompound(value) {
   return String(value || '').replace(/\b(blau|rot|gruen|grün|schwarz|gelb|gold)\s+(weiss|weiß|blau|rot|gruen|grün|schwarz|gelb|gold)(?=\s|$)/gi, '$1-$2');
+}
+
+function hasHyphenatedCompound(value) {
+  return /\b(?:blau|rot|gruen|grün|schwarz|gelb|gold)-(?:weiss|weiß|blau|rot|gruen|grün|schwarz|gelb|gold)\b/i.test(String(value || ''));
 }
 
 function prefixVariants(value) {

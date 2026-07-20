@@ -62,6 +62,8 @@ assert.ok(buildSearchVariants('TC Blau-Weiss Zundorf').includes('TC Blau-Weiss Z
 assert.ok(buildSearchVariants('Tennisclub Blau Weiss Zundorf').includes('Tennisclub Blau-Weiss Zündorf'));
 assert.equal(buildSearchVariants('TC Blau Weiss Halle')[0], 'TC Blau-Weiss Halle');
 assert.equal(buildSearchVariants('Tennisclub Blau Weiss Halle')[0], 'TC Blau-Weiss Halle');
+assert.ok(buildSearchVariants('TC Blau Weiss Halle').includes('TC Blau-Weiß Halle'));
+assert.ok(buildSearchVariants('Tennisclub Blau Weiss Halle').includes('TC Blau-Weiß Halle'));
 for (const identity of expectedOfficialIdentities) {
   const canonical = canonicalClubName(identity.aliases[0]);
   for (const alias of identity.aliases) {
