@@ -122,6 +122,10 @@ body {
   display: none;
 }
 
+.vs-result.is-search .vs-status-panel.is-error {
+  display: grid;
+}
+
 .vs-result.is-error .vs-error-actions {
   display: flex;
 }
@@ -183,6 +187,17 @@ body {
   display: grid;
   gap: 0.75rem;
   margin-top: 1.45rem;
+}
+
+.vs-search-validation {
+  margin: 0.65rem 0 0;
+  color: #a13d24;
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.vs-search-validation[hidden] {
+  display: none;
 }
 
 .vs-search-form label {
@@ -620,7 +635,7 @@ body {
     <section class="vs-card" data-od-id="vereinssuche-card">
       <section class="vs-result" id="vs-result" data-od-id="vereinssuche-result">
         <div class="vs-search-panel" id="vs-search-panel" data-od-id="vereinssuche-search-panel">
-          <div class="vs-search-eyebrow">Vereinssuche · Live-Quelle VS-0.5</div>
+          <div class="vs-search-eyebrow">Vereinssuche · Live-Quelle VS-0.6</div>
           <h1 class="vs-search-title" data-od-id="vereinssuche-search-title">Deinen Verein finden</h1>
           <p class="vs-search-copy">KlubOS gleicht deinen Vereinsnamen zuerst mit dem offiziellen DTB-nuLiga-Ergebnisdienst ab. Wenn dort kein eindeutiger Treffer vorliegt, wird nur ein eindeutig zuordenbarer OSM-Fallback übernommen – sonst gibt es keinen Treffer.</p>
           <form class="vs-search-form" id="vs-search-form" data-od-id="vereinssuche-search-form" onsubmit="return handleClubSearch(event)">
@@ -629,6 +644,7 @@ body {
               <input id="vs-query" type="search" autocomplete="organization" value="" placeholder="z. B. TC Kirchhörde, Köln oder TSC Hansa">
               <button class="btn btn-primary" type="submit" data-od-id="vereinssuche-submit">Verein suchen</button>
             </div>
+            <p class="vs-search-validation" id="vs-query-hint" role="alert" hidden>Bitte gib einen Vereinsnamen, eine Stadt oder ein Kürzel ein.</p>
           </form>
         </div>
 
@@ -640,7 +656,7 @@ body {
           </div>
         </div>
 
-        <div class="vs-status-panel is-success" id="vs-status-panel" data-od-id="vereinssuche-status">
+        <div class="vs-status-panel is-success" id="vs-status-panel" role="status" aria-live="polite" data-od-id="vereinssuche-status">
           <div class="vs-status-icon" id="vs-status-icon" aria-hidden="true"></div>
           <div>
           <div class="vs-status-title" id="vs-status-title">Noch kein Verein ausgewählt</div>
@@ -714,6 +730,7 @@ body {
 (function() {
   const result = document.getElementById('vs-result');
   const queryEl = document.getElementById('vs-query');
+  const queryHint = document.getElementById('vs-query-hint');
   const statusPanel = document.getElementById('vs-status-panel');
   const statusIcon = document.getElementById('vs-status-icon');
   const statusTitle = document.getElementById('vs-status-title');
@@ -771,6 +788,8 @@ body {
     setMode('search');
     resultsList.innerHTML = '';
     sourceNote.innerHTML = '';
+    queryHint.hidden = true;
+    queryEl.removeAttribute('aria-invalid');
     window.setTimeout(() => queryEl.focus({ preventScroll: true }), 0);
   }
 
@@ -779,9 +798,14 @@ body {
     if (!query) {
       setStatus('error', 'Suchbegriff fehlt', 'Bitte gib einen Vereinsnamen, eine Stadt oder ein Kürzel ein.');
       setMode('search');
+      queryHint.hidden = false;
+      queryEl.setAttribute('aria-invalid', 'true');
       queryEl.focus({ preventScroll: true });
       return;
     }
+
+    queryHint.hidden = true;
+    queryEl.setAttribute('aria-invalid', 'false');
 
     if (activeRequest) activeRequest.abort();
     const sequence = ++requestSequence;

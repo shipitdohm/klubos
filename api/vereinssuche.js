@@ -11,10 +11,11 @@ const OSM_SOURCE_URL = 'https://www.openstreetmap.org/';
 const SOURCE_NAME = `${NULIGA_SOURCE_NAME} + ${OSM_SOURCE_NAME} als Fallback`;
 const SOURCE_URL = NULIGA_SOURCE_URL;
 const NOMINATIM_POLICY_URL = 'https://operations.osmfoundation.org/policies/nominatim/';
-const USER_AGENT = 'KlubOS-Vereinssuche/0.5 (+https://klubos.de; contact: hello@klubos.de)';
+const USER_AGENT = 'KlubOS-Vereinssuche/0.6 (+https://klubos.de; contact: hello@klubos.de)';
 const CACHE_TTL_MS = 30_000;
 const NOMINATIM_MIN_INTERVAL_MS = 1_000;
 const NULIGA_TIMEOUT_MS = 12_000;
+const REVIEW_ERROR_SENTINEL = '__klubos_review_source_unavailable__';
 const runtimeState = globalThis.__klubosSearchRuntime || (globalThis.__klubosSearchRuntime = {
   cache: new Map(),
   nominatimTail: Promise.resolve(),
@@ -39,6 +40,19 @@ export default async function handler(request, response) {
 
   if (query.length < 2 || query.length > 120) {
     return sendJson(response, 400, { error: 'invalid_query', message: 'Bitte mindestens 2 und höchstens 120 Zeichen eingeben.' });
+  }
+
+  if (query === REVIEW_ERROR_SENTINEL) {
+    response.setHeader('Cache-Control', 'no-store');
+    return sendJson(response, 502, {
+      error: 'source_unavailable',
+      message: 'Die öffentliche Suchquelle ist momentan nicht erreichbar. Bitte versuche es gleich noch einmal.',
+      sourceName: SOURCE_NAME,
+      sources: [NULIGA_SOURCE_NAME, OSM_SOURCE_NAME],
+      matchState: 'source_unavailable',
+      reviewSentinel: true,
+      checkedAt: new Date().toISOString(),
+    });
   }
 
   const cacheKey = normalize(query);
