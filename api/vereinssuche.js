@@ -19,7 +19,7 @@ const OSM_SOURCE_URL = 'https://www.openstreetmap.org/';
 const SOURCE_NAME = `${NULIGA_SOURCE_NAME} + ${OSM_SOURCE_NAME} als Fallback`;
 const SOURCE_URL = NULIGA_SOURCE_URL;
 const NOMINATIM_POLICY_URL = 'https://operations.osmfoundation.org/policies/nominatim/';
-const USER_AGENT = 'KlubOS-Vereinssuche/0.7.1 (+https://klubos.de; contact: hello@klubos.de)';
+const USER_AGENT = 'KlubOS-Vereinssuche/0.7.2 (+https://klubos.de; contact: hello@klubos.de)';
 const CACHE_TTL_MS = 30_000;
 const NOMINATIM_MIN_INTERVAL_MS = 1_000;
 const NULIGA_TIMEOUT_MS = 12_000;
@@ -145,18 +145,40 @@ async function searchNuLiga(query, checkedAt) {
   let sawAmbiguous = false;
   let sawUnavailable = false;
   let successfulRequest = false;
+  let extendedOfficialCandidate = null;
 
   for (const variant of variants) {
     const result = await searchNuLigaVariant(variant, checkedAt);
-    if (result.status === 'match') return result;
+    if (result.status === 'match') {
+      if (canonicalClubName(result.club.name) === canonicalClubName(variant)) return result;
+      if (!extendedOfficialCandidate && isOfficialNameExtension(result.club, variant)) {
+        if (isGenericClubQuery(variant)) sawAmbiguous = true;
+        else extendedOfficialCandidate = result;
+      }
+      continue;
+    }
     if (result.status === 'ambiguous') sawAmbiguous = true;
     if (result.status === 'unavailable') sawUnavailable = true;
     if (result.status !== 'unavailable') successfulRequest = true;
   }
 
+  if (extendedOfficialCandidate && !sawAmbiguous) return { status: 'match', club: extendedOfficialCandidate.club };
   if (sawAmbiguous) return { status: 'ambiguous' };
   if (sawUnavailable && !successfulRequest) return { status: 'unavailable' };
   return { status: 'no_match' };
+}
+
+function isOfficialNameExtension(club, variant) {
+  const queryTokens = canonicalClubName(variant).split(' ').filter(Boolean);
+  const nameTokens = canonicalClubName(club.name).split(' ').filter(Boolean);
+  const locationTokens = normalize(`${club.city} ${club.region}`).split(' ').filter(Boolean);
+  return queryTokens.every((token) => nameTokens.includes(token))
+    && nameTokens.filter((token) => !queryTokens.includes(token)).every((token) => locationTokens.includes(token));
+}
+
+function isGenericClubQuery(variant) {
+  const tokens = canonicalClubName(variant).split(' ').filter(Boolean);
+  return tokens[0] === 'tennisclub' && tokens.length === 2;
 }
 
 async function searchNuLigaVariant(query, checkedAt) {
