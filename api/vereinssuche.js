@@ -19,7 +19,7 @@ const OSM_SOURCE_URL = 'https://www.openstreetmap.org/';
 const SOURCE_NAME = `${NULIGA_SOURCE_NAME} + ${OSM_SOURCE_NAME} als Fallback`;
 const SOURCE_URL = NULIGA_SOURCE_URL;
 const NOMINATIM_POLICY_URL = 'https://operations.osmfoundation.org/policies/nominatim/';
-const USER_AGENT = 'KlubOS-Vereinssuche/0.7.3 (+https://klubos.de; contact: hello@klubos.de)';
+const USER_AGENT = 'KlubOS-Vereinssuche/0.7.4 (+https://klubos.de; contact: hello@klubos.de)';
 const CACHE_TTL_MS = 30_000;
 const NOMINATIM_MIN_INTERVAL_MS = 1_000;
 const NULIGA_TIMEOUT_MS = 12_000;
@@ -163,6 +163,7 @@ async function searchNuLiga(query, checkedAt) {
     if (result.status === 'match') {
       if (canonicalClubName(result.club.name) === canonicalClubName(variant)) return result;
       if (variantIndex === 0 && isOfficialCandidateMatch(result.club.name, variant)) return result;
+      if (isLocationFragmentMatch(result.club, variant, query)) return result;
       if (!extendedOfficialCandidate && isOfficialNameExtension(result.club, variant)) {
         if (isGenericClubQuery(variant) && !hasOnlyShortOfficialPrefix(result.club, variant)) sawAmbiguous = true;
         else extendedOfficialCandidate = result;
@@ -206,6 +207,17 @@ function isOfficialCandidateMatch(name, query) {
   const queryTokens = canonicalClubName(query).split(' ').filter(Boolean);
   const candidateTokens = canonicalClubName(name).split(' ').filter(Boolean);
   return queryTokens.length > 0 && queryTokens.every((token) => candidateTokens.includes(token));
+}
+
+function isLocationFragmentMatch(club, variant, originalQuery) {
+  const fragment = canonicalClubName(variant);
+  const originalTokens = canonicalClubName(originalQuery).split(' ').filter(Boolean);
+  const candidateTokens = canonicalClubName(club.name).split(' ').filter(Boolean);
+  return originalTokens.length >= 3
+    && fragment.length >= 6
+    && candidateTokens.includes(fragment)
+    && (canonicalClubName(club.name) === canonicalClubName(originalQuery)
+      || !originalTokens.every((token) => candidateTokens.includes(token)));
 }
 
 async function searchNuLigaVariant(query, checkedAt) {

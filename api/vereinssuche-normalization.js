@@ -47,14 +47,27 @@ export function buildSearchVariants(query) {
       .trim();
     if (withoutSuffix !== current) queue.push(withoutSuffix);
 
-    const prefix = current.match(/^\s*(tc|tennisclub|tennis[ -]+club)\b\s*(.*)$/i);
-    if (prefix) {
+    const rawTokens = current.split(/\s+/).filter(Boolean);
+    const locationFragment = rawTokens.at(-1)?.replace(/^[^\p{L}\d]+|[^\p{L}\d]+$/gu, '');
+    if (locationFragment && normalize(locationFragment).length >= 6 && rawTokens.length >= 3) {
+      queue.unshift(locationFragment);
+    }
+
+    const addPrefixVariants = (value) => {
+      const prefix = value.match(/^\s*(tc|tennisclub|tennis[ -]+club)\b\s*(.*)$/i);
+      if (!prefix) return;
       const rest = prefix[2].trim();
-      if (rest) {
-        queue.push(`TC ${rest}`);
-        queue.push(`Tennisclub ${rest}`);
-        queue.push(`Tennis-Club ${rest}`);
-      }
+      if (!rest) return;
+      queue.push(`TC ${rest}`);
+      queue.push(`Tennisclub ${rest}`);
+      queue.push(`Tennis-Club ${rest}`);
+    };
+    addPrefixVariants(current);
+
+    const compound = current.replace(/\b(blau|rot|gruen|grün|schwarz|gelb|gold)\s+(weiss|weiß|blau|rot|gruen|grün|schwarz|gelb|gold)(?=\s|$)/gi, '$1-$2');
+    if (compound !== current) {
+      queue.push(compound);
+      addPrefixVariants(compound);
     }
 
     const ascii = current.replace(/[äöüÄÖÜß]/g, (character) => ({
