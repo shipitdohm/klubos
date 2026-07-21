@@ -223,7 +223,7 @@ input, textarea { font-family: inherit; color: inherit; }
   width: auto;
   object-fit: contain;
   flex: none;
-  filter: invert(1) brightness(0.22) saturate(0.7);
+  filter: none;
 }
 .auth-logo-image {
   height: 2rem;

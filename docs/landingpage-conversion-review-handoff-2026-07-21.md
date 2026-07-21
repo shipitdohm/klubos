@@ -85,7 +85,7 @@ Nicht geändert: `vereinssuche.html`, `src/`, `js/app.js`, interne App-Seiten, P
 - `astro check`: PASS — 0 Errors, 0 Warnings, 1 bestehender Hint in `api/vereinssuche.js` (`OSM_SOURCE_URL` ungenutzt); außerhalb dieses Scopes.
 - `pnpm run build`: PASS — der projektdefinierte `prebuild`-Schritt synchronisiert die Legacy-Public-Dateien, anschließend baut Astro 7 Routen.
 - Exakter Preview-Test des Build-Artefakts: `pnpm exec astro preview --host 127.0.0.1 --port 4174`.
-- HTTP-Ergebnis im Preview: `/datenschutz.html` **200**, `/impressum.html` **200**, `/css/style.css` **200**, `/mr8as03a-klubos_logo_white_transparent.png` **200**. Beide Rechtstextseiten enthalten die erwarteten Website-/gegenseitigen Legal-Links.
+- HTTP-Ergebnis im Preview: `/datenschutz.html` **200**, `/impressum.html` **200**, `/css/style.css` **200**, `/assets/klubos-logo-soft.svg` **200** und `/assets/klubos-app-icon.svg` **200**. Beide Rechtstextseiten enthalten die erwarteten Website-/gegenseitigen Legal-Links.
 - Damit ist der bisherige 404-Befund als Dev-Server-Fallback-Eigenheit eingeordnet: Der für Vercel relevante `pnpm run build`-Pfad stellt die Legacy-Seiten über `public/` reproduzierbar bereit.
 - Landingpage lokal im Browser bei **375×812, 768×1024, 1280×800, 1440×900** geprüft: `scrollWidth === clientWidth` in allen vier Messungen; Header, Footer, CTA-Texte und Navigation im DOM vorhanden.
 - Landingpage-Screenshots lokal bei 375×812 und 1440×900 aufgenommen: Hero, animierte Widget-Karten, neue CTA-Hierarchie und Desktop-Navigation sichtbar.
