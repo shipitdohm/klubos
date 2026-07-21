@@ -186,9 +186,14 @@ header.landing-header {
   0%, 100% { transform: var(--float-transform) translateY(0); }
   50% { transform: var(--float-transform) translateY(-14px); }
 }
+@media (min-width: 901px) and (max-width: 1100px) {
+  .floating-widget.is-social { left: 1rem; }
+  .floating-widget.is-booking { right: 1rem; }
+}
 @media (max-width: 900px) {
   .hero-widget-cloud {
     min-height: auto;
+    padding-top: 8rem;
     padding-bottom: 3rem;
   }
   .hero-orbit {
