@@ -1,19 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 432 104" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 120" role="img" aria-labelledby="title desc">
   <title id="title">KlubOS</title>
-  <desc id="desc">KlubOS Soft logo in a light monochrome treatment.</desc>
+  <desc id="desc">KlubOS Soft logo in a light monochrome treatment with the KlubOS wordmark.</desc>
   <style>
     .klubos-mark, .klubos-wordmark { fill: #F3F1F0; }
     .klubos-wordmark {
       font-family: "Canva Sans", Satoshi, "Avenir Next", Manrope, system-ui, sans-serif;
-      font-size: 64px;
+      font-size: 78px;
       font-weight: 400;
-      letter-spacing: 3px;
+      letter-spacing: 0;
     }
   </style>
   <g class="klubos-mark">
-    <rect x="12" y="13" width="35" height="38" rx="7" />
-    <rect x="55" y="13" width="35" height="38" rx="7" />
-    <rect x="12" y="66" width="78" height="10" rx="5" />
+    <rect x="12" y="14" width="45" height="52" rx="9" />
+    <rect x="67" y="14" width="45" height="52" rx="9" />
+    <rect x="12" y="83" width="100" height="12" rx="6" />
   </g>
-  <text class="klubos-wordmark" x="123" y="77">KLUBOS</text>
+  <text class="klubos-wordmark" x="151" y="91">KlubOS</text>
 </svg>
