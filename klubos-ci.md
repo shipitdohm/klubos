@@ -153,7 +153,7 @@ KlubOS nutzt eine zurückhaltende Glass-/Operating-System-Anmutung:
 
 - Line-Icons in SVG, `currentColor`, ca. 1–2px Strichstärke.
 - Icons sind Orientierungshilfe, nicht Dekoration.
-- Das verbindliche Hauptlogo ist die exakt gelieferte PNG-Wort-Bild-Marke `assets/klubos-logo-long-black.png` für helle Flächen. Für dunkle oder terrakottafarbene Flächen wird `assets/klubos-logo-long-white.png` verwendet.
+- Das verbindliche Hauptlogo ist die exakt gelieferte PNG-Wort-Bild-Marke `assets/klubos-logo-long-black.png` für helle Flächen. Für dunkle oder terrakottafarbene Flächen wird `assets/klubos-logo-long-white.png` verwendet. Im Landingpage-Footer wird ausschließlich das Favicon verwendet.
 - Das verbindliche App Icon und Favicon ist `assets/klubos-favicon.png` ohne Wortzeichen.
 - Die Originalvorlagen liegen unter `assets/source/`. Ihre Hintergründe wurden entfernt; Logoform, Wortmarke, Proportionen und Farben wurden nicht neu gezeichnet. Keine alternative Wortmarke in HTML/CSS, kein neues SVG und keine konkurrierende Logo-Variante anlegen.
 
