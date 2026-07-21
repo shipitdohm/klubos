@@ -227,7 +227,7 @@ input, textarea { font-family: inherit; color: inherit; }
 }
 .auth-logo-image {
   height: 2rem;
-  max-width: 7.75rem;
+  max-width: 11.5rem;
 }
 .sidebar-logo-image {
   height: 1.35rem;
@@ -235,15 +235,15 @@ input, textarea { font-family: inherit; color: inherit; }
 }
 .landing-logo-image {
   height: 1.5rem;
-  max-width: 7.75rem;
+  max-width: 10.5rem;
 }
 .landing-footer-logo-image {
   height: 1.2rem;
-  max-width: 6.5rem;
+  max-width: 8.5rem;
 }
 .vs-logo-image {
   height: 1rem;
-  max-width: 5.5rem;
+  max-width: 7rem;
 }
 
 /* ══════════════════════════════════════════════════════════════
