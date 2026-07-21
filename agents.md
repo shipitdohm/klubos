@@ -395,6 +395,6 @@ The current website and software surfaces establish a clear KlubOS visual langua
 - **Semantic colors:** danger `#BA3F36`, warning `#A8761D`, success `#3E7A56`.
 - **Shape:** thin `0.5px` borders, radius tokens `8px / 12px / 16px`, 999px pills, soft shadows and light glass/blur surfaces.
 - **Experience:** calm, warm, precise, board-first and operational. Show concrete widgets and useful outputs; avoid neon AI aesthetics, cold blue SaaS defaults, or excessive decoration.
-- **Logo:** use `assets/klubos-logo-soft.svg` as the primary B Soft lockup, `assets/klubos-logo-soft-white.svg` on dark surfaces, and `assets/klubos-app-icon.svg` as the D App Icon/favicon. Do not recreate the wordmark as ordinary text or introduce a competing logo.
+- **Logo:** use `assets/klubos-logo-soft.svg` as the primary B Soft lockup, with the softly rounded two-module mark and mixed-case `KlubOS` wordmark. Use `assets/klubos-logo-soft-white.svg` on dark or terracotta surfaces, and `assets/klubos-app-icon.svg` as the D App Icon/favicon. Do not recreate the wordmark as ordinary text or introduce a competing logo.
 - **Secondary colors** such as green, blue, pink, violet, orange, and sand are for status, charts, tennis illustrations, or widget previews—not replacements for Terracotta as the primary brand accent.
 - **Source of truth:** reuse tokens from `css/style.css`; document any new visual token in `klubos-ci.md` and the Notion Brand & Identity page.
