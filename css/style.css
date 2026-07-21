@@ -226,24 +226,25 @@ input, textarea { font-family: inherit; color: inherit; }
   filter: none;
 }
 .auth-logo-image {
-  height: 2rem;
-  max-width: 11.5rem;
+  height: 1.35rem;
+  max-width: 7.75rem;
 }
 .sidebar-logo-image {
   height: 1.35rem;
   max-width: 6.75rem;
 }
 .landing-logo-image {
-  height: 1.5rem;
-  max-width: 10.5rem;
+  height: 0.95rem;
+  max-width: 7rem;
 }
-.landing-footer-logo-image {
-  height: 1.2rem;
-  max-width: 8.5rem;
+.landing-footer-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  object-fit: contain;
 }
 .vs-logo-image {
   height: 1rem;
-  max-width: 7rem;
+  max-width: 4.75rem;
 }
 
 /* ══════════════════════════════════════════════════════════════
