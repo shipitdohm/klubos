@@ -17,6 +17,12 @@ Scope: öffentliche Website und öffentliche Einstiege vor der App. Die interne 
 
 **Fix:** Der mobile Hero erhält zusätzlichen oberen Innenabstand. Die Headline, CTAs und Widget-Karten bleiben vollständig sichtbar.
 
+### P2 — Dekorative Hero-Karten am Desktop-Rand
+
+**Observed:** Die äußeren Social-/Booking-Widget-Karten lagen bei 1280px und 1440px teilweise außerhalb des Viewports. Dadurch konnten sichtbare Textteile angeschnitten werden.
+
+**Fix:** Beide äußeren Karten liegen jetzt innerhalb des Viewports. Das Raster und die Glow-Flächen dürfen als rein dekorative, nicht-interaktive Hintergründe weiterhin über den Rand hinauslaufen.
+
 ### Keine Änderungen an der Vereinssuche-Produktlogik
 
 Die Vereinssuche wurde nur auf Darstellung und Navigation geprüft. Es wurden keine Such-, Daten-, Übernahme- oder Golden-Workflow-Regeln geändert.
@@ -33,7 +39,7 @@ Die Vereinssuche wurde nur auf Darstellung und Navigation geprüft. Es wurden ke
 | 1280 × 800 | Landingpage, öffentliche Einstiege | Bestehende schwebende Desktop-Komposition erhalten |
 | 1440 × 900 | Landingpage, öffentliche Einstiege | Bestehende schwebende Desktop-Komposition erhalten |
 
-Die seitlichen Widgets ragen bei 1280px und 1440px absichtlich leicht aus dem Hero-Rahmen heraus; das ist Teil der bestehenden visuellen Komposition und erzeugt keinen Body-Scrollbereich.
+Die seitlichen Widgets bleiben bei 1280px und 1440px vollständig sichtbar. Nur rein dekorative Raster-/Glow-Flächen können über den Rand hinausreichen und erzeugen keinen horizontalen Body-Scrollbereich.
 
 ## Flow-Evidenz
 
