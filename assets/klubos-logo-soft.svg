@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 432 104" role="img" aria-labelledby="title desc">
+  <title id="title">KlubOS</title>
+  <desc id="desc">KlubOS Soft logo: two rounded modules above a shared rounded baseline beside the KLUBOS wordmark.</desc>
+  <style>
+    .klubos-mark { fill: #BB5522; }
+    .klubos-wordmark {
+      fill: #1B1816;
+      font-family: "Canva Sans", Satoshi, "Avenir Next", Manrope, system-ui, sans-serif;
+      font-size: 64px;
+      font-weight: 400;
+      letter-spacing: 3px;
+    }
+  </style>
+  <g class="klubos-mark">
+    <rect x="12" y="13" width="35" height="38" rx="7" />
+    <rect x="55" y="13" width="35" height="38" rx="7" />
+    <rect x="12" y="66" width="78" height="10" rx="5" />
+  </g>
+  <text class="klubos-wordmark" x="123" y="77">KLUBOS</text>
+</svg>

@@ -153,8 +153,9 @@ KlubOS nutzt eine zurückhaltende Glass-/Operating-System-Anmutung:
 
 - Line-Icons in SVG, `currentColor`, ca. 1–2px Strichstärke.
 - Icons sind Orientierungshilfe, nicht Dekoration.
-- Das aktuelle KlubOS-Wortzeichen liegt als weiße transparente PNG-Datei `mr8as03a-klubos_logo_white_transparent.png` vor (2160 × 630). Es wird auf hellen Flächen per CSS-Filter abgedunkelt und auf dunklen Flächen weiß verwendet.
-- Das Wortzeichen ist ein Bild-Asset und keine frei gesetzte Satoshi-Überschrift. Für den Markenauftritt keine eigene alternative Wortmarke erfinden.
+- Das freigegebene Hauptlogo ist **B Soft**: `assets/klubos-logo-soft.svg` als horizontales Icon-plus-Wortzeichen-Lockup. Für dunkle Flächen wird `assets/klubos-logo-soft-white.svg` verwendet.
+- Das freigegebene App Icon ist **D**: `assets/klubos-app-icon.svg` ohne Wortzeichen. Es wird auch als Favicon und für kompakte App-Kontexte verwendet.
+- Das Wortzeichen ist als SVG-Text mit Canva-Sans-Präferenz und Satoshi/Avenir-Next/Manrope-Fallback angelegt. Für eine vollständig font-unabhängige Druck-/Brandmaster-Version kann es später in Pfade umgewandelt werden; bis dahin keine alternative Wortmarke erfinden.
 
 ## 7. Bewegung
 
