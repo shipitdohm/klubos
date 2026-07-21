@@ -54,11 +54,10 @@ Die seitlichen Widgets ragen bei 1280px und 1440px absichtlich leicht aus dem He
 ## Live-/Deploymentstatus
 
 - **Lokal geprüft:** oben genannte Viewports, CTA-Flows und öffentliche Formulare.
-- **Öffentlich live geprüft:** noch offen, bis dieser Stand auf `main` deployed ist.
+- **Öffentlich live geprüft:** `https://klubos.de/` nach Deployment bei 375 × 812, 1024 × 768 und 1440 × 900; CTA zur Vereinssuche und horizontale Scrollbreite geprüft.
 - **200%-Browserzoom:** mit der verfügbaren Browsersteuerung nicht als echter Browser-Zoomschritt reproduziert; die schmalen CSS-Viewport-Checks decken den relevanten Reflow-Fall ab.
 
 ## Offene Punkte
 
-1. Nach dem Deployment `https://klubos.de/` über mindestens 375px, 768px und 1440px erneut prüfen.
-2. Prüfen, ob die Vercel-/Build-Umgebung den `sync:assets`-Schritt aus `package.json` tatsächlich ausführt; ohne diesen Schritt werden die Legacy-HTML-Einstiege nicht in die statische Ausgabe kopiert.
-3. Der angeforderte Pfad `docs/vereinssuche-golden-workflow-v0.8.4.md` war im Repository nicht vorhanden. Vor Änderungen an der Vereinssuche muss der verbindliche Workflow wieder zugänglich gemacht werden.
+1. Prüfen, ob die Vercel-/Build-Umgebung den `sync:assets`-Schritt aus `package.json` tatsächlich ausführt; ohne diesen Schritt werden die Legacy-HTML-Einstiege nicht in die statische Ausgabe kopiert.
+2. Der angeforderte Pfad `docs/vereinssuche-golden-workflow-v0.8.4.md` war im Repository nicht vorhanden. Vor Änderungen an der Vereinssuche muss der verbindliche Workflow wieder zugänglich gemacht werden.
