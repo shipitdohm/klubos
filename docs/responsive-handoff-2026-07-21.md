@@ -61,6 +61,7 @@ Die seitlichen Widgets bleiben bei 1280px und 1440px vollständig sichtbar. Nur 
 
 - **Lokal geprüft:** oben genannte Viewports, CTA-Flows und öffentliche Formulare.
 - **Öffentlich live geprüft:** `https://klubos.de/` nach Deployment bei 375 × 812, 1024 × 768 und 1440 × 900; CTA zur Vereinssuche und horizontale Scrollbreite geprüft.
+- **Unabhängiger Controller-Check:** final PASS nach dem zweiten Deployment; Hero-Karten, `scrollWidth = clientWidth`, öffentliche Seiten, CTAs und Live-Konsole bestätigt.
 - **200%-Browserzoom:** mit der verfügbaren Browsersteuerung nicht als echter Browser-Zoomschritt reproduziert; die schmalen CSS-Viewport-Checks decken den relevanten Reflow-Fall ab.
 
 ## Offene Punkte
