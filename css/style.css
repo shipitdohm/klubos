@@ -111,16 +111,6 @@ input, textarea { font-family: inherit; color: inherit; }
   font-size: 1rem;
   border-radius: var(--radius);
 }
-.landing-text-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  color: var(--accent);
-  font-size: 0.875rem;
-  font-weight: 600;
-  transition: color 0.2s ease, gap 0.2s ease;
-}
-.landing-text-link:hover { color: var(--accent-hover); gap: 0.65rem; }
 
 :where(a, button, input, select, textarea, summary):focus-visible {
   outline: 3px solid rgba(187, 85, 34, 0.34);
@@ -226,7 +216,7 @@ input, textarea { font-family: inherit; color: inherit; }
   filter: none;
 }
 .auth-logo-image {
-  height: 2rem;
+  height: 1.35rem;
   max-width: 7.75rem;
 }
 .sidebar-logo-image {
@@ -234,16 +224,17 @@ input, textarea { font-family: inherit; color: inherit; }
   max-width: 6.75rem;
 }
 .landing-logo-image {
-  height: 1.5rem;
-  max-width: 7.75rem;
+  height: 0.95rem;
+  max-width: 7rem;
 }
-.landing-footer-logo-image {
-  height: 1.2rem;
-  max-width: 6.5rem;
+.landing-footer-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  object-fit: contain;
 }
 .vs-logo-image {
   height: 1rem;
-  max-width: 5.5rem;
+  max-width: 4.75rem;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -696,7 +687,24 @@ input, textarea { font-family: inherit; color: inherit; }
   transition: color 0.15s;
 }
 .landing-nav a:hover { color: var(--fg); }
-.landing-login-link { margin-left: 0.35rem; }
+.landing-login-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  margin-left: 0.35rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid rgba(255,255,255,0.92);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.82);
+  color: var(--fg) !important;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(17,24,39,0.04);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.landing-login-link:hover { background: #fff; border-color: var(--border); transform: translateY(-1px); }
+.landing-header-cta { min-height: 2.5rem; padding: 0.5rem 1.1rem; font-size: 0.8125rem; white-space: nowrap; }
 
 .hero {
   min-height: 100vh;
@@ -752,6 +760,7 @@ input, textarea { font-family: inherit; color: inherit; }
   line-height: 1.05;
   margin-bottom: 1.25rem;
 }
+.hero h1 span { display: block; white-space: nowrap; }
 .hero p {
   font-size: clamp(1rem, 2vw, 1.125rem);
   color: var(--fg-muted);
@@ -838,52 +847,6 @@ input, textarea { font-family: inherit; color: inherit; }
   font-size: 0.8125rem;
   color: var(--fg-dim);
 }
-
-/* Public landing footer: a calm, useful close to the conversion path. */
-.landing-footer-rich {
-  width: min(1120px, calc(100% - 2rem));
-  margin: 0 auto 1.25rem;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 14px 40px rgba(17, 24, 39, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  display: block;
-}
-.landing-footer-main {
-  display: grid;
-  grid-template-columns: minmax(220px, 1.5fr) repeat(2, minmax(140px, 1fr));
-  gap: 2rem;
-}
-.landing-footer-brand { display: flex; flex-direction: column; align-items: flex-start; gap: 0.75rem; }
-.landing-footer-logo { color: var(--fg); gap: 0.65rem; }
-.landing-footer-mark { width: 0.65rem; height: 0.65rem; border-radius: 2px; background: var(--accent); box-shadow: 0 0 16px rgba(187, 85, 34, 0.45); }
-.landing-footer-brand .landing-footer-tagline { max-width: 260px; line-height: 1.55; }
-.landing-footer-contact { color: var(--accent); font-size: 0.8125rem; font-weight: 600; }
-.landing-footer-nav { display: flex; flex-direction: column; align-items: flex-start; gap: 0.45rem; font-size: 0.8125rem; }
-.landing-footer-nav > span { color: var(--fg-dim); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.25rem; }
-.landing-footer-nav a { color: var(--fg-muted); transition: color 0.2s ease; }
-.landing-footer-nav a:hover, .landing-footer-contact:hover { color: var(--accent-hover); }
-.landing-footer-bottom { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-top: 0.5px solid var(--border); margin-top: 2rem; padding-top: 1rem; color: var(--fg-dim); font-size: 0.6875rem; }
-.landing-footer-bottom nav { display: flex; gap: 1rem; }
-.landing-footer-bottom a:hover { color: var(--fg); }
-
-/* Public legal pages are deliberately a draft shell until operator data is supplied. */
-.legal-page { align-items: flex-start; padding: clamp(1rem, 4vw, 3rem); }
-.legal-card { max-width: 760px; padding: clamp(1.5rem, 4vw, 3rem); }
-.legal-card .logo { margin-bottom: 1.75rem; }
-.legal-intro { color: var(--fg-muted); line-height: 1.7; margin-top: 1rem; }
-.legal-status { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.25rem; padding: 0.55rem 0.75rem; border: 0.5px solid rgba(187, 85, 34, 0.3); border-radius: 999px; color: var(--accent); background: rgba(187, 85, 34, 0.06); font-size: 0.75rem; font-weight: 600; }
-.legal-status::before { content: ''; width: 0.45rem; height: 0.45rem; border-radius: 50%; background: currentColor; }
-.legal-section { margin-top: 2rem; padding-top: 1.5rem; border-top: 0.5px solid var(--border); }
-.legal-section h2 { font-size: 1.05rem; margin-bottom: 0.65rem; }
-.legal-section p, .legal-section li { color: var(--fg-muted); font-size: 0.9rem; line-height: 1.7; }
-.legal-section ul { padding-left: 1.2rem; display: grid; gap: 0.35rem; }
-.legal-placeholder { margin-top: 1rem; padding: 1rem; border-radius: var(--radius); background: var(--surface-2); border: 0.5px solid var(--border); }
-.legal-placeholder strong { display: block; margin-bottom: 0.35rem; color: var(--fg); font-size: 0.85rem; }
-.legal-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
 
 /* ══════════════════════════════════════════════════════════════
    TABLE
@@ -1073,9 +1036,6 @@ input, textarea { font-family: inherit; color: inherit; }
     flex-direction: column;
     text-align: center;
   }
-  .landing-footer-main { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-  .landing-footer-brand { grid-column: 1 / -1; }
-  .landing-footer-bottom { align-items: flex-start; flex-direction: column; }
 }
 
 @media (max-width: 480px) {
@@ -1084,10 +1044,6 @@ input, textarea { font-family: inherit; color: inherit; }
   .features-section { padding: 2rem 1.25rem 4rem; }
   .main-content { padding: 1.25rem; }
   .auth-card { padding: 1.5rem; }
-  .legal-page { padding: 1rem; }
-  .legal-card { padding: 1.25rem; }
-  .landing-footer-main { grid-template-columns: 1fr; }
-  .landing-footer-brand { grid-column: auto; }
 }
 
 /* ══════════════════════════════════════════════════════════════
