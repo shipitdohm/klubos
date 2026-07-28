@@ -2,14 +2,14 @@
 <html lang="de"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="/assets/klubos-favicon.png">
-<meta name="description" content="KlubOS hilft deutschen Tennisvereinen, ihre tägliche Verwaltungsarbeit mit weniger Sucherei und mehr Überblick zu erledigen.">
+<link rel="icon" type="image/svg+xml" href="/assets/klubos-app-icon.svg">
+<meta name="description" content="KlubOS bündelt Mitglieder, Finanzen, Plätze, Termine und Vereinskommunikation für deutsche Tennisvereine – an einem Ort für die tägliche Vorstandsarbeit.">
 <meta name="theme-color" content="#F3F1F0">
-<meta property="og:title" content="KlubOS — Weniger Verwaltungsarbeit, mehr Überblick">
-<meta property="og:description" content="KlubOS hilft deutschen Tennisvereinen, ihre tägliche Verwaltungsarbeit mit weniger Sucherei und mehr Überblick zu erledigen.">
+<meta property="og:title" content="KlubOS — Der Vorstandshub für deutsche Tennisvereine">
+<meta property="og:description" content="Ein verbundener Vorstandshub für Mitglieder, Finanzen, Plätze, Termine und Vereinskommunikation.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
-<title>KlubOS — Weniger Verwaltungsarbeit, mehr Überblick</title>
+<title>KlubOS — Vorstandshub für deutsche Tennisvereine</title>
 <link rel="stylesheet" href="css/style.css">
 <style>
 html { scroll-behavior: auto; }
@@ -23,11 +23,11 @@ html { scroll-behavior: auto; }
 }
 .site-grid {
   background-image:
-    linear-gradient(rgba(17, 24, 39, 0.075) 0.5px, transparent 0.5px),
-    linear-gradient(90deg, rgba(17, 24, 39, 0.075) 0.5px, transparent 0.5px);
+    linear-gradient(rgba(17, 24, 39, 0.055) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, rgba(17, 24, 39, 0.055) 0.5px, transparent 0.5px);
   background-size: 60px 60px;
   background-position: center top;
-  opacity: 0.5;
+  opacity: 0.42;
   overflow: hidden;
 }
 .grid-hotspot {
@@ -72,7 +72,7 @@ header.landing-header {
 }
 .hero-widget-cloud .hero-content {
   z-index: 3;
-  max-width: 1000px;
+  max-width: 760px;
 }
 .hero-orbit {
   position: absolute;
@@ -187,10 +187,14 @@ header.landing-header {
   0%, 100% { transform: var(--float-transform) translateY(0); }
   50% { transform: var(--float-transform) translateY(-14px); }
 }
+@media (min-width: 901px) and (max-width: 1100px) {
+  .floating-widget.is-social { left: 1rem; }
+  .floating-widget.is-booking { right: 1rem; }
+}
 @media (max-width: 900px) {
   .hero-widget-cloud {
     min-height: auto;
-    padding-top: 9rem;
+    padding-top: 8rem;
     padding-bottom: 3rem;
   }
   .hero-orbit {
@@ -286,7 +290,6 @@ header.landing-header {
   50% { box-shadow: 0 0 0 4px rgba(187,85,34,0.045); }
 }
 .comparison-section {
-  --comparison-progress: 0;
   max-width: 1240px;
   margin: 0 auto;
   padding: clamp(5rem, 10vw, 8rem) clamp(1.25rem, 4vw, 3rem);
@@ -311,9 +314,8 @@ header.landing-header {
 .comparison-column.is-before { background: rgba(255,255,255,0.62); }
 .comparison-column.is-after {
   border-color: rgba(187,85,34,0.34);
-  background: linear-gradient(145deg, rgba(187,85,34,calc(0.08 + var(--comparison-progress) * 0.12)), rgba(255,255,255,calc(0.94 - var(--comparison-progress) * 0.1)) 62%);
-  box-shadow: 0 22px 54px rgba(187,85,34,calc(0.07 + var(--comparison-progress) * 0.08));
-  transition: background 0.25s ease, box-shadow 0.25s ease;
+  background: linear-gradient(145deg, rgba(187,85,34,0.1), rgba(255,255,255,0.88) 58%);
+  box-shadow: 0 22px 54px rgba(187,85,34,0.11);
 }
 .comparison-column-head {
   display: flex;
@@ -339,9 +341,8 @@ header.landing-header {
 .comparison-row:nth-child(2) { animation-delay: 0.08s; }
 .comparison-row:nth-child(3) { animation-delay: 0.16s; }
 .comparison-row:nth-child(4) { animation-delay: 0.24s; }
-.comparison-icon { display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: rgba(17,24,39,0.055); color: var(--fg-muted); font-size: 0.8rem; transition: transform 0.25s ease, color 0.25s ease, background 0.25s ease; }
-.is-before .comparison-icon { transform: translateY(calc(var(--comparison-progress) * 0.45rem)); color: rgba(186,63,54,calc(0.1 + var(--comparison-progress) * 0.9)); background: rgba(186,63,54,calc(0.045 + var(--comparison-progress) * 0.12)); }
-.is-after .comparison-icon { background: rgba(62,122,86,calc(0.06 + var(--comparison-progress) * 0.14)); color: rgba(62,122,86,calc(0.4 + var(--comparison-progress) * 0.6)); }
+.comparison-icon { display: inline-flex; align-items: center; justify-content: center; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: rgba(17,24,39,0.055); color: var(--fg-muted); font-size: 0.8rem; }
+.is-after .comparison-icon { background: rgba(187,85,34,0.13); color: var(--accent); }
 .comparison-row strong { display: block; font-size: 0.82rem; line-height: 1.3; }
 .comparison-row p { margin: 0.2rem 0 0; color: var(--fg-muted); font-size: 0.74rem; line-height: 1.45; }
 .comparison-status { align-self: center; padding: 0.27rem 0.45rem; border-radius: 999px; background: rgba(17,24,39,0.055); color: var(--fg-dim); font-size: 0.62rem; white-space: nowrap; }
@@ -385,7 +386,6 @@ header.landing-header {
 @media (prefers-reduced-motion: reduce) {
   .problem-signal:hover { transform: none; }
   .problem-signal-orbit span, .comparison-row, .comparison-bridge i { animation: none; }
-  .comparison-column.is-after, .comparison-icon { transition: none; }
 }
 
 /* ── Widget Cards ── */
@@ -1647,274 +1647,91 @@ header.landing-header {
   filter: brightness(1.12);
 }
 
+/* ── FAQ ── */
+.faq-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem 1rem; width: min(1040px, 100%); margin: 2.5rem auto 0; }
+.faq-item { border: 0.5px solid var(--border); border-radius: 14px; background: rgba(255,255,255,0.72); transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+.faq-item[open] { border-color: rgba(187,85,34,0.35); box-shadow: 0 12px 28px rgba(17,24,39,0.06); }
+.faq-item summary { display: grid; grid-template-columns: 2rem minmax(0, 1fr) 1.25rem; gap: 0.7rem; align-items: start; padding: 1rem 1.1rem; cursor: pointer; list-style: none; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-number { color: var(--accent); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; }
+.faq-question { color: var(--fg); font-size: 0.875rem; font-weight: 650; line-height: 1.35; }
+.faq-category { display: block; margin-bottom: 0.25rem; color: var(--fg-dim); font-size: 0.625rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.faq-chevron { color: var(--accent); font-size: 1.2rem; font-weight: 400; line-height: 1; text-align: right; transition: transform 0.2s ease; }
+.faq-item[open] .faq-chevron { transform: rotate(45deg); }
+.faq-answer { padding: 0 1.1rem 1.1rem 3.9rem; }
+.faq-answer p { color: var(--fg-muted); font-size: 0.8125rem; line-height: 1.65; }
+
 /* ── Calculator ── */
 .calculator-section {
-  padding: 4rem 2rem 6rem;
-  max-width: 900px;
-  margin: 0 auto;
-}
-.calc-card {
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  padding: 0;
-  margin-top: 2.5rem;
-}
-.calc-intro {
-  max-width: 560px;
-  margin: 0 auto;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  border: 0.5px solid var(--border);
-  border-radius: 16px;
-  background: rgba(255,255,255,0.78);
-  box-shadow: 0 14px 36px rgba(17,24,39,0.07);
-  text-align: center;
-}
-.calc-intro h3 {
-  margin: 0.55rem 0 0.5rem;
-  font-size: clamp(1.25rem, 2.4vw, 1.65rem);
-  letter-spacing: -0.03em;
-}
-.calc-intro p {
-  max-width: 410px;
-  margin: 0 auto 1.25rem;
-  color: var(--fg-muted);
-  font-size: 0.875rem;
-  line-height: 1.55;
-}
-.calc-intro .btn { width: auto; }
-.calc-workspace[hidden] { display: none; }
-.calc-columns {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.86fr);
-  gap: 2.25rem;
-  align-items: stretch;
-}
-.calc-inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-.calc-group {
-  margin-bottom: 0;
-}
-.calc-group:last-child { margin-bottom: 0; }
-.calc-label-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 0.625rem;
-}
-.calc-label-row label {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--fg-muted);
-}
-.calc-label-row .calc-value {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--accent);
-  font-variant-numeric: tabular-nums;
-}
-.calc-slider {
-  -webkit-appearance: none;
-  appearance: none;
   width: 100%;
-  height: 6px;
-  border-radius: 999px;
-  background: rgba(240, 240, 240, 0.1);
-  outline: none;
-  cursor: pointer;
+  max-width: none;
+  margin: 0;
+  padding: clamp(4.5rem, 8vw, 7rem) 1.25rem clamp(5rem, 9vw, 7rem);
+  background: #fff;
 }
-.calc-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--accent);
-  border: 2px solid var(--bg);
-  box-shadow: 0 0 0 1px var(--border);
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-.calc-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
-.calc-slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--accent);
-  border: 2px solid var(--bg);
-  box-shadow: 0 0 0 1px var(--border);
-  cursor: pointer;
-}
-.calc-scale {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.55rem;
-  color: var(--fg-dim);
-  font-size: 0.6875rem;
-  font-variant-numeric: tabular-nums;
-}
-.calc-sub {
-  font-size: 0.6875rem;
-  color: var(--fg-dim);
-  margin-top: 0.375rem;
-}
-.calc-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.125rem;
-}
-.calc-chip {
-  padding: 0.5rem 1rem;
-  border-radius: 100px;
-  border: 0.5px solid var(--border);
-  font-size: 0.8125rem;
-  color: var(--fg-muted);
-  cursor: pointer;
-  transition: all 0.15s;
-  background: var(--surface);
-  user-select: none;
-}
-.calc-chip:hover {
-  border-color: var(--fg-muted);
-  color: var(--fg);
-}
-.calc-chip.active {
-  background: rgba(187, 85, 34, 0.1);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.calc-socials {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.55rem;
-}
-.calc-social,
-.calc-wide-toggle,
-.calc-tool-toggle {
-  border: 0.5px solid var(--border);
-  color: var(--fg-muted);
-  background: transparent;
-  cursor: pointer;
-  font: inherit;
-  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease, transform 0.18s ease;
-}
-.calc-social:hover,
-.calc-wide-toggle:hover,
-.calc-tool-toggle:hover {
-  border-color: var(--fg-muted);
-  color: var(--fg);
-}
-.calc-social.active,
-.calc-wide-toggle.active,
-.calc-tool-toggle.active {
-  border-color: rgba(187, 85, 34, 0.5);
-  color: var(--accent);
-  background: rgba(187, 85, 34, 0.045);
-}
-.calc-social {
-  min-height: 54px;
-  border-radius: var(--radius-sm);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-}
-.calc-social svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.65;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.calc-social span {
-  font-size: 0.6875rem;
-  font-weight: 500;
-}
-.calc-wide-toggle {
-  width: 100%;
-  min-height: 46px;
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-.calc-binary {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem;
-}
-.calc-tool-toggle {
-  min-height: 42px;
-  border-radius: var(--radius-sm);
-  font-size: 0.8125rem;
-  font-weight: 600;
-}
-.calc-result {
-  position: relative;
-  overflow: hidden;
-  min-height: 100%;
-  background:
-    linear-gradient(180deg, rgba(187, 85, 34, 0.06), transparent 46%),
-    rgba(255, 255, 255, 0.92);
-  border: 0.5px solid var(--border);
-  border-radius: 14px;
-  padding: 1.75rem;
-  box-shadow: 0 14px 36px rgba(17,24,39,0.10);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-self: stretch;
-  gap: 0.7rem;
-}
-.calc-output-kicker {
-  color: var(--fg-dim);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-.calc-number {
-  font-size: clamp(3.1rem, 6vw, 4.55rem);
-  font-weight: 650;
-  letter-spacing: -0.045em;
-  line-height: 0.92;
-  color: var(--fg);
-  font-variant-numeric: tabular-nums;
-  text-shadow: none;
-}
-.calc-number .calc-prefix {
-  font-size: 0.42em;
-  letter-spacing: -0.03em;
-  color: var(--fg-dim);
-}
-.calc-unit {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--fg-muted);
-  margin-top: 0.3rem;
-}
-.calc-card > .btn {
-  width: 100%;
-  margin-top: 1.25rem;
-  text-align: center;
-}
+.calculator-inner { width: min(1040px, 100%); margin: 0 auto; }
+.calc-launch-panel { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: center; width: min(820px, 100%); margin: 2.5rem auto 0; padding: clamp(1.25rem, 3vw, 1.75rem); border: 0.5px solid var(--border); border-radius: 16px; background: var(--bg); }
+.calc-launch-panel[hidden], .calc-card[hidden] { display: none; }
+.calc-launch-copy { color: var(--fg-muted); font-size: 0.75rem; font-weight: 600; line-height: 1.4; }
+.calc-launch-action { display: grid; justify-items: end; gap: 0.8rem; }
+.calc-launch-progress { display: flex; align-items: center; gap: 0.6rem; color: var(--fg-dim); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; }
+.calc-launch-progress i { display: block; width: 86px; height: 4px; overflow: hidden; border-radius: 999px; background: var(--surface-2); }
+.calc-launch-progress b { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--accent); }
+.calc-card { margin-top: 2.5rem; }
+.calc-progress { display: grid; grid-template-columns: auto auto; gap: 0.55rem 1rem; align-items: center; margin-bottom: 1.5rem; color: var(--fg-dim); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
+.calc-progress-value { justify-self: end; color: var(--accent); font-variant-numeric: tabular-nums; }
+.calc-progress-track { grid-column: 1 / -1; height: 4px; overflow: hidden; border-radius: 999px; background: var(--surface-2); }
+.calc-progress-track span { display: block; width: 25%; height: 100%; border-radius: inherit; background: var(--accent); transition: width 0.35s ease; }
+.calc-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; color: var(--fg-dim); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; }
+.calc-close { color: var(--fg-muted); font-size: 0.75rem; font-weight: 600; letter-spacing: normal; text-transform: none; }
+.calc-close:hover { color: var(--accent); }
+.calc-layout { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(300px, 0.92fr); gap: clamp(1.5rem, 4vw, 3rem); align-items: stretch; }
+.calc-stepper { min-width: 0; }
+.calc-step[hidden] { display: none; }
+.calc-step-index { color: var(--accent); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; }
+.calc-step h3 { margin-top: 0.5rem; font-size: clamp(1.25rem, 2.5vw, 1.65rem); line-height: 1.2; letter-spacing: -0.025em; }
+.calc-step-intro { max-width: 560px; margin-top: 0.65rem; color: var(--fg-muted); font-size: 0.875rem; line-height: 1.6; }
+.calc-choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; margin-top: 1.4rem; }
+.calc-choice { min-height: 88px; padding: 0.9rem 1rem; border: 0.5px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--fg); text-align: left; transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease; }
+.calc-choice:hover { border-color: var(--fg-muted); transform: translateY(-1px); }
+.calc-choice.is-selected { border-color: var(--accent); background: rgba(187, 85, 34, 0.07); box-shadow: 0 8px 20px rgba(187, 85, 34, 0.08); }
+.calc-choice-title { display: block; font-size: 0.875rem; font-weight: 650; }
+.calc-choice-note { display: block; margin-top: 0.3rem; color: var(--fg-muted); font-size: 0.75rem; line-height: 1.35; }
+.calc-choice.is-selected .calc-choice-note { color: var(--accent-hover); }
+.calc-choice-grid.is-multi .calc-choice { min-height: 74px; }
+.calc-step-error { min-height: 1.1rem; margin-top: 0.7rem; color: var(--danger); font-size: 0.75rem; }
+.calc-step-actions { display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem; }
+.calc-step-actions .btn { min-width: 7.5rem; }
+.calc-back { color: var(--fg-muted); font-size: 0.8125rem; font-weight: 600; }
+.calc-back[hidden] { display: none; }
+.calc-result { position: relative; overflow: hidden; min-height: 100%; padding: clamp(1.35rem, 3vw, 2rem); border: 0.5px solid var(--border); border-radius: 16px; background: linear-gradient(180deg, rgba(187, 85, 34, 0.07), transparent 48%), var(--bg); box-shadow: 0 14px 36px rgba(17,24,39,0.09); display: flex; flex-direction: column; justify-content: center; gap: 1rem; }
+.calc-result.is-result-focused { outline: 2px solid var(--accent); outline-offset: 4px; }
+.calc-result.is-updated .calc-number { animation: calc-result-pulse 0.35s ease; }
+@keyframes calc-result-pulse { 50% { transform: translateY(-3px); color: var(--accent); } }
+.calc-output-kicker { color: var(--fg-dim); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; line-height: 1.2; text-transform: uppercase; }
+.calc-number { margin-top: 0.55rem; color: var(--fg); font-size: clamp(2.5rem, 5vw, 4.2rem); font-weight: 650; letter-spacing: -0.045em; line-height: 0.95; font-variant-numeric: tabular-nums; }
+.calc-unit { max-width: 250px; margin-top: 0.4rem; color: var(--fg-muted); font-size: 0.8125rem; font-weight: 600; line-height: 1.4; }
+.calc-result-summary { margin-top: 0.65rem; color: var(--fg-muted); font-size: 0.8125rem; line-height: 1.55; }
+.calc-sources { display: grid; gap: 0.65rem; margin-top: 0.4rem; }
+.calc-source { display: grid; grid-template-columns: minmax(100px, 1fr) 1.1fr; gap: 0.7rem; align-items: center; color: var(--fg-muted); font-size: 0.72rem; }
+.calc-source-bar { height: 5px; overflow: hidden; border-radius: 999px; background: var(--surface-2); }
+.calc-source-bar span { display: block; width: 55%; height: 100%; border-radius: inherit; background: var(--accent); opacity: 0.72; transition: width 0.35s ease; }
+.calc-result-note { margin-top: 0.25rem; color: var(--fg-dim); font-size: 0.7rem; line-height: 1.5; }
+.calc-result-cta { width: 100%; margin-top: 0.35rem; text-align: center; }
 
 @media (max-width: 700px) {
   .widget-grid-alt { grid-template-columns: 1fr; }
   .widget-grid-alt[data-od-id="path-3-2-1"] { grid-template-columns: 1fr; }
   .widget-grid-alt[data-od-id="path-3-2-1"] .widget-card { grid-column: auto; }
-  .calc-columns { grid-template-columns: 1fr; gap: 1.4rem; }
-  .calc-socials { grid-template-columns: 1fr; }
+  .faq-grid { grid-template-columns: 1fr; }
+  .faq-item summary { grid-template-columns: 1.75rem minmax(0, 1fr) 1rem; padding-inline: 0.85rem; }
+  .faq-answer { padding-left: 3.45rem; padding-right: 0.85rem; }
+  .calc-layout { grid-template-columns: 1fr; gap: 1.5rem; }
+  .calc-choice-grid { grid-template-columns: 1fr; }
+  .calc-result { min-height: auto; }
+  .calc-launch-panel { grid-template-columns: 1fr; gap: 1.25rem; }
+  .calc-launch-action { justify-items: start; }
+  .calc-toolbar { align-items: flex-start; flex-direction: column; gap: 0.5rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .widget-grid-alt[data-od-id="path-3-2-1"] *,
@@ -1935,23 +1752,7 @@ header.landing-header {
 }
 @media (max-width: 640px) {
   .landing-header .landing-nav { display: none; }
-  .landing-header { gap: 0.45rem; padding: 0.6rem 0.7rem; }
-  .landing-header-cta { padding-inline: 0.7rem; }
-  .landing-login-link { margin-left: auto; padding-inline: 0.65rem; }
-}
-@media (max-width: 480px) {
-  .hero-widget-cloud { padding-top: 8.5rem; }
-  .hero h1 { font-size: 1.65rem; }
-  header.landing-header { width: calc(100% - 1rem) !important; }
-  .landing-logo-image { height: 0.8rem; max-width: 5.4rem; }
-  .landing-login-link, .landing-header-cta { min-height: 2.75rem; font-size: 0.6875rem; }
-  .landing-login-link { padding-inline: 0.5rem; }
-  .landing-header-cta { padding-inline: 0.45rem; }
-}
-@media (max-width: 767px) {
-  .hero-widget-cloud { min-height: 100svh; }
-  .hero-orbit { display: none; }
-  .hero h1 span { white-space: normal; }
+  .landing-header { padding: 0.75rem 1rem; }
 }
 </style>
 </head>
@@ -1963,37 +1764,38 @@ header.landing-header {
   <span class="grid-hotspot is-c"></span>
   <span class="grid-hotspot is-d"></span>
 </div>
+<canvas class="site-grid-canvas" id="site-grid-canvas" aria-hidden="true"></canvas>
 
 <header class="landing-header" data-od-id="landing-header" style="position:fixed;left:50%;transform:translateX(-50%);width:min(900px,calc(100% - 2rem));top:0.85rem;border-radius:18px;border:0.5px solid rgba(255,255,255,0.42);box-shadow:0 8px 24px rgba(17,24,39,0.045),inset 0 1px 0 rgba(255,255,255,0.62),inset 0 -1px 0 rgba(17,24,39,0.025);background:linear-gradient(135deg,rgba(255,255,255,0.34),rgba(255,255,255,0.08));backdrop-filter:blur(34px) saturate(220%) contrast(112%);-webkit-backdrop-filter:blur(34px) saturate(220%) contrast(112%)">
   <a href="index.html" class="landing-logo" aria-label="KlubOS">
-    <img src="/assets/klubos-logo-long-black.png" alt="KlubOS" class="brand-logo-image landing-logo-image">
+    <img src="/assets/klubos-logo-soft.svg" alt="KlubOS" class="brand-logo-image landing-logo-image">
   </a>
   <nav class="landing-nav" data-od-id="landing-nav" style="flex:1;align-items:center;justify-content:center;gap:1.25rem">
-    <a href="#problem-section">Das Problem</a>
+    <a href="#problem">Das Problem</a>
     <span aria-hidden="true" style="width:4px;height:4px;border-radius:50%;background:rgba(17,24,39,0.18);display:inline-block"></span>
-    <a href="#vergleich">Der Unterschied</a>
+    <a href="#system">So hilft KlubOS</a>
     <span aria-hidden="true" style="width:4px;height:4px;border-radius:50%;background:rgba(17,24,39,0.18);display:inline-block"></span>
-    <a href="#features">Das System</a>
+    <a href="#ablauf">Ablauf</a>
   </nav>
-  <a href="login.html" class="landing-login-link">Einloggen</a>
-  <a href="pilot.html" class="btn btn-primary landing-header-cta">Pilotgespräch vereinbaren</a>
+  <a href="login.html" class="landing-login-link" style="color:var(--fg-muted);font-size:0.8125rem;white-space:nowrap">Einloggen</a>
+  <a href="pilot.html" class="btn btn-primary" style="padding:0.5rem 1.25rem;font-size:0.8125rem">Pilotgespräch vereinbaren</a>
 </header>
 
 <main>
   <section class="hero hero-widget-cloud" data-od-id="hero">
     <div class="hero-glow"></div>
     <div class="hero-content">
-      <div class="hero-eyebrow">Das Gehirn für deinen Verein</div>
-      <h1><span>Weniger Verwaltungsarbeit,</span> <span>mehr Überblick.</span></h1>
-      <p>Mit KlubOS bewältigt dein Verein Vorstandsarbeit in einem Bruchteil der Zeit, die sie heute braucht.</p>
+      <div class="hero-eyebrow">Für deutsche Tennisvereine · Vorstandshub</div>
+      <h1>Weniger Verwaltungsarbeit. Mehr Überblick im Vorstand.</h1>
+      <p>KlubOS bündelt Mitglieder, Finanzen, Plätze, Termine und Vereinskommunikation an einem Ort – für die Aufgaben, die in eurem Tennisverein jede Woche weiterlaufen.</p>
       <div class="hero-cta">
-        <a href="pilot.html" class="btn btn-primary btn-lg">Pilotgespräch vereinbaren</a>
-        <a href="#features" class="btn btn-ghost btn-lg" data-od-id="hero-pilot-cta">Das System ansehen</a>
+        <a href="pilot.html" class="btn btn-primary btn-lg" data-od-id="hero-pilot-cta">Pilotgespräch vereinbaren</a>
+        <a href="#system" class="btn btn-ghost btn-lg">So hilft KlubOS</a>
       </div>
     </div>
     <div class="hero-orbit" aria-hidden="true">
       <article class="floating-widget is-social">
-        <h3>Vorstandsdashboard</h3>
+        <h3>Vorstandsübersicht</h3>
         <p>Offene Punkte, nächste Termine und wichtige Vereinsdaten auf einen Blick.</p>
         <div class="mini-bars"><span style="width:88%"></span><span></span><span></span></div>
       </article>
@@ -2003,14 +1805,14 @@ header.landing-header {
         <div class="mini-calendar"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
       </article>
       <article class="floating-widget is-finance">
-        <h3>Finanz-Widget</h3>
+        <h3>Finanzen</h3>
         <p>Kassenbericht, offene Beiträge und Monatsstatus auf einen Blick.</p>
         <div class="mini-row"><span>Saldo</span><strong>+6.400 €</strong></div>
         <div class="mini-row"><span class="mini-pill">bereit für Export</span></div>
       </article>
       <article class="floating-widget is-ai">
-        <h3>Vereins-KI</h3>
-        <p>Frage stellen. Entwurf erhalten, prüfen und gemeinsam freigeben.</p>
+        <h3>Assistenz</h3>
+        <p>Aus eurem Vereinskontext einen ersten Entwurf für die nächste Aufgabe erstellen.</p>
         <div class="mini-chat"><span></span><span></span><span></span></div>
       </article>
       <article class="floating-widget is-members">
@@ -2021,64 +1823,64 @@ header.landing-header {
     </div>
   </section>
 
-  <section id="problem-section" class="features-section problem-section" data-od-id="problem-section" style="padding-top:clamp(5.5rem,10vw,8rem);padding-bottom:clamp(5rem,10vw,7rem)">
+  <section id="problem" class="features-section problem-section" data-od-id="problem-section" style="padding-top:clamp(5.5rem,10vw,8rem);padding-bottom:clamp(5rem,10vw,7rem)">
     <div class="features-header reveal">
-      <h2 class="h2">Zu wenig Hände. Zu viel Verwaltungsarbeit.</h2>
-      <p style="color:var(--fg-muted);font-size:1rem;max-width:720px;margin:0.9rem auto 0">Vorstände tragen Verantwortung neben Beruf, Familie und Sport. Zeit geht verloren, wenn Informationen verstreut liegen und jede Saison mit derselben Sucharbeit beginnt.</p>
+      <h2 class="h2">Wenn Vorstandsarbeit überall verteilt ist, bleibt sie an euch hängen.</h2>
+      <p style="color:var(--fg-muted);font-size:1rem;max-width:720px;margin:0.9rem auto 0">Informationen liegen in Dateien, Mails und Chats. Aufgaben wandern weiter, bis jemand sie wieder zusammensucht – oft kurz vor der Sitzung oder dem Saisonstart.</p>
     </div>
     <div class="problem-signals reveal" data-od-id="problem-signals">
       <article class="problem-signal">
         <div class="problem-signal-orbit" aria-hidden="true"><span>Excel</span><span>E-Mail</span><span>Chat</span></div>
-        <h3>Informationen</h3>
-        <p>liegen an zu vielen Orten und müssen vor jeder Sitzung neu zusammengesucht werden.</p>
+        <h3>Alles verteilt</h3>
+        <p>Mitgliederstände, Termine und Dokumente liegen an verschiedenen Orten und fehlen genau dann, wenn ihr sie braucht.</p>
       </article>
       <article class="problem-signal is-accent">
         <div class="problem-signal-orbit" aria-hidden="true"><span>Aufgabe</span><span>Frist</span><span>Rückfrage</span></div>
-        <h3>Verantwortung</h3>
-        <p>bleibt an einzelnen Personen hängen, statt im Vorstand sichtbar weiterzulaufen.</p>
+        <h3>Zu viel bei Einzelnen</h3>
+        <p>Wissen und Aufgaben bleiben an den Personen hängen, die sich bisher darum gekümmert haben.</p>
       </article>
       <article class="problem-signal">
         <div class="problem-signal-orbit" aria-hidden="true"><span>Plan</span><span>Entwurf</span><span>Freigabe</span></div>
-        <h3>Entscheidungen</h3>
-        <p>werden zwischen Nachrichten getroffen, obwohl sie einen gemeinsamen Kontext brauchen.</p>
+        <h3>Entscheidungen ohne Kontext</h3>
+        <p>Ihr stimmt euch zwischen Nachrichten ab, obwohl für eine gute Entscheidung der aktuelle Stand fehlen kann.</p>
       </article>
     </div>
   </section>
 
   <section id="vergleich" class="comparison-section" data-od-id="comparison-section">
     <div class="features-header reveal">
-      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Vorher / Nachher</div>
-      <h2 class="h2">Vom Abstimmen zum Abarbeiten.</h2>
-      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:620px;margin:0.75rem auto 0">KlubOS ersetzt nicht den Vorstand. Es bringt die Informationen, Entwürfe und nächsten Schritte an einen Ort.</p>
+      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Der Unterschied im Alltag</div>
+      <h2 class="h2">Von verstreuten Aufgaben zu einem gemeinsamen Arbeitsstand.</h2>
+      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:620px;margin:0.75rem auto 0">KlubOS nimmt euch nicht die Vereinsarbeit ab. Es bringt den aktuellen Stand, die nächsten Aufgaben und die nötigen Unterlagen zusammen.</p>
     </div>
     <div class="comparison-shell reveal">
       <div class="comparison-column is-before">
-        <div class="comparison-column-head"><span class="comparison-dot"></span><div><span class="comparison-kicker">Ohne KlubOS</span><h3>Jede Aufgabe beginnt bei null.</h3></div></div>
-        <div class="comparison-row"><span class="comparison-icon">↗</span><div><strong>Mitglieder finden</strong><p>Excel-Datei, Mailanhang oder Vereinsordner öffnen</p></div><span class="comparison-status">verstreut</span></div>
+        <div class="comparison-column-head"><span class="comparison-dot"></span><div><span class="comparison-kicker">Ohne KlubOS</span><h3>Jede Aufgabe startet mit Suchen.</h3></div></div>
+        <div class="comparison-row"><span class="comparison-icon">↗</span><div><strong>Mitgliederstand klären</strong><p>Datei, Mailanhang oder Vereinsordner öffnen</p></div><span class="comparison-status">verstreut</span></div>
         <div class="comparison-row"><span class="comparison-icon">↗</span><div><strong>Termin abstimmen</strong><p>Nachrichten schreiben, Antworten sammeln, Kalender pflegen</p></div><span class="comparison-status">manuell</span></div>
-        <div class="comparison-row"><span class="comparison-icon">↗</span><div><strong>Kommunikation vorbereiten</strong><p>Alte Texte suchen, Informationen zusammensetzen, nachfragen</p></div><span class="comparison-status">jedes Mal neu</span></div>
+        <div class="comparison-row"><span class="comparison-icon">↗</span><div><strong>Info vorbereiten</strong><p>Alte Texte suchen, Details zusammensetzen, nachfragen</p></div><span class="comparison-status">jedes Mal neu</span></div>
       </div>
       <div class="comparison-bridge" aria-hidden="true"><span>KlubOS</span><i></i><i></i><i></i></div>
       <div class="comparison-column is-after">
-        <div class="comparison-column-head"><span class="comparison-dot"></span><div><span class="comparison-kicker">Mit KlubOS</span><h3>Der nächste Schritt ist sichtbar.</h3></div></div>
-        <div class="comparison-row"><span class="comparison-icon">✓</span><div><strong>Kontext an einem Ort</strong><p>Mitglieder, Aufgaben und relevante Dokumente verbunden</p></div><span class="comparison-status">geordnet</span></div>
-        <div class="comparison-row"><span class="comparison-icon">✓</span><div><strong>Entwurf statt Leerseite</strong><p>KlubOS erstellt einen Vorschlag, den der Vorstand prüfen kann</p></div><span class="comparison-status">prüfbar</span></div>
-        <div class="comparison-row"><span class="comparison-icon">✓</span><div><strong>Freigeben und weitergeben</strong><p>Bearbeiten, exportieren oder im Vereinskontext speichern</p></div><span class="comparison-status">gemeinsam</span></div>
+        <div class="comparison-column-head"><span class="comparison-dot"></span><div><span class="comparison-kicker">Mit KlubOS</span><h3>Der nächste Schritt ist vorbereitet.</h3></div></div>
+        <div class="comparison-row"><span class="comparison-icon">✓</span><div><strong>Gemeinsamer Arbeitsstand</strong><p>Mitglieder, Aufgaben und Unterlagen an einem Ort</p></div><span class="comparison-status">geordnet</span></div>
+        <div class="comparison-row"><span class="comparison-icon">✓</span><div><strong>Erster Entwurf</strong><p>Ein Plan, Text oder Bericht als Ausgangspunkt für euren Vorstand</p></div><span class="comparison-status">greifbar</span></div>
+        <div class="comparison-row"><span class="comparison-icon">✓</span><div><strong>Prüfen und weitergeben</strong><p>Bearbeiten, freigeben, exportieren oder im Vereinskontext speichern</p></div><span class="comparison-status">gemeinsam</span></div>
       </div>
     </div>
-    <p class="comparison-note reveal">KlubOS bereitet vor. Ihr prüft, entscheidet und gebt frei.</p>
+    <p class="comparison-note reveal">Ihr behaltet den Überblick und entscheidet, was in eurem Verein umgesetzt wird.</p>
   </section>
 
-  <section id="features" class="features-section" data-od-id="features-section">
+  <section id="system" class="features-section" data-od-id="features-section">
     <div class="features-header reveal">
-      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Das System</div>
-      <h2 class="h2">Ein Ort für die Arbeit, die sonst überall liegt.</h2>
-      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:560px;margin:0.75rem auto 0">Mitglieder, Kasse, Plätze, Sponsoren, Events und Kommunikation arbeiten mit gemeinsamem Kontext. Die Vereins-KI unterstützt einzelne Aufgaben dort, wo ein Entwurf oder nächster Schritt Zeit spart.</p>
+      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Eure Vorstandsarbeit</div>
+      <h2 class="h2">Ein Ort für die Aufgaben, die jede Woche weiterlaufen.</h2>
+      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:560px;margin:0.75rem auto 0">KlubOS verbindet die Arbeitsbereiche eures Tennisvereins, damit aus Informationen konkrete nächste Schritte werden – von der Platzplanung bis zum Kassenbericht.</p>
     </div>
     <div class="widget-grid-alt reveal" data-od-id="path-3-2-1">
       <div class="widget-card" data-od-id="widget-platz">
         <h3>Plätze &amp; Termine</h3>
-        <p>Vorschläge für Saison, Training und Sperrzeiten – prüfbar, editierbar und exportierbar.</p>
+        <p>Saison, Training, Punktspiele und Sperrzeiten in einem Plan, den ihr gemeinsam weiterbearbeitet.</p>
         <div class="wp wp-platz">
           <div class="pl-header"><span>KW 14</span><span>Mo 30 - So 05</span></div>
           <div class="pl-calendar">
@@ -2096,7 +1898,7 @@ header.landing-header {
       </div>
       <div class="widget-card" data-od-id="widget-mitglieder">
         <h3>Mitgliederverwaltung</h3>
-        <p>Anmeldungen, Beiträge und Kündigungen mit dem Kontext, den der Vorstand braucht.</p>
+        <p>Anmeldungen, Beiträge und Kündigungen mit dem aktuellen Stand für eure nächste Entscheidung.</p>
         <div class="wp wp-members">
           <div class="mm-stats">
             <div class="mm-stat"><div class="mm-num teal" data-member-count="" data-member-target="847">0</div><div class="mm-label">Aktiv</div></div>
@@ -2111,7 +1913,7 @@ header.landing-header {
       </div>
       <div class="widget-card" data-od-id="widget-design">
         <h3>Vereinsauftritt</h3>
-        <p>Lade eure CI hoch. Die KI erstellt danach Vereinsmaterialien in eurem Stil.</p>
+        <p>Logo, Bilder und Farben an einem Ort – für Aushänge, Newsletter und Social Assets in eurem Vereinsstil.</p>
         <div class="wp wp-brandkit">
           <div class="bk-ingest">
             <div class="bk-logo">TC</div>
@@ -2121,7 +1923,7 @@ header.landing-header {
             </div>
           </div>
           <div class="bk-memory">
-            <span><strong>KI merkt sich CI</strong><br>Look, Tonalität und Vorlagen</span>
+            <span><strong>Vereinsstil verfügbar</strong><br>Look, Tonalität und Vorlagen</span>
             <div class="bk-palette"><i></i><i></i><i></i></div>
           </div>
           <div class="bk-output">
@@ -2139,7 +1941,7 @@ header.landing-header {
       </div>
       <div class="widget-card" data-od-id="widget-sponsoren">
         <h3>Sponsoren</h3>
-        <p>Partner, Leistungen, Fristen und Berichte übersichtlich vorbereiten.</p>
+        <p>Partner, Leistungen und offene Zusagen im Blick behalten und für Gespräche sauber vorbereiten.</p>
         <div class="wp wp-sponsors">
           <div class="sp-row" data-sponsor-line="" data-sponsor-target="12000"><span class="sp-name"><i class="sp-dot gold"></i>Sponsor 1</span><span class="sp-amount" data-sponsor-amount="">12.000 €</span><span class="sp-status paid">bezahlt</span><span class="sp-doc" aria-label="Anhang"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg></span></div>
           <div class="sp-row" data-sponsor-line="" data-sponsor-target="8500"><span class="sp-name"><i class="sp-dot gold"></i>Sponsor 2</span><span class="sp-amount" data-sponsor-amount="">8.500 €</span><span class="sp-status open">offen</span><button type="button" class="sp-doc has-notice" aria-label="Neuer Anhang" aria-expanded="false" data-sponsor-gimmick=""><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg><span class="sp-gimmick-bubble">WOW, du hast es echt versucht. Kontaktiere uns, um zu erfahren, wie es aussehen kann!</span></button></div>
@@ -2150,7 +1952,7 @@ header.landing-header {
       </div>
       <div class="widget-card" data-od-id="widget-magazin">
         <h3>Vereinskommunikation</h3>
-        <p>Texte und Layouts für Magazin, Aushang und Newsletter aus einem Vereinskontext.</p>
+        <p>Informationen aus eurem Vereinsalltag in Texte für Magazin, Aushang und Newsletter überführen.</p>
         <div class="wp wp-articlebuild">
           <div class="ab-page">
             <div class="ab-image"></div>
@@ -2167,7 +1969,7 @@ header.landing-header {
       </div>
       <div class="widget-card" data-od-id="widget-finanzen">
         <h3>Finanzmanager</h3>
-        <p>Einnahmen, Ausgaben und Kassenberichte mit prüfbaren Entwürfen für den Vorstand.</p>
+        <p>Beiträge, Ausgaben und Kassenberichte mit dem Monatsstand, den ihr im Vorstand besprechen könnt.</p>
         <div class="wp wp-finance-report">
           <div class="fr-header">
             <span>Kassenbericht</span>
@@ -2187,8 +1989,8 @@ header.landing-header {
         </div>
       </div>
       <div class="widget-card" data-od-id="widget-ki">
-        <h3>Assistenz im Kontext</h3>
-        <p>Ein Entwurf für die konkrete Vereinsaufgabe – zum Prüfen, Bearbeiten und Freigeben.</p>
+        <h3>Vereinsassistenz</h3>
+        <p>Aus eurem Vereinskontext einen ersten Entwurf für Text, Plan oder Zusammenfassung erstellen.</p>
         <div class="wp wp-chat">
           <div class="ch-messages" data-chat-thread="">
             <div class="ch-bubble user is-hidden" data-chat-user=""></div>
@@ -2201,156 +2003,213 @@ header.landing-header {
     </div>
   </section>
 
-  <section id="rechner" class="calculator-section" data-od-id="calculator-section">
+  <section id="ablauf" class="features-section" data-od-id="how-it-works-section">
     <div class="features-header reveal">
-      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Vorstandsaufwand einordnen</div>
-      <h2 class="h2">Wie viel Verwaltungsarbeit könnt ihr zurückgewinnen?</h2>
-      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:560px;margin:0.75rem auto 0">Vier kurze Fragen geben euch eine grobe Orientierung für euer monatliches Zeitpotenzial – keine exakte Einspargarantie.</p>
+      <div class="hero-eyebrow" style="margin-bottom:0.75rem">So wird aus einer Aufgabe ein Ergebnis</div>
+      <h2 class="h2">Ein klarer Ablauf für eure tägliche Vorstandsarbeit.</h2>
+      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:620px;margin:0.75rem auto 0">Ihr startet mit einer konkreten Aufgabe. KlubOS bringt den passenden Vereinskontext zusammen und macht daraus einen bearbeitbaren nächsten Schritt.</p>
     </div>
-    <div class="calc-card reveal" data-od-id="calc-card">
-      <div class="calc-intro" data-calc-intro>
-        <div class="calc-output-kicker">Euer Zeitpotenzial</div>
-        <h3>Was könnte KlubOS euch im Monat abnehmen?</h3>
-        <p>Öffnet den Rechner und beantwortet vier kurze Fragen zu eurem Vereinsalltag.</p>
-        <button type="button" class="btn btn-primary btn-lg" data-calc-open>Rechner öffnen <span aria-hidden="true">→</span></button>
+    <div class="widget-grid-alt reveal" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+      <div class="widget-card" data-od-id="step-vorstand-fragt">
+        <div class="hero-eyebrow" style="margin-bottom:0.75rem">01</div>
+        <h3>Aufgabe festhalten</h3>
+        <p>Ihr beschreibt, was für euren Verein vorbereitet oder organisiert werden soll – direkt dort, wo die Aufgabe entsteht.</p>
+        <div class="calc-chip active" style="align-self:flex-start;margin-top:auto">„Belegungsplan für die Sommersaison“</div>
       </div>
-      <div class="calc-workspace" data-calc-workspace hidden>
-      <div class="calc-columns">
-        <div class="calc-inputs">
-        <div class="calc-group">
-          <div class="calc-label-row">
-            <label for="calc-members">Mitgliederzahl</label>
-            <span class="calc-value" id="calc-members-val">500</span>
-          </div>
-          <input type="range" class="calc-slider" id="calc-members" min="0" max="5000" value="500" step="50">
-          <div class="calc-scale"><span>0</span><span>5000+</span></div>
-        </div>
+      <div class="widget-card" data-od-id="step-klubos-liefert">
+        <div class="hero-eyebrow" style="margin-bottom:0.75rem">02</div>
+        <h3>Arbeitsstand verbinden</h3>
+        <p>KlubOS führt die relevanten Informationen zusammen und erstellt einen ersten Plan, Text, Bericht oder nächste Aufgaben.</p>
+        <div class="calc-chip active" style="align-self:flex-start;margin-top:auto">→ Saisonplan, Mannschaften und Trainer im Blick.</div>
+      </div>
+      <div class="widget-card" data-od-id="step-vorstand-entscheidet">
+        <div class="hero-eyebrow" style="margin-bottom:0.75rem">03</div>
+        <h3>Ergebnis weitergeben</h3>
+        <p>Ihr prüft und bearbeitet das Ergebnis, gebt es frei, exportiert es oder speichert es für die nächste Sitzung.</p>
+        <div class="calc-chip active" style="align-self:flex-start;margin-top:auto">Prüfen · bearbeiten · weitergeben</div>
+      </div>
+    </div>
+  </section>
 
-        <div class="calc-group">
-          <div class="calc-label-row">
-            <label>Social-Kanäle</label>
-          </div>
-          <div class="calc-socials" role="group" aria-label="Social-Kanäle auswählen">
-            <button type="button" class="calc-social calc-toggle active" data-calc-toggle="" data-act="instagram" aria-pressed="true" data-od-id="calc-social-instagram">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="4"></rect><circle cx="12" cy="12" r="3.2"></circle><circle cx="16.6" cy="7.4" r="0.8"></circle></svg>
-              <span>Instagram</span>
-            </button>
-            <button type="button" class="calc-social calc-toggle" data-calc-toggle="" data-act="tiktok" aria-pressed="false" data-od-id="calc-social-tiktok">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4v9.2a4.1 4.1 0 1 1-3.2-4"></path><path d="M14 4c.7 2.5 2.2 4 4.8 4.4"></path></svg>
-              <span>TikTok</span>
-            </button>
-            <button type="button" class="calc-social calc-toggle" data-calc-toggle="" data-act="youtube" aria-pressed="false" data-od-id="calc-social-youtube">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="10" rx="3"></rect><path d="m11 10 4 2-4 2z"></path></svg>
-              <span>YouTube</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="calc-group">
-          <button type="button" class="calc-wide-toggle calc-toggle active" data-calc-toggle="" data-act="magazine" aria-pressed="true" data-od-id="calc-magazine-toggle">Vereinsmagazin</button>
-        </div>
-
-        <div class="calc-group">
-          <div class="calc-label-row">
-            <label>Nutzt ihr schon Tools für die Vereinsverwaltung?</label>
-          </div>
-          <div class="calc-binary" role="group" aria-label="Vorhandene Management-Tools">
-            <button type="button" class="calc-tool-toggle" data-calc-tool="yes" aria-pressed="false" data-od-id="calc-tools-yes">Ja</button>
-            <button type="button" class="calc-tool-toggle active" data-calc-tool="no" aria-pressed="true" data-od-id="calc-tools-no">Nein</button>
-          </div>
-        </div>
-        </div>
-
-        <div class="calc-result" data-od-id="calc-result" style="gap: 16.2px;">
-          <div>
-            <div class="calc-output-kicker">Grobe Orientierung</div>
-            <div class="calc-number"><span id="calc-hours">18</span></div>
-            <div class="calc-unit">Stunden / Monat</div>
-          </div>
+  <section id="rechner" class="calculator-section" data-od-id="calculator-section">
+    <div class="calculator-inner">
+      <div class="features-header reveal">
+        <div class="hero-eyebrow" style="margin-bottom:0.75rem">Arbeitsaufwand sichtbar machen</div>
+        <h2 class="h2">Wie viel Zeit könnte euer Vorstand im Monat zurückgewinnen?</h2>
+        <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:620px;margin:0.75rem auto 0">Vier kurze Fragen geben euch eine vorsichtige Monatsorientierung.</p>
+      </div>
+      <div class="calc-launch-panel reveal" id="calc-launch-panel">
+        <div class="calc-launch-copy">Vorsichtige Orientierung · keine Einspargarantie</div>
+        <div class="calc-launch-action">
+          <div class="calc-launch-progress" aria-label="Kalkulator noch nicht gestartet"><span>0&nbsp;%</span><i aria-hidden="true"><b></b></i></div>
+          <button type="button" class="btn btn-primary" id="calc-open" aria-expanded="false" aria-controls="calc-card">Kalkulator öffnen</button>
         </div>
       </div>
-      <a href="pilot.html?source=calculator" class="btn btn-primary btn-lg" data-od-id="calc-cta">Pilotgespräch vereinbaren</a>
+      <div class="calc-card reveal" id="calc-card" data-od-id="calc-card" hidden>
+        <div class="calc-progress" aria-label="Fortschritt im Rechner">
+          <span id="calc-step-label">Schritt 1 von 4</span>
+          <span id="calc-progress-value">25&nbsp;%</span>
+          <span class="calc-progress-track" aria-hidden="true"><span id="calc-progress-bar"></span></span>
+        </div>
+        <div class="calc-toolbar">
+          <span>Schrittweise Orientierung</span>
+          <button type="button" class="calc-close" id="calc-close" aria-expanded="true" aria-controls="calc-card">Kalkulator schließen</button>
+        </div>
+        <div class="calc-layout">
+          <form class="calc-stepper" id="calc-form" novalidate>
+            <div class="calc-step" data-calc-step="1">
+              <div class="calc-step-index">01 · VORSTAND</div>
+              <h3>Wie viele Personen tragen die Vorstandsarbeit aktiv?</h3>
+              <p class="calc-step-intro">Nicht die formale Zahl zählt, sondern wer regelmäßig Aufgaben übernimmt, Informationen sucht und Entscheidungen vorbereitet.</p>
+              <div class="calc-choice-grid" role="group" aria-label="Aktiv mitarbeitende Personen">
+                <button type="button" class="calc-choice" id="calc-first-choice" data-calc-choice="people" data-value="1" aria-pressed="false"><span class="calc-choice-title">Eine Person</span><span class="calc-choice-note">Viel Wissen an einer Stelle</span></button>
+                <button type="button" class="calc-choice is-selected" data-calc-choice="people" data-value="2" aria-pressed="true"><span class="calc-choice-title">2–3 Personen</span><span class="calc-choice-note">Kleines aktives Kernteam</span></button>
+                <button type="button" class="calc-choice" data-calc-choice="people" data-value="3" aria-pressed="false"><span class="calc-choice-title">4–5 Personen</span><span class="calc-choice-note">Mehr Übergaben im Alltag</span></button>
+                <button type="button" class="calc-choice" data-calc-choice="people" data-value="4" aria-pressed="false"><span class="calc-choice-title">6 oder mehr</span><span class="calc-choice-note">Viele Schnittstellen</span></button>
+              </div>
+            </div>
+            <div class="calc-step" data-calc-step="2" hidden>
+              <div class="calc-step-index">02 · ZEIT</div>
+              <h3>Wie viel Zeit fließt ungefähr in wiederkehrende Administration?</h3>
+              <p class="calc-step-intro">Gemeint sind Suchen, Abstimmen, Statuspflege, Listen und wiederkehrende Texte – nicht Training, Platzwartung oder Sitzungen selbst.</p>
+              <div class="calc-choice-grid" role="group" aria-label="Wöchentlicher administrativer Zeitaufwand">
+                <button type="button" class="calc-choice" data-calc-choice="hours" data-value="1" aria-pressed="false"><span class="calc-choice-title">1–3 Stunden</span><span class="calc-choice-note">Einzelne Aufgaben</span></button>
+                <button type="button" class="calc-choice is-selected" data-calc-choice="hours" data-value="2" aria-pressed="true"><span class="calc-choice-title">4–6 Stunden</span><span class="calc-choice-note">Regelmäßige Vereinsarbeit</span></button>
+                <button type="button" class="calc-choice" data-calc-choice="hours" data-value="3" aria-pressed="false"><span class="calc-choice-title">7–10 Stunden</span><span class="calc-choice-note">Viele wiederkehrende Abläufe</span></button>
+                <button type="button" class="calc-choice" data-calc-choice="hours" data-value="4" aria-pressed="false"><span class="calc-choice-title">11 oder mehr</span><span class="calc-choice-note">Hoher Verwaltungsdruck</span></button>
+              </div>
+            </div>
+            <div class="calc-step" data-calc-step="3" hidden>
+              <div class="calc-step-index">03 · ARBEITSBEREICHE</div>
+              <h3>Welche Bereiche laufen bei euch regelmäßig zusammen?</h3>
+              <p class="calc-step-intro">Wählt mindestens einen Bereich. Mehrere Bereiche bedeuten mehr Übergaben zwischen Listen, Personen und Terminen.</p>
+              <div class="calc-choice-grid is-multi" role="group" aria-label="Regelmäßig betroffene Arbeitsbereiche">
+                <button type="button" class="calc-choice is-selected" data-calc-choice="areas" data-value="members" aria-pressed="true"><span class="calc-choice-title">Mitglieder</span><span class="calc-choice-note">Anmeldungen, Beiträge, Kontakte</span></button>
+                <button type="button" class="calc-choice is-selected" data-calc-choice="areas" data-value="finance" aria-pressed="true"><span class="calc-choice-title">Finanzen</span><span class="calc-choice-note">Kasse, Belege, Berichte</span></button>
+                <button type="button" class="calc-choice" data-calc-choice="areas" data-value="courts" aria-pressed="false"><span class="calc-choice-title">Plätze &amp; Teams</span><span class="calc-choice-note">Training, Spielbetrieb, Saison</span></button>
+                <button type="button" class="calc-choice" data-calc-choice="areas" data-value="communication" aria-pressed="false"><span class="calc-choice-title">Kommunikation</span><span class="calc-choice-note">Aushänge, Newsletter, Website</span></button>
+                <button type="button" class="calc-choice" data-calc-choice="areas" data-value="partners" aria-pressed="false"><span class="calc-choice-title">Sponsoren &amp; Events</span><span class="calc-choice-note">Partner, Zusagen, Veranstaltungen</span></button>
+              </div>
+              <div class="calc-step-error" id="calc-step-error" role="alert" aria-live="polite"></div>
+            </div>
+            <div class="calc-step" data-calc-step="4" hidden>
+              <div class="calc-step-index">04 · VERTEILUNG</div>
+              <h3>Wie verteilt liegt diese Arbeit heute?</h3>
+              <p class="calc-step-intro">Je mehr Orte und Übergaben, desto mehr Zeit verschwindet in Suchen und Nachfragen.</p>
+              <div class="calc-choice-grid" role="group" aria-label="Verteilung der Verwaltungsarbeit">
+                <button type="button" class="calc-choice" data-calc-choice="spread" data-value="1" aria-pressed="false"><span class="calc-choice-title">Meist an einem Ort</span><span class="calc-choice-note">Ein System oder eine klare Ablage</span></button>
+                <button type="button" class="calc-choice is-selected" data-calc-choice="spread" data-value="2" aria-pressed="true"><span class="calc-choice-title">Auf 2–3 Orte verteilt</span><span class="calc-choice-note">Zum Beispiel Datei, Mail und Chat</span></button>
+                <button type="button" class="calc-choice" data-calc-choice="spread" data-value="3" aria-pressed="false"><span class="calc-choice-title">Überall verteilt</span><span class="calc-choice-note">Viele Listen, Ordner und Rückfragen</span></button>
+              </div>
+            </div>
+            <div class="calc-step-actions">
+              <button type="button" class="calc-back" id="calc-back" hidden>← Zurück</button>
+              <button type="button" class="btn btn-ghost" id="calc-next">Weiter</button>
+            </div>
+          </form>
+          <aside class="calc-result" data-od-id="calc-result" aria-labelledby="calc-result-title" tabindex="-1">
+            <div>
+              <div class="calc-output-kicker">Vorsichtige Orientierung</div>
+              <div class="calc-number" id="calc-hours" aria-label="Möglicher erster Hebel">ca. 4–8</div>
+              <div class="calc-unit" id="calc-result-title">Stunden möglicher erster Hebel / Monat</div>
+              <p class="calc-result-summary" id="calc-result-summary" role="status" aria-live="polite">Ein gemeinsamer Arbeitsstand könnte bei euch zuerst Such- und Abstimmungsarbeit reduzieren.</p>
+            </div>
+            <div class="calc-sources" aria-label="Wahrscheinliche Zeitquellen">
+              <div class="calc-source"><span>Suchen &amp; Abstimmen</span><span class="calc-source-bar"><span data-calc-source="search"></span></span></div>
+              <div class="calc-source"><span>Texte &amp; Dokumente</span><span class="calc-source-bar"><span data-calc-source="documents"></span></span></div>
+              <div class="calc-source"><span>Übergaben &amp; Status</span><span class="calc-source-bar"><span data-calc-source="handoffs"></span></span></div>
+            </div>
+            <p class="calc-result-note">Orientierung/Hypothese: aus einem begrenzten Wochenwert auf ca. 4,3 Wochen hochgerechnet. Keine Einspargarantie und kein ROI-Versprechen.</p>
+            <a href="pilot.html" class="btn btn-primary calc-result-cta">Pilotgespräch vereinbaren</a>
+            <button type="button" class="calc-back" id="calc-reset">Auswahl zurücksetzen</button>
+          </aside>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="features-section audience-section" data-od-id="audience-section">
     <div class="features-header reveal">
-      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Arbeitsbereiche für euren Alltag</div>
-      <h2 class="h2">Wo wir euch unterstützen können</h2>
-      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:620px;margin:0.75rem auto 0">Von Kasse und Mitgliedern bis Plätze, Sport und Kommunikation: Im Pilot schauen wir gemeinsam, welcher Bereich euch heute am meisten Zeit kostet und wo KlubOS zuerst sinnvoll helfen kann.</p>
+      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Für euren Vorstand</div>
+      <h2 class="h2">Jede Rolle findet schneller den nächsten Schritt.</h2>
+      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:560px;margin:0.75rem auto 0">KlubOS bringt Vorsitz, Kasse und Sport zusammen, ohne dass für jede Aufgabe ein neues Tool oder eine neue Liste entsteht.</p>
     </div>
     <div class="widget-grid-alt reveal" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
       <div class="widget-card role-card" data-od-id="role-vorsitz">
         <span class="role-card-index">01</span>
         <h3>Vorsitz</h3>
-        <p>Sieht offene Entscheidungen, Sitzungsgrundlagen und Aufgaben, die nicht verloren gehen dürfen.</p>
-        <div class="role-card-task">Nächste Vorstandssitzung vorbereiten <span>→</span></div>
+        <p>Sieht offene Entscheidungen, Sitzungsgrundlagen und Aufgaben, die im Vorstand weiterlaufen müssen.</p>
+        <div class="role-card-task">Sitzung vorbereiten <span>→</span></div>
       </div>
       <div class="widget-card role-card is-featured" data-od-id="role-kasse">
         <span class="role-card-index">02</span>
         <h3>Kasse</h3>
-        <p>Behält Einnahmen, Ausgaben und offene Punkte im Blick – mit Entwürfen, die geprüft werden können.</p>
-        <div class="role-card-task">Monatsbericht vorbereiten <span>→</span></div>
+        <p>Behält Einnahmen, Ausgaben und offene Punkte im Blick – mit dem aktuellen Stand für die nächste Besprechung.</p>
+        <div class="role-card-task">Monatsstand vorbereiten <span>→</span></div>
       </div>
       <div class="widget-card role-card" data-od-id="role-sport">
         <span class="role-card-index">03</span>
         <h3>Sport &amp; Jugend</h3>
-        <p>Plant Trainings, Mannschaften und Events, ohne jedes Mal bei verstreuten Listen anzufangen.</p>
-        <div class="role-card-task">Saisonstart strukturieren <span>→</span></div>
+        <p>Plant Trainings, Mannschaften und Events, ohne jedes Mal bei verstreuten Listen neu anzufangen.</p>
+        <div class="role-card-task">Saisonstart planen <span>→</span></div>
       </div>
     </div>
   </section>
 
-  <section class="features-section pilot-section" data-od-id="pilot-section">
+  <section id="pilot" class="features-section pilot-section" data-od-id="pilot-section">
     <div class="features-header reveal">
-      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Pilotphase</div>
-      <h2 class="h2">Ihr kennt euren Vereinsalltag am besten.</h2>
-      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:600px;margin:0.75rem auto 0">Im Pilot wählen wir gemeinsam den Bereich, der euch heute am meisten Zeit kostet, und prüfen daran, wo KlubOS euch konkret weiterhilft.</p>
+      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Gemeinsam starten</div>
+      <h2 class="h2">Ein klarer erster Workflow für euren Verein.</h2>
+      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:600px;margin:0.75rem auto 0">Im Gespräch schauen wir auf euren Vereinsalltag, wählen eine konkrete Aufgabe und klären offen, was KlubOS heute leisten kann und was als Nächstes entsteht.</p>
     </div>
     <div class="pilot-panel reveal">
-      <div class="pilot-panel-copy"><span class="pilot-marker">KlubOS / 01</span><h3>Ein sinnvoller erster Arbeitsbereich.</h3><p>Zum Beispiel Saisonstart, Vorstandssitzung oder Kassenbericht. Wir schauen gemeinsam, was bereits funktioniert, was euch heute bremst und welcher nächste Schritt realistisch ist.</p></div>
-      <div><div class="pilot-panel-flow" aria-label="Pilotablauf"><span>Verein kennenlernen</span><i>→</i><span>Workflow auswählen</span><i>→</i><span>Entwurf prüfen</span></div><a href="pilot.html" class="btn btn-primary" style="margin-top:1rem">Pilotgespräch vereinbaren</a></div>
+      <div class="pilot-panel-copy"><span class="pilot-marker">KlubOS / 01</span><h3>Ihr kennt euren Vereinsalltag am besten.</h3><p>Im Pilot wählen wir gemeinsam einen konkreten Einstieg – zum Beispiel Saisonstart, Vorstandssitzung oder Kassenbericht – und machen den Ablauf Schritt für Schritt greifbar.</p></div>
+      <div><div class="pilot-panel-flow" aria-label="Pilotablauf"><span>Verein kennenlernen</span><i>→</i><span>Aufgabe auswählen</span><i>→</i><span>Ergebnis prüfen</span></div><a href="pilot.html" class="btn btn-primary" style="margin-top:1rem">Pilotgespräch vereinbaren</a></div>
     </div>
   </section>
 
   <section class="features-section" data-od-id="faq-section">
     <div class="features-header reveal">
-      <div class="hero-eyebrow" style="margin-bottom:0.75rem">FAQ</div>
-      <h2 class="h2">Häufige Fragen.</h2>
+      <div class="hero-eyebrow" style="margin-bottom:0.75rem">Bevor ihr startet</div>
+      <h2 class="h2">Die Fragen, die im Vorstand zuerst auftauchen.</h2>
+      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:620px;margin:0.75rem auto 0">KlubOS soll in euren Vereinsalltag passen. Deshalb sagen wir klar, wofür der Pilot da ist, was ihr mitbringt und was noch gemeinsam entsteht.</p>
     </div>
-    <div class="calc-card reveal" style="max-width:800px" data-od-id="faq-list">
-      <details style="padding:1rem 0;border-bottom:0.5px solid var(--border)" open="">
-        <summary style="cursor:pointer;font-weight:600;color:var(--fg)">Was ist KlubOS genau?</summary>
-        <p style="color:var(--fg-muted);font-size:0.875rem;line-height:1.6;margin-top:0.75rem">KlubOS bündelt mehrere Arbeitsbereiche für die tägliche Vereinsarbeit – zum Beispiel Mitglieder, Finanzen, Plätze, Sponsoren und Kommunikation. Die Vereins-KI ist ein Teil davon und hilft bei konkreten Aufgaben.</p>
+    <div class="faq-grid reveal" data-od-id="faq-list">
+      <details class="faq-item" open="">
+        <summary><span class="faq-number">01</span><span class="faq-question"><span class="faq-category">Passung</span>Für welche Vereine ist KlubOS gedacht?</span><span class="faq-chevron" aria-hidden="true">+</span></summary>
+        <div class="faq-answer"><p>KlubOS startet mit deutschen Tennisvereinen und ihren Vorständen. Es passt besonders zu Vereinen, in denen mehrere Personen regelmäßig Mitglieder, Finanzen, Plätze, Kommunikation, Sponsoren oder Events organisieren.</p></div>
       </details>
-      <details style="padding:1rem 0;border-bottom:0.5px solid var(--border)">
-        <summary style="cursor:pointer;font-weight:600;color:var(--fg)">Müssen unsere Mitglieder KlubOS auch nutzen?</summary>
-        <p style="color:var(--fg-muted);font-size:0.875rem;line-height:1.6;margin-top:0.75rem">Im Pilot richtet sich KlubOS zunächst an den Vorstand. Welche Mitglieder später eingebunden werden, hängt vom jeweiligen Workflow und den Rollen im Verein ab.</p>
+      <details class="faq-item">
+        <summary><span class="faq-number">02</span><span class="faq-question"><span class="faq-category">Alltag</span>Was könnt ihr damit konkret erledigen?</span><span class="faq-chevron" aria-hidden="true">+</span></summary>
+        <div class="faq-answer"><p>Zum Beispiel einen Saison- oder Belegungsplan vorbereiten, Mitgliederstände zusammenbringen, einen Kassenbericht strukturieren, Vereinsinfos für Newsletter und Aushang aufbereiten oder Sponsoren- und Eventaufgaben im Blick behalten.</p></div>
       </details>
-      <details style="padding:1rem 0;border-bottom:0.5px solid var(--border)">
-        <summary style="cursor:pointer;font-weight:600;color:var(--fg)">Müssen wir unsere bisherigen Tools sofort ersetzen?</summary>
-        <p style="color:var(--fg-muted);font-size:0.875rem;line-height:1.6;margin-top:0.75rem">Nein. KlubOS startet mit einem klaren Workflow, der euch heute Zeit kostet. Welche Daten und Tools dabei sinnvoll einbezogen werden, klären wir gemeinsam.</p>
+      <details class="faq-item">
+        <summary><span class="faq-number">03</span><span class="faq-question"><span class="faq-category">Einstieg</span>Müssen wir Excel-, WhatsApp- oder Vereinsdaten sofort umziehen?</span><span class="faq-chevron" aria-hidden="true">+</span></summary>
+        <div class="faq-answer"><p>Nein. Im Gespräch wählen wir einen konkreten ersten Workflow. Dabei klären wir, welche Informationen dafür sinnvoll sind und was zunächst in euren bestehenden Ablagen bleiben kann.</p></div>
       </details>
-      <details style="padding:1rem 0;border-bottom:0.5px solid var(--border)">
-        <summary style="cursor:pointer;font-weight:600;color:var(--fg)">Wie starten wir mit unserem Verein?</summary>
-        <p style="color:var(--fg-muted);font-size:0.875rem;line-height:1.6;margin-top:0.75rem">Wir lernen euren Vorstand und euren Alltag kennen, wählen einen sinnvollen ersten Workflow und prüfen gemeinsam, was KlubOS dafür bereits leisten kann.</p>
+      <details class="faq-item">
+        <summary><span class="faq-number">04</span><span class="faq-question"><span class="faq-category">Pilot</span>Wie läuft das Pilotgespräch ab?</span><span class="faq-chevron" aria-hidden="true">+</span></summary>
+        <div class="faq-answer"><p>Ihr erzählt uns, wo im Vorstand gerade Zeit verloren geht. Gemeinsam wählen wir eine konkrete Aufgabe, besprechen den nötigen Kontext und klären, wie ein sinnvoller Pilot für euren Verein aussehen kann. Vorbereitung braucht ihr dafür keine besondere.</p></div>
       </details>
-      <details style="padding:1rem 0;border-bottom:0.5px solid var(--border)">
-        <summary style="cursor:pointer;font-weight:600;color:var(--fg)">Was passiert mit unseren Vereinsdaten?</summary>
-        <p style="color:var(--fg-muted);font-size:0.875rem;line-height:1.6;margin-top:0.75rem">Wir besprechen vor dem Pilot, welche Daten für den ersten Workflow wirklich benötigt werden. Datenschutz, Hosting und Zugriffsrechte werden transparent dokumentiert, bevor produktiv gearbeitet wird.</p>
+      <details class="faq-item">
+        <summary><span class="faq-number">05</span><span class="faq-question"><span class="faq-category">Zusammenarbeit</span>Wer im Vorstand arbeitet mit KlubOS?</span><span class="faq-chevron" aria-hidden="true">+</span></summary>
+        <div class="faq-answer"><p>KlubOS ist für Zusammenarbeit gedacht. Je nach Workflow können Vorsitz, Kasse, Sport, Jugend oder Kommunikation beteiligt sein. Rollen und Zugänge richten wir am Vereinsmodell aus.</p></div>
       </details>
-      <details style="padding:1rem 0">
-        <summary style="cursor:pointer;font-weight:600;color:var(--fg)">Was passiert nach dem Pilot?</summary>
-        <p style="color:var(--fg-muted);font-size:0.875rem;line-height:1.6;margin-top:0.75rem">Wir schauen gemeinsam auf den erreichten Nutzen, die nächsten sinnvollen Workflows und den passenden Umfang. Preise und Leistungsgrenzen werden transparent besprochen.</p>
+      <details class="faq-item">
+        <summary><span class="faq-number">06</span><span class="faq-question"><span class="faq-category">Pilotumfang</span>Was kostet der Pilot und was ist enthalten?</span><span class="faq-chevron" aria-hidden="true">+</span></summary>
+        <div class="faq-answer"><p>Preise und Umfang sind noch nicht final veröffentlicht. Im Gespräch klären wir transparent, welcher erste Workflow betrachtet wird, welche Zusammenarbeit dafür nötig ist und welcher nächste Schritt sinnvoll wäre.</p></div>
+      </details>
+      <details class="faq-item">
+        <summary><span class="faq-number">07</span><span class="faq-question"><span class="faq-category">Einordnung</span>Ist KlubOS schon fertig – und was unterscheidet es von Einzelsoftware oder einem KI-Tool?</span><span class="faq-chevron" aria-hidden="true">+</span></summary>
+        <div class="faq-answer"><p>KlubOS ist im Pilot und wird gemeinsam mit Vereinen weiter geschärft. Der Unterschied liegt im verbundenen Vorstandskontext: mehrere Arbeitsbereiche und konkrete Vereinsabläufe an einem Ort – ergänzt um eine Assistenzfunktion, nicht ersetzt durch einen einzelnen Chat.</p></div>
       </details>
     </div>
   </section>
 
-  <section class="features-section" data-od-id="final-cta-section">
+  <section id="gespraech" class="features-section" data-od-id="final-cta-section">
     <div class="features-header reveal">
-      <h2 class="h2">Macht aus Verwaltungsarbeit wieder Vorstandsarbeit.</h2>
-      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:620px;margin:0.75rem auto 0">Erzählt uns, welcher Workflow euch heute am meisten Zeit kostet. Gemeinsam finden wir den sinnvollsten Einstieg in KlubOS.</p>
+      <h2 class="h2">Schaut mit uns auf euren ersten Workflow.</h2>
+      <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:620px;margin:0.75rem auto 0">Erzählt uns, welche Aufgabe euch heute am meisten Zeit kostet. Gemeinsam prüfen wir, ob KlubOS euch dabei konkret entlasten kann.</p>
       <div class="hero-cta" style="justify-content:center;margin-top:2rem">
         <a href="pilot.html" class="btn btn-primary btn-lg">Pilotgespräch vereinbaren</a>
       </div>
@@ -2359,16 +2218,36 @@ header.landing-header {
   </section>
 </main>
 
-<footer class="landing-footer" data-od-id="landing-footer" style="width:min(420px,calc(100% - 2rem));margin:0 auto 1.25rem;padding:1.35rem 1.5rem 1.2rem;border:0.5px solid var(--border);border-radius:14px;box-shadow:0 14px 40px rgba(17,24,39,0.10);background:rgba(255,255,255,0.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0.7rem">
-  <a href="index.html" class="landing-footer-logo" aria-label="KlubOS Startseite">
-    <img src="/assets/klubos-favicon.png" alt="KlubOS" class="landing-footer-icon" width="32" height="32">
-  </a>
-  <div class="landing-footer-tagline" style="color:var(--fg-muted);font-size:0.8125rem;line-height:1.5">Gebaut für Vorstände</div>
-  <nav aria-label="Rechtliches" style="display:flex;align-items:center;justify-content:center;gap:0.75rem;font-size:0.6875rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg-dim)">
-    <a href="impressum.html" style="color:inherit">Impressum</a>
-    <span aria-hidden="true" style="width:3px;height:3px;border-radius:50%;background:var(--fg-dim);opacity:0.7"></span>
-    <a href="datenschutz.html" style="color:inherit">Datenschutz</a>
-  </nav>
+<footer class="landing-footer landing-footer-rich" data-od-id="landing-footer">
+  <div class="landing-footer-main">
+    <div class="landing-footer-brand">
+      <a href="index.html" class="landing-footer-logo" aria-label="KlubOS Startseite">
+        <img src="/assets/klubos-logo-soft.svg" alt="KlubOS" class="brand-logo-image landing-footer-logo-image">
+      </a>
+      <p class="landing-footer-tagline">Der verbundene Vorstandshub für deutsche Tennisvereine.</p>
+      <a class="landing-footer-contact" href="mailto:dohm@klubos.de">dohm@klubos.de</a>
+    </div>
+    <nav class="landing-footer-nav" aria-label="Website-Navigation">
+      <span>Auf dieser Seite</span>
+      <a href="#problem">Das Problem</a>
+      <a href="#system">So hilft KlubOS</a>
+      <a href="#ablauf">Ablauf</a>
+      <a href="#pilot">Pilotphase</a>
+    </nav>
+    <nav class="landing-footer-nav" aria-label="Weiterführende Links">
+      <span>Weiter</span>
+      <a href="pilot.html">Pilot besprechen</a>
+      <a href="login.html">Einloggen</a>
+      <a href="vereinssuche.html">Vereinssuche</a>
+    </nav>
+  </div>
+  <div class="landing-footer-bottom">
+    <span>KlubOS · Für Vorstände gebaut</span>
+    <nav aria-label="Rechtliches">
+      <a href="impressum.html">Impressum</a>
+      <a href="datenschutz.html">Datenschutz</a>
+    </nav>
+  </div>
 </footer>
 
 <script>
@@ -2841,7 +2720,6 @@ document.querySelectorAll('.landing-nav').forEach(nav => {
 // ── Small circles on grid intersections ──────────────────────
 
 const canvas = document.getElementById('site-grid-canvas');
-if (canvas) {
 const ctx = canvas.getContext('2d');
 const GRID = 60;
 const ACCENT = '187, 85, 34';
@@ -2986,98 +2864,189 @@ window.addEventListener('resize', () => {
 });
 
 startAnimation();
-}
-
-// ── Scroll-based comparison motion ──────────────────────────
-
-const comparisonSection = document.querySelector('[data-od-id="comparison-section"]');
-if (comparisonSection) {
-  const comparisonMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let comparisonFrame = null;
-
-  function updateComparisonMotion() {
-    const rect = comparisonSection.getBoundingClientRect();
-    const travel = Math.max(1, rect.height - window.innerHeight * 0.35);
-    const progress = comparisonMotion.matches
-      ? 1
-      : Math.min(1, Math.max(0, (window.innerHeight * 0.78 - rect.top) / travel));
-    comparisonSection.style.setProperty('--comparison-progress', progress.toFixed(3));
-    comparisonFrame = null;
-  }
-
-  function requestComparisonMotion() {
-    if (!comparisonFrame) comparisonFrame = requestAnimationFrame(updateComparisonMotion);
-  }
-
-  updateComparisonMotion();
-  window.addEventListener('scroll', requestComparisonMotion, { passive: true });
-  window.addEventListener('resize', requestComparisonMotion);
-  comparisonMotion.addEventListener?.('change', requestComparisonMotion);
-}
 
 // ── Calculator ────────────────────────────────────────────────
+(function initWorkloadCalculator() {
+  const form = document.getElementById('calc-form');
+  if (!form) return;
 
-const membersSlider = document.getElementById('calc-members');
-const membersVal = document.getElementById('calc-members-val');
-const calcHours = document.getElementById('calc-hours');
-const calcToggles = document.querySelectorAll('.calc-card [data-calc-toggle]');
-const calcToolButtons = document.querySelectorAll('.calc-card [data-calc-tool]');
-const calcIntro = document.querySelector('[data-calc-intro]');
-const calcWorkspace = document.querySelector('[data-calc-workspace]');
-const calcOpenButton = document.querySelector('[data-calc-open]');
+  const state = { step: 1, people: 2, hours: 2, areas: new Set(['members', 'finance']), spread: 2 };
+  const launchPanel = document.getElementById('calc-launch-panel');
+  const calcCard = document.getElementById('calc-card');
+  const openButton = document.getElementById('calc-open');
+  const closeButton = document.getElementById('calc-close');
+  const stepEls = Array.from(form.querySelectorAll('[data-calc-step]'));
+  const stepLabel = document.getElementById('calc-step-label');
+  const progressValue = document.getElementById('calc-progress-value');
+  const progressBar = document.getElementById('calc-progress-bar');
+  const backButton = document.getElementById('calc-back');
+  const nextButton = document.getElementById('calc-next');
+  const resetButton = document.getElementById('calc-reset');
+  const stepError = document.getElementById('calc-step-error');
+  const result = document.querySelector('[data-od-id="calc-result"]');
+  const resultHours = document.getElementById('calc-hours');
+  const resultSummary = document.getElementById('calc-result-summary');
+  let resultIsFinal = false;
+  const sourceBars = {
+    search: document.querySelector('[data-calc-source="search"]'),
+    documents: document.querySelector('[data-calc-source="documents"]'),
+    handoffs: document.querySelector('[data-calc-source="handoffs"]')
+  };
 
-function calcHoursSaved() {
-  const members = parseInt(membersSlider.value);
-  const activeToggles = document.querySelectorAll('.calc-card [data-calc-toggle].active');
-  const activeTool = document.querySelector('.calc-card [data-calc-tool].active');
-  const activities = { instagram: false, tiktok: false, youtube: false, magazine: false };
-  activeToggles.forEach(control => { activities[control.dataset.act] = true; });
-  // This is an orientation in hours per month, not a promise of exact savings.
-  // Keep the estimate bounded and explainable: club complexity, communication
-  // work, recurring publications, and the presence of existing tools.
-  const memberWork = Math.min(7, 2 + Math.sqrt(Math.max(members, 0)) / 22);
-  let activityHours = 0;
-  if (activities.instagram) activityHours += 1.5;
-  if (activities.tiktok)    activityHours += 1.5;
-  if (activities.youtube)   activityHours += 2;
-  if (activities.magazine)  activityHours += 3.5;
-  const toolFactor = activeTool && activeTool.dataset.calcTool === 'yes' ? 0.82 : 1;
-  const totalHours = (memberWork + activityHours + 1.5) * toolFactor;
-  const savings = Math.max(3, Math.round(totalHours));
-  calcHours.textContent = savings;
-}
+  const hourRanges = {
+    1: { label: '1–3 Stunden', midpoint: 2 },
+    2: { label: '4–6 Stunden', midpoint: 5 },
+    3: { label: '7–10 Stunden', midpoint: 8.5 },
+    4: { label: '11 oder mehr', midpoint: 11 }
+  };
+  const monthlyRanges = { 1: '4–8', 2: '6–10', 3: '8–12' };
+  const peopleLabels = { 1: 'eine Person', 2: '2–3 Personen', 3: '4–5 Personen', 4: '6 oder mehr Personen' };
+  const areaLabels = { members: 'Mitglieder', finance: 'Finanzen', courts: 'Plätze & Teams', communication: 'Kommunikation', partners: 'Sponsoren & Events' };
 
-function updateSliderDisplay() {
-  const members = parseInt(membersSlider.value);
-  membersVal.textContent = members >= 5000 ? '5000+' : members.toLocaleString('de-DE');
-  calcHoursSaved();
-}
+  function getModel() {
+    const areaCount = state.areas.size;
+    const base = hourRanges[state.hours].midpoint;
+    const peopleFactor = [0, 0.9, 1, 1.05, 1.1][state.people];
+    const areaFactor = 0.88 + Math.min(areaCount, 5) * 0.045;
+    const spreadFactor = [0, 0.78, 1, 1.22][state.spread];
+    const workload = Math.round(base * peopleFactor * areaFactor * spreadFactor * 10) / 10;
+    const leverageFactor = 0.08 + areaCount * 0.018 + (state.spread - 1) * 0.035;
+    const firstLever = Math.max(1, Math.min(3, Math.round(workload * leverageFactor)));
+    const monthlyRange = monthlyRanges[firstLever];
+    const search = Math.round(35 + (state.spread * 12) + (areaCount * 4));
+    const documents = Math.round(25 + (state.hours * 5) + (state.people === 1 ? 8 : 0));
+    const handoffs = Math.max(15, 100 - search - documents);
+    return { areaCount, workload, firstLever, monthlyRange, search, documents, handoffs };
+  }
 
-membersSlider.addEventListener('input', updateSliderDisplay);
-calcToggles.forEach(control => {
-  control.addEventListener('click', () => {
-    const active = !control.classList.contains('active');
-    control.classList.toggle('active', active);
-    control.setAttribute('aria-pressed', String(active));
-    calcHoursSaved();
+  function paintResult(animate = true) {
+    const model = getModel();
+    resultHours.textContent = `ca. ${model.monthlyRange}`;
+    resultSummary.textContent = `${hourRanges[state.hours].label} wiederkehrende Administration, verteilt auf ${model.areaCount} ${model.areaCount === 1 ? 'Bereich' : 'Bereiche'} und ${peopleLabels[state.people]}. Das entspricht als mögliche erste Orientierung ca. ${model.monthlyRange} Stunden pro Monat – aus einem begrenzten Wochenwert hochgerechnet.`;
+    sourceBars.search.style.width = `${model.search}%`;
+    sourceBars.documents.style.width = `${model.documents}%`;
+    sourceBars.handoffs.style.width = `${model.handoffs}%`;
+    if (animate) {
+      result.classList.remove('is-updated');
+      requestAnimationFrame(() => result.classList.add('is-updated'));
+    }
+  }
+
+  function paintStep() {
+    stepEls.forEach(step => { step.hidden = Number(step.dataset.calcStep) !== state.step; });
+    const percentage = Math.round((state.step / stepEls.length) * 100);
+    stepLabel.textContent = `Schritt ${state.step} von ${stepEls.length}`;
+    progressValue.innerHTML = `${percentage}&nbsp;%`;
+    progressBar.style.width = `${percentage}%`;
+    backButton.hidden = state.step === 1;
+    nextButton.disabled = false;
+    nextButton.textContent = state.step === stepEls.length
+      ? (resultIsFinal ? 'Ergebnis sichtbar' : 'Ergebnis ansehen')
+      : 'Weiter';
+    if (state.step !== stepEls.length) resultIsFinal = false;
+    if (stepError) stepError.textContent = '';
+  }
+
+  function openCalculator() {
+    state.step = 1;
+    resultIsFinal = false;
+    launchPanel.hidden = true;
+    calcCard.hidden = false;
+    openButton.setAttribute('aria-expanded', 'true');
+    closeButton.setAttribute('aria-expanded', 'true');
+    paintStep();
+    paintResult(false);
+    document.getElementById('calc-first-choice')?.focus({ preventScroll: true });
+  }
+
+  function closeCalculator() {
+    state.step = 1;
+    resultIsFinal = false;
+    calcCard.hidden = true;
+    launchPanel.hidden = false;
+    openButton.setAttribute('aria-expanded', 'false');
+    closeButton.setAttribute('aria-expanded', 'false');
+    openButton.focus();
+  }
+
+  function selectChoice(button) {
+    const type = button.dataset.calcChoice;
+    const value = button.dataset.value;
+    if (type === 'areas') {
+      if (state.areas.has(value) && state.areas.size === 1) {
+        stepError.textContent = 'Wählt mindestens einen Arbeitsbereich aus.';
+        return;
+      }
+      state.areas.has(value) ? state.areas.delete(value) : state.areas.add(value);
+      button.classList.toggle('is-selected', state.areas.has(value));
+      button.setAttribute('aria-pressed', String(state.areas.has(value)));
+    } else {
+      state[type] = Number(value);
+      document.querySelectorAll(`[data-calc-choice="${type}"]`).forEach(choice => {
+        const selected = choice.dataset.value === value;
+        choice.classList.toggle('is-selected', selected);
+        choice.setAttribute('aria-pressed', String(selected));
+      });
+    }
+    if (stepError) stepError.textContent = '';
+    if (state.step === stepEls.length) {
+      resultIsFinal = false;
+      nextButton.disabled = false;
+      nextButton.textContent = 'Ergebnis ansehen';
+    }
+    paintResult();
+  }
+
+  openButton.addEventListener('click', openCalculator);
+  closeButton.addEventListener('click', closeCalculator);
+  form.querySelectorAll('[data-calc-choice]').forEach(button => button.addEventListener('click', () => selectChoice(button)));
+  nextButton.addEventListener('click', () => {
+    if (state.step === 3 && state.areas.size === 0) {
+      stepError.textContent = 'Wählt mindestens einen Arbeitsbereich aus.';
+      return;
+    }
+    if (state.step < stepEls.length) {
+      state.step += 1;
+      paintStep();
+      paintResult();
+    } else {
+      resultIsFinal = true;
+      result.classList.remove('is-result-focused');
+      result.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'center'
+      });
+      requestAnimationFrame(() => {
+        result.classList.add('is-result-focused');
+        result.focus({ preventScroll: true });
+      });
+      nextButton.textContent = 'Ergebnis sichtbar';
+      nextButton.disabled = true;
+      window.setTimeout(() => result.classList.remove('is-result-focused'), 1800);
+    }
   });
-});
-calcToolButtons.forEach(control => {
-  control.addEventListener('click', () => {
-    calcToolButtons.forEach(button => {
-      const active = button === control;
-      button.classList.toggle('active', active);
-      button.setAttribute('aria-pressed', String(active));
+  backButton.addEventListener('click', () => {
+    if (state.step > 1) { state.step -= 1; paintStep(); }
+  });
+  resetButton.addEventListener('click', () => {
+    state.step = 1;
+    resultIsFinal = false;
+    state.people = 2;
+    state.hours = 2;
+    state.areas = new Set(['members', 'finance']);
+    state.spread = 2;
+    form.querySelectorAll('[data-calc-choice]').forEach(button => {
+      const type = button.dataset.calcChoice;
+      const selected = type === 'areas' ? state.areas.has(button.dataset.value) : Number(button.dataset.value) === state[type];
+      button.classList.toggle('is-selected', selected);
+      button.setAttribute('aria-pressed', String(selected));
     });
-    calcHoursSaved();
+    paintStep();
+    paintResult();
   });
-});
-calcOpenButton?.addEventListener('click', () => {
-  if (!calcIntro || !calcWorkspace) return;
-  calcIntro.hidden = true;
-  calcWorkspace.hidden = false;
-  updateSliderDisplay();
-});
+
+  paintResult(false);
+})();
 </script>
 
 
