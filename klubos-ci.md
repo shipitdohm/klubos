@@ -153,9 +153,9 @@ KlubOS nutzt eine zurückhaltende Glass-/Operating-System-Anmutung:
 
 - Line-Icons in SVG, `currentColor`, ca. 1–2px Strichstärke.
 - Icons sind Orientierungshilfe, nicht Dekoration.
-- Das freigegebene Hauptlogo ist **B Soft**: `assets/klubos-logo-soft.svg` als horizontales Icon-plus-Wortzeichen-Lockup mit gemischt geschriebener Wortmarke `KlubOS`. Für dunkle oder terrakottafarbene Flächen wird `assets/klubos-logo-soft-white.svg` verwendet.
-- Das freigegebene App Icon ist **D**: `assets/klubos-app-icon.svg` ohne Wortzeichen. Es besteht aus dem Soft-Mark in einem abgerundeten Quadrat; die helle Gegenvariante liegt als `assets/klubos-app-icon-white.svg` vor. Beide werden für Favicon und kompakte App-Kontexte verwendet.
-- Das Wortzeichen ist als SVG-Text mit Canva-Sans-Präferenz und Satoshi/Avenir-Next/Manrope-Fallback angelegt. Für eine vollständig font-unabhängige Druck-/Brandmaster-Version kann es später in Pfade umgewandelt werden; bis dahin keine alternative Wortmarke erfinden.
+- Das verbindliche Hauptlogo ist die exakt gelieferte PNG-Wort-Bild-Marke `assets/klubos-logo-long-black.png` für helle Flächen. Für dunkle oder terrakottafarbene Flächen wird `assets/klubos-logo-long-white.png` verwendet. Im Landingpage-Footer wird ausschließlich das Favicon verwendet.
+- Das verbindliche App Icon und Favicon ist `assets/klubos-favicon.png` ohne Wortzeichen.
+- Die Originalvorlagen liegen unter `assets/source/`. Ihre Hintergründe wurden entfernt; Logoform, Wortmarke, Proportionen und Farben wurden nicht neu gezeichnet. Keine alternative Wortmarke in HTML/CSS, kein neues SVG und keine konkurrierende Logo-Variante anlegen.
 
 ## 7. Bewegung
 
