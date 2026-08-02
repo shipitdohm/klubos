@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pilot besprechen — KlubOS</title>
 <link rel="stylesheet" href="css/style.css">
+<script src="js/site-config.js"></script>
 <style>
   body.pilot-page {
     min-height: 100vh;
@@ -45,7 +46,7 @@
     align-items: center;
   }
 
-  .pilot-brand img { height: 1.6rem; }
+  .pilot-brand img { height: 1.25rem; }
 
   .pilot-topbar-meta {
     display: inline-flex;
@@ -274,29 +275,41 @@
   .pilot-actions .btn { min-height: 46px; }
   .pilot-back-link { color: var(--fg-muted); font-size: 0.78rem; text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 3px; }
 
-  .pilot-calendar {
+  .pilot-booking {
     display: grid;
     gap: 0.85rem;
     margin-top: 1.55rem;
   }
 
-  .pilot-calendar-note {
-    padding: 0.75rem 0.85rem;
-    border: 0.5px solid rgba(187,85,34,0.2);
-    border-radius: 12px;
-    background: rgba(187,85,34,0.055);
-    color: var(--fg-muted);
-    font-size: 0.74rem;
-    line-height: 1.45;
+  .pilot-booking-card {
+    display: grid;
+    gap: 0.45rem;
+    padding: 1rem;
+    border: 0.5px solid var(--border);
+    border-radius: 15px;
+    background: rgba(255,255,255,0.58);
   }
 
-  .pilot-date-group { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 0.8rem; align-items: start; }
-  .pilot-date-label { padding-top: 0.55rem; color: var(--fg-muted); font-size: 0.78rem; line-height: 1.25; }
-  .pilot-date-label strong { display: block; color: var(--fg); font-size: 0.9rem; }
-  .pilot-slots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.55rem; }
-  .pilot-slot { min-height: 42px; padding: 0.55rem 0.7rem; border: 0.5px solid var(--border); border-radius: 11px; background: rgba(255,255,255,0.74); color: var(--fg-muted); font-size: 0.78rem; text-align: left; transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease; }
-  .pilot-slot:hover { transform: translateY(-2px); border-color: rgba(187,85,34,0.35); color: var(--fg); background: #fff; }
-  .pilot-slot[aria-pressed="true"] { border-color: var(--accent); background: rgba(187,85,34,0.09); color: var(--accent); box-shadow: 0 8px 20px rgba(187,85,34,0.1); }
+  .pilot-booking-card.is-ready { border-color: rgba(187,85,34,0.24); background: rgba(187,85,34,0.055); }
+  .pilot-booking-card.is-fallback { border-color: rgba(168,118,29,0.26); background: rgba(168,118,29,0.055); }
+  .pilot-booking-card strong { color: var(--fg); font-size: 0.86rem; }
+  .pilot-booking-card p { color: var(--fg-muted); font-size: 0.75rem; line-height: 1.5; }
+  .pilot-booking-card .btn { justify-self: start; margin-top: 0.35rem; }
+  .pilot-booking-status { color: var(--fg-dim); font-size: 0.68rem; line-height: 1.45; }
+
+  .pilot-context-note {
+    display: grid;
+    gap: 0.25rem;
+    margin-top: 1.1rem;
+    padding: 0.8rem 0.9rem;
+    border-left: 2px solid rgba(187,85,34,0.38);
+    background: rgba(187,85,34,0.045);
+    color: var(--fg-muted);
+    font-size: 0.74rem;
+    line-height: 1.5;
+  }
+
+  .pilot-context-note strong { color: var(--fg); font-size: 0.78rem; }
 
   .pilot-selected-slot {
     min-height: 42px;
@@ -357,16 +370,13 @@
     .pilot-form-group.is-wide { grid-column: auto; }
     .pilot-actions { align-items: stretch; flex-direction: column-reverse; }
     .pilot-actions .btn, .pilot-actions .pilot-back-link { width: 100%; text-align: center; }
-    .pilot-date-group { grid-template-columns: 1fr; gap: 0.45rem; }
-    .pilot-date-label { padding-top: 0; }
-    .pilot-slots { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .pilot-review-row { align-items: flex-start; flex-direction: column; gap: 0.12rem; }
     .pilot-review-row strong { text-align: left; }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .pilot-step, .pilot-success { animation: none; }
-    .pilot-slot, .pilot-rail-step { transition: none; }
+    .pilot-rail-step { transition: none; }
   }
 </style>
 </head>
@@ -374,7 +384,7 @@
 
 <header class="pilot-topbar">
   <a href="index.html" class="pilot-brand" aria-label="KlubOS Startseite">
-    <img src="/assets/klubos-logo-soft-white.svg" alt="KlubOS" class="brand-logo-image">
+    <img src="/assets/klubos-logo-long-black.png" alt="KlubOS" class="brand-logo-image">
   </a>
   <div class="pilot-topbar-meta"><span>Kein Login nötig</span><a href="login.html" class="btn btn-ghost">Einloggen</a></div>
 </header>
@@ -387,18 +397,22 @@
 
     <div class="pilot-rail" aria-label="Pilotablauf">
       <div class="pilot-rail-step is-active" data-rail-step="1"><span>01</span><span>Verein &amp; Bedarf</span></div>
-      <div class="pilot-rail-step" data-rail-step="2"><span>02</span><span>Gespräch</span></div>
-      <div class="pilot-rail-step" data-rail-step="3"><span>03</span><span>Einrichtung</span></div>
+      <div class="pilot-rail-step" data-rail-step="2"><span>02</span><span>Termin / Anfrage</span></div>
+      <div class="pilot-rail-step" data-rail-step="3"><span>03</span><span>Nächster Schritt</span></div>
     </div>
 
-    <div class="pilot-intro-note">Keine öffentliche Registrierung. Nach der Pilotfreigabe wird euer geschützter Vereinsbereich automatisch vorbereitet.</div>
+    <div class="pilot-intro-note">Keine öffentliche Registrierung. Im Gespräch klären wir gemeinsam, welcher erste Workflow sinnvoll ist und was dafür eingerichtet werden muss.</div>
   </section>
 
   <section class="pilot-card" id="pilot-card" aria-live="polite">
     <div class="pilot-step" data-step-panel="1">
       <div class="pilot-step-index">01 / Verein &amp; Bedarf</div>
-      <h2>Erzählt uns kurz von eurem Verein.</h2>
+      <h2 tabindex="-1">Erzählt uns kurz von eurem Verein.</h2>
       <p class="pilot-step-copy">Die Angaben helfen uns, das erste Gespräch direkt auf euren Alltag und den sinnvollsten Workflow auszurichten.</p>
+      <div class="pilot-context-note" id="pilot-calculator-context" hidden>
+        <strong>Aus dem Kalkulator übernommen</strong>
+        <span id="pilot-calculator-context-copy"></span>
+      </div>
 
       <form class="pilot-form" id="pilot-form">
         <div class="pilot-form-grid">
@@ -456,63 +470,52 @@
     </div>
 
     <div class="pilot-step" data-step-panel="2" hidden>
-      <div class="pilot-step-index">02 / Gespräch</div>
-      <h2>Wann passt ein erstes Gespräch?</h2>
-      <p class="pilot-step-copy">Wählt einen passenden Slot für 30 Minuten. Im Livebetrieb wird diese Auswahl direkt mit deinem Kalender verbunden.</p>
+      <div class="pilot-step-index">02 / Termin oder Anfrage</div>
+      <h2 tabindex="-1">Der nächste Schritt bleibt klar.</h2>
+      <p class="pilot-step-copy">Wenn ein Kalender verbunden ist, wählt ihr euren Termin direkt beim Buchungsanbieter. Bis dahin könnt ihr euer Interesse ohne veraltete Beispielzeiten senden.</p>
 
-      <div class="pilot-calendar">
-        <div class="pilot-calendar-note"><strong>Beispielhafte Zeiten für den klickbaren Flow.</strong><br>Vor dem Go-live wird dieser Bereich durch deinen echten Kalender ersetzt.</div>
-        <div class="pilot-date-group">
-          <div class="pilot-date-label"><strong>Di, 21. Juli</strong>Diese Woche</div>
-          <div class="pilot-slots">
-            <button class="pilot-slot" type="button" data-slot="Dienstag, 21. Juli · 18:00 Uhr" aria-pressed="false">18:00 Uhr</button>
-            <button class="pilot-slot" type="button" data-slot="Dienstag, 21. Juli · 18:30 Uhr" aria-pressed="false">18:30 Uhr</button>
-          </div>
+      <div class="pilot-booking" id="pilot-booking">
+        <div class="pilot-booking-card is-ready" id="pilot-booking-ready" hidden>
+          <strong id="pilot-booking-ready-title">Termin im Kalender auswählen</strong>
+          <p id="pilot-booking-ready-copy">Der Kalender öffnet sich in einem neuen Tab. Danach kommt ihr hierher zurück und bestätigt, dass ihr einen Termin gewählt habt.</p>
+          <a class="btn btn-primary" id="pilot-booking-link" href="#" target="_blank" rel="noopener">Kalender öffnen <span aria-hidden="true">↗</span></a>
+          <button type="button" class="btn btn-ghost" id="pilot-booking-confirm">Ich habe einen Termin gewählt</button>
+          <span class="pilot-booking-status" id="pilot-booking-provider"></span>
         </div>
-        <div class="pilot-date-group">
-          <div class="pilot-date-label"><strong>Do, 23. Juli</strong>Diese Woche</div>
-          <div class="pilot-slots">
-            <button class="pilot-slot" type="button" data-slot="Donnerstag, 23. Juli · 17:30 Uhr" aria-pressed="false">17:30 Uhr</button>
-            <button class="pilot-slot" type="button" data-slot="Donnerstag, 23. Juli · 19:00 Uhr" aria-pressed="false">19:00 Uhr</button>
-          </div>
+        <div class="pilot-booking-card is-fallback" id="pilot-booking-fallback">
+          <strong>Terminabstimmung auf Anfrage</strong>
+          <p>Der echte Kalender ist noch nicht verbunden. Eure Angaben werden deshalb als ehrliche Anfrage vorbereitet – ohne erfundene Termine.</p>
         </div>
-        <div class="pilot-date-group">
-          <div class="pilot-date-label"><strong>Mo, 27. Juli</strong>Nächste Woche</div>
-          <div class="pilot-slots">
-            <button class="pilot-slot" type="button" data-slot="Montag, 27. Juli · 18:00 Uhr" aria-pressed="false">18:00 Uhr</button>
-            <button class="pilot-slot" type="button" data-slot="Montag, 27. Juli · 18:30 Uhr" aria-pressed="false">18:30 Uhr</button>
-          </div>
-        </div>
-        <div class="pilot-selected-slot" id="pilot-selected-slot" hidden><span>Ausgewählter Termin</span><strong id="pilot-selected-slot-value"></strong></div>
+        <div class="pilot-selected-slot" id="pilot-selected-slot" hidden><span id="pilot-selected-slot-label">Ausgewählter nächster Schritt</span><strong id="pilot-selected-slot-value"></strong></div>
       </div>
 
       <div class="pilot-actions">
         <button type="button" class="pilot-back-link" data-go-step="1">← Angaben ändern</button>
-        <button type="button" class="btn btn-primary" id="pilot-review-button" data-go-step="3" disabled>Zusammenfassung ansehen <span aria-hidden="true">→</span></button>
+        <button type="button" class="btn btn-primary" id="pilot-review-button" data-go-step="3">Zusammenfassung ansehen <span aria-hidden="true">→</span></button>
       </div>
     </div>
 
     <div class="pilot-step" data-step-panel="3" hidden>
       <div class="pilot-step-index">03 / Bestätigen</div>
-      <h2>Ein klarer nächster Schritt.</h2>
-      <p class="pilot-step-copy">Prüft die Angaben noch einmal. Danach ist der Pilotgespräch-Flow abgeschlossen.</p>
+      <h2 tabindex="-1">Ein klarer nächster Schritt.</h2>
+      <p class="pilot-step-copy">Prüft die Angaben noch einmal. Danach könnt ihr die Anfrage per E-Mail öffnen und den vereinbarten nächsten Schritt festhalten.</p>
       <div class="pilot-review" id="pilot-review"></div>
       <div class="pilot-actions">
         <button type="button" class="pilot-back-link" data-go-step="2">← Termin ändern</button>
-        <button type="button" class="btn btn-primary" id="pilot-confirm-button">Pilotgespräch vorbereiten <span aria-hidden="true">→</span></button>
+        <button type="button" class="btn btn-primary" id="pilot-confirm-button">Anfrage per E-Mail öffnen <span aria-hidden="true">→</span></button>
       </div>
     </div>
 
     <div class="pilot-success" id="pilot-success" hidden>
       <div class="pilot-success-mark" aria-hidden="true">✓</div>
       <div class="pilot-eyebrow">Pilot / Nächster Schritt</div>
-      <h2>Der Pilot ist vorbereitet.</h2>
-      <p id="pilot-success-copy">Die Angaben sind für das erste Gespräch zusammengefasst. Nach der Freigabe wird euer Vereinsbereich automatisch vorbereitet.</p>
+      <h2>Die Anfrage ist vorbereitet.</h2>
+      <p id="pilot-success-copy">Eure Angaben bleiben als Grundlage für das erste Gespräch erhalten. Öffnet jetzt die E-Mail und sendet sie an KlubOS.</p>
       <div class="pilot-success-actions">
         <a class="btn btn-primary" id="pilot-mail-link" href="mailto:dohm@klubos.de">Anfrage per E-Mail öffnen</a>
         <a class="btn btn-ghost" href="index.html">Zur Website</a>
       </div>
-      <div class="pilot-success-note">Der klickbare Prototyp nutzt Beispieltermine. Vor dem Go-live wird der Kalender direkt verbunden und die Anfrage automatisch in den Pilotprozess übernommen.</div>
+      <div class="pilot-success-note">Der Termin wird – sofern verbunden – beim ausgewählten Buchungsanbieter gebucht. Die Pilotanfrage selbst öffnet sich als E-Mail, damit ihr sie vor dem Versand prüfen könnt.</div>
     </div>
   </section>
 </main>
@@ -527,13 +530,29 @@
     website: params.get('website') || '',
     source: params.get('source') || 'website',
     slot: '',
+    calculatorMonthly: params.get('calculatorMonthly') || '',
+    calculatorWorkload: params.get('calculatorWorkload') || '',
+    calculatorAreas: params.get('calculatorAreas') || '',
   };
+
+  const siteConfig = window.KLUBOS_SITE_CONFIG || {};
+  const bookingUrl = typeof siteConfig.bookingUrl === 'string' && /^https?:\/\//i.test(siteConfig.bookingUrl)
+    ? siteConfig.bookingUrl
+    : '';
+  const bookingProvider = String(siteConfig.bookingProvider || '').trim();
 
   const form = document.getElementById('pilot-form');
   const clubInput = document.getElementById('pilot-verein');
   const clubHint = document.getElementById('pilot-verein-hint');
   const selectedSlot = document.getElementById('pilot-selected-slot');
   const selectedSlotValue = document.getElementById('pilot-selected-slot-value');
+  const bookingReady = document.getElementById('pilot-booking-ready');
+  const bookingFallback = document.getElementById('pilot-booking-fallback');
+  const bookingLink = document.getElementById('pilot-booking-link');
+  const bookingProviderNote = document.getElementById('pilot-booking-provider');
+  const bookingConfirm = document.getElementById('pilot-booking-confirm');
+  const calculatorContext = document.getElementById('pilot-calculator-context');
+  const calculatorContextCopy = document.getElementById('pilot-calculator-context-copy');
   const review = document.getElementById('pilot-review');
   const reviewButton = document.getElementById('pilot-review-button');
   const confirmButton = document.getElementById('pilot-confirm-button');
@@ -547,6 +566,35 @@
     clubInput.readOnly = true;
     clubHint.textContent = 'Aus der Vereinssuche übernommen – im Gespräch prüfen wir die Vereinszuordnung gemeinsam.';
   }
+
+  function setupBooking() {
+    const hasBooking = Boolean(bookingUrl);
+    bookingReady.hidden = !hasBooking;
+    bookingFallback.hidden = hasBooking;
+    reviewButton.disabled = hasBooking;
+    if (hasBooking) {
+      bookingLink.href = bookingUrl;
+      bookingProviderNote.textContent = bookingProvider
+        ? `Buchungsanbieter: ${bookingProvider}.`
+        : 'Externer Buchungskalender.';
+    } else {
+      state.slot = 'Terminabstimmung auf Anfrage';
+      selectedSlotValue.textContent = state.slot;
+      selectedSlot.hidden = false;
+    }
+  }
+
+  function setupCalculatorContext() {
+    if (!state.calculatorMonthly && !state.calculatorAreas) return;
+    const pieces = [];
+    if (state.calculatorMonthly) pieces.push(`möglicher erster Hebel: ca. ${state.calculatorMonthly} Stunden pro Monat`);
+    if (state.calculatorAreas) pieces.push(`Bereiche: ${state.calculatorAreas.replaceAll(',', ', ')}`);
+    calculatorContextCopy.textContent = `${pieces.join(' · ')}. Wir nehmen diese Orientierung als Gesprächsgrundlage – nicht als Einsparversprechen.`;
+    calculatorContext.hidden = false;
+  }
+
+  setupBooking();
+  setupCalculatorContext();
 
   function readForm() {
     const data = new FormData(form);
@@ -586,15 +634,13 @@
     });
   });
 
-  document.querySelectorAll('[data-slot]').forEach((button) => {
-    button.addEventListener('click', function () {
-      document.querySelectorAll('[data-slot]').forEach((item) => item.setAttribute('aria-pressed', 'false'));
-      button.setAttribute('aria-pressed', 'true');
-      state.slot = button.dataset.slot;
-      selectedSlotValue.textContent = state.slot;
-      selectedSlot.hidden = false;
-      reviewButton.disabled = false;
-    });
+  bookingConfirm?.addEventListener('click', function () {
+    state.slot = `Termin über ${bookingProvider || 'den Buchungskalender'} ausgewählt`;
+    selectedSlotValue.textContent = state.slot;
+    selectedSlot.hidden = false;
+    reviewButton.disabled = false;
+    bookingConfirm.disabled = true;
+    bookingConfirm.textContent = 'Termin bestätigt';
   });
 
   function renderReview() {
@@ -604,7 +650,8 @@
       ['Ansprechpartner', state.name],
       ['Rolle', state.rolle],
       ['Erster Workflow', state.workflow],
-      ['Gespräch', state.slot],
+      ['Nächster Schritt', state.slot],
+      ...(state.calculatorMonthly ? [['Kalkulator', `ca. ${state.calculatorMonthly} Stunden möglicher erster Hebel / Monat`]] : []),
     ];
     rows.forEach(([label, value]) => {
       const row = document.createElement('div');
@@ -629,7 +676,10 @@
       'Rolle: ' + state.rolle,
       'Vereinsgröße: ' + state.groesse,
       'Erster Workflow: ' + state.workflow,
-      'Gespräch: ' + state.slot,
+      'Nächster Schritt: ' + state.slot,
+      state.calculatorMonthly ? 'Kalkulator-Orientierung: ca. ' + state.calculatorMonthly + ' Stunden möglicher erster Hebel / Monat' : '',
+      state.calculatorAreas ? 'Kalkulator-Bereiche: ' + state.calculatorAreas.replaceAll(',', ', ') : '',
+      bookingProvider ? 'Buchungsanbieter: ' + bookingProvider : '',
       '',
       'Quelle: ' + state.source,
     ].join('\n');
