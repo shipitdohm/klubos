@@ -333,19 +333,21 @@ header.landing-header {
 @keyframes bridgePulse { 0%, 100% { opacity: 0.28; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.35); } }
 @keyframes comparisonRowIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .comparison-note { max-width: 620px; margin: 1.35rem auto 0; color: var(--fg-dim); font-size: 0.75rem; text-align: center; }
-.audience-section { position: relative; z-index: 1; isolation: isolate; max-width: none; margin: 0; padding-inline: max(1.25rem, calc((100vw - 1160px) / 2)); background: rgba(255,255,255,0.9); border-top: 0.5px solid rgba(17,24,39,0.07); border-bottom: 0.5px solid rgba(17,24,39,0.07); }
-.role-card { position: relative; overflow: visible; min-height: 230px; }
+.audience-section { position: relative; z-index: 1; isolation: isolate; max-width: none; margin: 0; padding-inline: max(1.25rem, calc((100vw - 1160px) / 2)); background: #fff; border-top: 0; border-bottom: 0; }
+.audience-section .features-header { margin-bottom: clamp(4.5rem, 7vw, 6rem); }
+.audience-section .widget-grid-alt { margin-top: 0; }
+.role-card { position: relative; overflow: visible; min-height: 315px; padding-top: 1.75rem; }
 .role-card-vorsitz { --role-accent: var(--accent); }
 .role-card-kasse { --role-accent: var(--warning); }
 .role-card-sport { --role-accent: var(--success); }
 .role-card.is-featured, .role-card-kasse.is-featured { border-color: rgba(17,24,39,0.11); background: #fff; }
-.role-card > .role-card-avatar { position: absolute; z-index: 2; top: -1.2rem; right: -0.65rem; width: clamp(7.5rem, 12vw, 10.25rem); height: clamp(6.35rem, 10vw, 8.75rem); max-width: none; object-fit: cover; object-position: center top; filter: drop-shadow(0 12px 16px rgba(17,24,39,0.12)); pointer-events: none; }
-.role-card-kasse > .role-card-avatar { right: -0.1rem; width: clamp(6.47rem, 10.35vw, 8.84rem); height: clamp(5.48rem, 8.62vw, 7.54rem); transform: scale(1.16); transform-origin: center top; }
-.role-card-index { color: var(--role-accent); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; }
-.role-card h3 { margin-top: auto; }
-.role-card-task { display: flex; justify-content: space-between; gap: 0.5rem; margin-top: 0.65rem; padding-top: 0.75rem; border-top: 0.5px solid var(--border); color: var(--fg-muted); font-size: 0.75rem; }
-.role-card > h3, .role-card > p { position: relative; z-index: 1; max-width: 70%; }
-.role-card-task span { color: var(--role-accent); font-size: 1rem; }
+.role-card > .role-card-avatar { position: absolute; z-index: 2; top: -3.35rem; left: 50%; right: auto; width: clamp(8rem, 12vw, 10.5rem); height: clamp(6.8rem, 10vw, 8.95rem); max-width: none; object-fit: cover; object-position: center top; transform: translateX(-50%); filter: drop-shadow(0 12px 16px rgba(17,24,39,0.12)); pointer-events: none; }
+.role-card-kasse > .role-card-avatar { right: auto; transform: translateX(-50%) scale(1.1); transform-origin: center top; }
+.role-card h3 { margin-top: 0; }
+.role-card > h3, .role-card > p { position: relative; z-index: 1; max-width: none; }
+.role-card-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: auto; padding-top: 1.05rem; }
+.role-action { display: inline-flex; align-items: center; min-height: 2rem; padding: 0.38rem 0.66rem; border: 0.5px solid rgba(17,24,39,0.12); border-radius: 10px; background: rgba(255,255,255,0.82); box-shadow: 0 7px 18px rgba(17,24,39,0.055); color: var(--fg-muted); font-size: 0.68rem; font-weight: 600; line-height: 1.1; transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease; }
+.role-action:hover, .role-action:focus-visible { border-color: color-mix(in srgb, var(--role-accent) 45%, var(--border)); background: #fff; box-shadow: 0 10px 22px rgba(17,24,39,0.09); color: var(--fg); transform: translateY(-1px); }
 .workflow-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; width: min(1040px, 100%); margin: 2.5rem auto 0; }
 .workflow-step { min-height: 190px; }
 .workflow-step-index, .workflow-step-index b, .workflow-step-index span { color: var(--accent); }
@@ -402,14 +404,16 @@ header.landing-header {
   .pilot-panel-flow { grid-template-columns: 1fr; gap: 0.45rem; }
   .pilot-panel-flow i { transform: rotate(90deg); }
   .workflow-steps { grid-template-columns: 1fr; }
-  .role-card { min-height: 238px; padding: 1.25rem; }
-  .role-card > .role-card-avatar { top: -0.9rem; right: -0.45rem; width: 7.4rem; height: 6.3rem; }
-  .role-card-kasse > .role-card-avatar { right: 0.05rem; width: 6.38rem; height: 5.43rem; }
+  .audience-section .features-header { margin-bottom: 4.25rem; }
+  .role-card { min-height: 295px; padding: 1.25rem; padding-top: 1.6rem; }
+  .role-card > .role-card-avatar { top: -2.9rem; left: 50%; right: auto; width: 8rem; height: 6.8rem; }
+  .role-card-kasse > .role-card-avatar { right: auto; width: 8rem; height: 6.8rem; transform: translateX(-50%) scale(1.1); }
 }
 @media (max-width: 360px) {
-  .role-card > .role-card-avatar { top: -0.65rem; right: -0.2rem; width: 6.6rem; height: 5.6rem; }
-  .role-card-kasse > .role-card-avatar { right: 0.2rem; width: 5.69rem; height: 4.83rem; }
-  .role-card > h3, .role-card > p { max-width: 68%; }
+  .audience-section .features-header { margin-bottom: 3.8rem; }
+  .role-card { min-height: 300px; }
+  .role-card > .role-card-avatar { top: -2.7rem; width: 7.3rem; height: 6.2rem; }
+  .role-card-kasse > .role-card-avatar { width: 7.3rem; height: 6.2rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .problem-signal:hover, .widget-card:hover, .comparison-column:hover, .faq-item:hover, .calc-launch-panel:hover, .calc-result:hover, .pilot-panel:hover { transform: none; }
@@ -2151,24 +2155,33 @@ header.landing-header {
     <div class="widget-grid-alt reveal" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
       <div class="widget-card role-card role-card-vorsitz" data-od-id="role-vorsitz">
         <img class="role-card-avatar" src="/assets/role-avatars/klubos-role-vorsitz.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
-        <span class="role-card-index">01</span>
         <h3>Vorsitz</h3>
         <p>Sieht offene Entscheidungen, Sitzungsgrundlagen und Aufgaben, die im Vorstand weiterlaufen müssen.</p>
-        <div class="role-card-task">Sitzung vorbereiten <span>→</span></div>
+        <div class="role-card-actions" aria-label="Beispiele für Aufgaben im Vorsitz">
+          <a class="role-action" href="pilot.html?source=persona&amp;role=vorstand&amp;workflow=jhv">JHV planen</a>
+          <a class="role-action" href="pilot.html?source=persona&amp;role=vorstand&amp;workflow=sitzung">Wöchentliche Sitzung</a>
+          <a class="role-action" href="pilot.html?source=persona&amp;role=vorstand&amp;workflow=aufgaben">Aufgaben verteilen</a>
+        </div>
       </div>
       <div class="widget-card role-card role-card-kasse is-featured" data-od-id="role-kasse">
         <img class="role-card-avatar" src="/assets/role-avatars/klubos-role-kasse.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
-        <span class="role-card-index">02</span>
         <h3>Kasse</h3>
         <p>Behält Einnahmen, Ausgaben und offene Punkte im Blick – mit dem aktuellen Stand für die nächste Besprechung.</p>
-        <div class="role-card-task">Monatsstand vorbereiten <span>→</span></div>
+        <div class="role-card-actions" aria-label="Beispiele für Aufgaben in der Kasse">
+          <a class="role-action" href="pilot.html?source=persona&amp;role=kasse&amp;workflow=monatsstand">Monatsstand prüfen</a>
+          <a class="role-action" href="pilot.html?source=persona&amp;role=kasse&amp;workflow=beitraege">Beiträge im Blick</a>
+          <a class="role-action" href="pilot.html?source=persona&amp;role=kasse&amp;workflow=kassenbericht">Kassenbericht vorbereiten</a>
+        </div>
       </div>
       <div class="widget-card role-card role-card-sport" data-od-id="role-sport">
         <img class="role-card-avatar" src="/assets/role-avatars/klubos-role-sport.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
-        <span class="role-card-index">03</span>
         <h3>Sport &amp; Jugend</h3>
         <p>Plant Trainings, Mannschaften und Events, ohne jedes Mal bei verstreuten Listen neu anzufangen.</p>
-        <div class="role-card-task">Saisonstart planen <span>→</span></div>
+        <div class="role-card-actions" aria-label="Beispiele für Aufgaben in Sport und Jugend">
+          <a class="role-action" href="pilot.html?source=persona&amp;role=sport&amp;workflow=saisonstart">Saisonstart planen</a>
+          <a class="role-action" href="pilot.html?source=persona&amp;role=sport&amp;workflow=training">Trainingszeiten ordnen</a>
+          <a class="role-action" href="pilot.html?source=persona&amp;role=sport&amp;workflow=mannschaften">Mannschaften vorbereiten</a>
+        </div>
       </div>
     </div>
   </section>
