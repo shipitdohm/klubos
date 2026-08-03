@@ -2,7 +2,7 @@
 <html lang="de"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="/assets/klubos-app-icon.svg">
+<link rel="icon" type="image/svg+xml" href="assets/klubos-app-icon.svg">
 <meta name="description" content="KlubOS verbindet Mitglieder, Finanzen, Plätze, Termine und Vereinskommunikation für die tägliche Arbeit eures Vorstands.">
 <meta name="theme-color" content="#F3F1F0">
 <meta property="og:title" content="KlubOS — Mehr Überblick für euren Vereinsvorstand">
@@ -346,8 +346,7 @@ header.landing-header {
 .role-card h3 { margin-top: 0; }
 .role-card > h3, .role-card > p { position: relative; z-index: 1; max-width: none; }
 .role-card-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: auto; padding-top: 1.05rem; }
-.role-action { display: inline-flex; align-items: center; min-height: 2rem; padding: 0.38rem 0.66rem; border: 0.5px solid rgba(17,24,39,0.12); border-radius: 10px; background: rgba(255,255,255,0.82); box-shadow: 0 7px 18px rgba(17,24,39,0.055); color: var(--fg-muted); font-size: 0.68rem; font-weight: 600; line-height: 1.1; transition: color 0.18s ease, border-color 0.18s ease, background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease; }
-.role-action:hover, .role-action:focus-visible { border-color: color-mix(in srgb, var(--role-accent) 45%, var(--border)); background: #fff; box-shadow: 0 10px 22px rgba(17,24,39,0.09); color: var(--fg); transform: translateY(-1px); }
+.role-action { display: inline-flex; align-items: center; min-height: 2.1rem; padding: 0.42rem 0.86rem; border: 0.5px solid var(--border); border-radius: 999px; background: rgba(255,255,255,0.8); color: var(--fg-muted); font-size: 0.68rem; font-weight: 500; line-height: 1.1; white-space: nowrap; pointer-events: none; user-select: none; }
 .workflow-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; width: min(1040px, 100%); margin: 2.5rem auto 0; }
 .workflow-step { min-height: 190px; }
 .workflow-step-index, .workflow-step-index b, .workflow-step-index span { color: var(--accent); }
@@ -1807,7 +1806,7 @@ header.landing-header {
 
 <header class="landing-header" data-od-id="landing-header" style="position:fixed;left:50%;transform:translateX(-50%);width:min(900px,calc(100% - 2rem));top:0.85rem;border-radius:18px;border:0.5px solid rgba(255,255,255,0.42);box-shadow:0 8px 24px rgba(17,24,39,0.045),inset 0 1px 0 rgba(255,255,255,0.62),inset 0 -1px 0 rgba(17,24,39,0.025);background:linear-gradient(135deg,rgba(255,255,255,0.34),rgba(255,255,255,0.08));backdrop-filter:blur(34px) saturate(220%) contrast(112%);-webkit-backdrop-filter:blur(34px) saturate(220%) contrast(112%)">
   <a href="index.html" class="landing-logo" aria-label="KlubOS">
-    <img src="/assets/klubos-logo-soft.svg" alt="KlubOS" class="brand-logo-image landing-logo-image">
+    <img src="assets/klubos-logo-soft.svg" alt="KlubOS" class="brand-logo-image landing-logo-image">
   </a>
   <nav class="landing-nav" data-od-id="landing-nav" style="flex:1;align-items:center;justify-content:center;gap:1.25rem">
     <a href="#problem">Das Problem</a>
@@ -2154,33 +2153,33 @@ header.landing-header {
     </div>
     <div class="widget-grid-alt reveal" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
       <div class="widget-card role-card role-card-vorsitz" data-od-id="role-vorsitz">
-        <img class="role-card-avatar" src="/assets/role-avatars/klubos-role-vorsitz.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        <img class="role-card-avatar" src="assets/role-avatars/klubos-role-vorsitz.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
         <h3>Vorsitz</h3>
         <p>Sieht offene Entscheidungen, Sitzungsgrundlagen und Aufgaben, die im Vorstand weiterlaufen müssen.</p>
         <div class="role-card-actions" aria-label="Beispiele für Aufgaben im Vorsitz">
-          <a class="role-action" href="pilot.html?source=persona&amp;role=vorstand&amp;workflow=jhv">JHV planen</a>
-          <a class="role-action" href="pilot.html?source=persona&amp;role=vorstand&amp;workflow=sitzung">Wöchentliche Sitzung</a>
-          <a class="role-action" href="pilot.html?source=persona&amp;role=vorstand&amp;workflow=aufgaben">Aufgaben verteilen</a>
+          <span class="role-action">JHV planen</span>
+          <span class="role-action">Wöchentliche Sitzung</span>
+          <span class="role-action">Aufgaben verteilen</span>
         </div>
       </div>
       <div class="widget-card role-card role-card-kasse is-featured" data-od-id="role-kasse">
-        <img class="role-card-avatar" src="/assets/role-avatars/klubos-role-kasse.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        <img class="role-card-avatar" src="assets/role-avatars/klubos-role-kasse.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
         <h3>Kasse</h3>
         <p>Behält Einnahmen, Ausgaben und offene Punkte im Blick – mit dem aktuellen Stand für die nächste Besprechung.</p>
         <div class="role-card-actions" aria-label="Beispiele für Aufgaben in der Kasse">
-          <a class="role-action" href="pilot.html?source=persona&amp;role=kasse&amp;workflow=monatsstand">Monatsstand prüfen</a>
-          <a class="role-action" href="pilot.html?source=persona&amp;role=kasse&amp;workflow=beitraege">Beiträge im Blick</a>
-          <a class="role-action" href="pilot.html?source=persona&amp;role=kasse&amp;workflow=kassenbericht">Kassenbericht vorbereiten</a>
+          <span class="role-action">Monatsstand prüfen</span>
+          <span class="role-action">Beiträge im Blick</span>
+          <span class="role-action">Kassenbericht vorbereiten</span>
         </div>
       </div>
       <div class="widget-card role-card role-card-sport" data-od-id="role-sport">
-        <img class="role-card-avatar" src="/assets/role-avatars/klubos-role-sport.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+        <img class="role-card-avatar" src="assets/role-avatars/klubos-role-sport.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
         <h3>Sport &amp; Jugend</h3>
         <p>Plant Trainings, Mannschaften und Events, ohne jedes Mal bei verstreuten Listen neu anzufangen.</p>
         <div class="role-card-actions" aria-label="Beispiele für Aufgaben in Sport und Jugend">
-          <a class="role-action" href="pilot.html?source=persona&amp;role=sport&amp;workflow=saisonstart">Saisonstart planen</a>
-          <a class="role-action" href="pilot.html?source=persona&amp;role=sport&amp;workflow=training">Trainingszeiten ordnen</a>
-          <a class="role-action" href="pilot.html?source=persona&amp;role=sport&amp;workflow=mannschaften">Mannschaften vorbereiten</a>
+          <span class="role-action">Saisonstart planen</span>
+          <span class="role-action">Trainingszeiten ordnen</span>
+          <span class="role-action">Mannschaften vorbereiten</span>
         </div>
       </div>
     </div>
@@ -2250,7 +2249,7 @@ header.landing-header {
   <div class="landing-footer-main">
     <div class="landing-footer-brand">
       <a href="index.html" class="landing-footer-logo" aria-label="KlubOS Startseite">
-        <img src="/assets/klubos-favicon.png" alt="KlubOS" class="landing-footer-icon" width="32" height="32">
+        <img src="assets/klubos-favicon.png" alt="KlubOS" class="landing-footer-icon" width="32" height="32">
       </a>
       <p class="landing-footer-tagline">Mehr Überblick für die Arbeit eures Vorstands.</p>
       <a class="landing-footer-contact" href="mailto:dohm@klubos.de">dohm@klubos.de</a>
