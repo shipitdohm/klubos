@@ -1093,7 +1093,7 @@ input, textarea { font-family: inherit; color: inherit; }
   .landing-footer-main { grid-template-columns: 1fr; }
   .landing-footer-brand { grid-column: auto; }
   header.landing-header { width: calc(100% - 1rem) !important; }
-  .landing-logo-image { height: 0.8rem; max-width: 5.4rem; }
+  .landing-logo-image { height: 1.05rem; max-width: 6.25rem; }
   .landing-login-link { min-height: 2.75rem; padding-inline: 0.5rem; font-size: 0.6875rem; }
   .landing-header-cta { min-height: 2.75rem; padding-inline: 0.45rem; font-size: 0.6875rem; }
 }

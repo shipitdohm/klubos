@@ -2,7 +2,7 @@
 <html lang="de"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/svg+xml" href="/assets/klubos-app-icon.svg">
+<link rel="icon" type="image/svg+xml" href="assets/klubos-app-icon.svg">
 <meta name="description" content="KlubOS verbindet Mitglieder, Finanzen, Plätze, Termine und Vereinskommunikation für die tägliche Arbeit eures Vorstands.">
 <meta name="theme-color" content="#F3F1F0">
 <meta property="og:title" content="KlubOS — Mehr Überblick für euren Vereinsvorstand">
@@ -333,19 +333,23 @@ header.landing-header {
 @keyframes bridgePulse { 0%, 100% { opacity: 0.28; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.35); } }
 @keyframes comparisonRowIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 .comparison-note { max-width: 620px; margin: 1.35rem auto 0; color: var(--fg-dim); font-size: 0.75rem; text-align: center; }
-.audience-section { position: relative; z-index: 1; isolation: isolate; max-width: none; margin: 0; padding-inline: max(1.25rem, calc((100vw - 1160px) / 2)); background: rgba(255,255,255,0.9); border-top: 0.5px solid rgba(17,24,39,0.07); border-bottom: 0.5px solid rgba(17,24,39,0.07); }
-.role-card { position: relative; overflow: visible; min-height: 230px; }
+.audience-section { position: relative; z-index: 1; isolation: isolate; max-width: none; margin: 0; padding-inline: max(1.25rem, calc((100vw - 1160px) / 2)); background: #fff; border-top: 0; border-bottom: 0; }
+.audience-section .features-header { margin-bottom: clamp(3.1rem, 4.2vw, 4rem); }
+.audience-section .widget-grid-alt { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 1.45vw, 1.35rem); margin-top: 0; align-items: stretch; }
+.role-card { position: relative; overflow: visible; min-height: 0; padding: 1.25rem 1.3rem 1.2rem; }
 .role-card-vorsitz { --role-accent: var(--accent); }
 .role-card-kasse { --role-accent: var(--warning); }
 .role-card-sport { --role-accent: var(--success); }
 .role-card.is-featured, .role-card-kasse.is-featured { border-color: rgba(17,24,39,0.11); background: #fff; }
-.role-card > .role-card-avatar { position: absolute; z-index: 2; top: -1.2rem; right: -0.65rem; width: clamp(7.5rem, 12vw, 10.25rem); height: clamp(6.35rem, 10vw, 8.75rem); max-width: none; object-fit: cover; object-position: center top; filter: drop-shadow(0 12px 16px rgba(17,24,39,0.12)); pointer-events: none; }
-.role-card-kasse > .role-card-avatar { right: -0.1rem; width: clamp(6.47rem, 10.35vw, 8.84rem); height: clamp(5.48rem, 8.62vw, 7.54rem); transform: scale(1.16); transform-origin: center top; }
-.role-card-index { color: var(--role-accent); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; }
-.role-card h3 { margin-top: auto; }
-.role-card-task { display: flex; justify-content: space-between; gap: 0.5rem; margin-top: 0.65rem; padding-top: 0.75rem; border-top: 0.5px solid var(--border); color: var(--fg-muted); font-size: 0.75rem; }
-.role-card > h3, .role-card > p { position: relative; z-index: 1; max-width: 70%; }
-.role-card-task span { color: var(--role-accent); font-size: 1rem; }
+.role-card > .role-card-avatar { position: absolute; z-index: 2; top: -3.35rem; right: 0.7rem; left: auto; width: clamp(7.4rem, 10vw, 9rem); height: clamp(7.25rem, 10vw, 8.7rem); max-width: none; object-fit: contain; object-position: center bottom; transform: none; filter: drop-shadow(0 12px 16px rgba(17,24,39,0.12)); pointer-events: none; }
+.role-card-vorsitz > .role-card-avatar { right: 0.55rem; transform: scale(1.02); transform-origin: right bottom; }
+.role-card-kasse > .role-card-avatar { right: 0.35rem; transform: scale(1.04); transform-origin: right bottom; }
+.role-card-sport > .role-card-avatar { right: 0.45rem; transform: scale(1.02); transform-origin: right bottom; }
+.role-card h3 { margin-top: 0; }
+.role-card > h3, .role-card > p { position: relative; z-index: 1; max-width: calc(100% - clamp(7.2rem, 43%, 8.8rem)); }
+.role-card > p { margin-top: 0.35rem; margin-bottom: 0; }
+.role-card-actions { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1.1rem; padding-top: 0; }
+.role-action { display: inline-flex; align-items: center; min-height: 2.1rem; padding: 0.42rem 0.86rem; border: 0.5px solid var(--border); border-radius: 999px; background: rgba(255,255,255,0.8); color: var(--fg-muted); font-size: 0.68rem; font-weight: 500; line-height: 1.1; white-space: nowrap; pointer-events: none; user-select: none; }
 .workflow-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.8rem; width: min(1040px, 100%); margin: 2.5rem auto 0; }
 .workflow-step { min-height: 190px; }
 .workflow-step-index, .workflow-step-index b, .workflow-step-index span { color: var(--accent); }
@@ -395,6 +399,10 @@ header.landing-header {
   .comparison-bridge i { width: 2px; height: 2px; }
   .pilot-panel { grid-template-columns: 1fr; }
   .workflow-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .audience-section .widget-grid-alt { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1rem; }
+  .audience-section .features-header { margin-bottom: 3.25rem; }
+  .role-card > .role-card-avatar { top: -3.05rem; right: 0.55rem; width: 7.7rem; height: 7.4rem; }
+  .role-card > h3, .role-card > p { max-width: calc(100% - 7rem); }
 }
 @media (max-width: 560px) {
   .comparison-row { grid-template-columns: 1.5rem minmax(0, 1fr); }
@@ -402,15 +410,28 @@ header.landing-header {
   .pilot-panel-flow { grid-template-columns: 1fr; gap: 0.45rem; }
   .pilot-panel-flow i { transform: rotate(90deg); }
   .workflow-steps { grid-template-columns: 1fr; }
-  .role-card { min-height: 238px; padding: 1.25rem; }
-  .role-card > .role-card-avatar { top: -0.9rem; right: -0.45rem; width: 7.4rem; height: 6.3rem; }
-  .role-card-kasse > .role-card-avatar { right: 0.05rem; width: 6.38rem; height: 5.43rem; }
+  .audience-section .features-header { margin-bottom: 3rem; }
+  .audience-section .widget-grid-alt { grid-template-columns: 1fr; column-gap: 1rem; row-gap: 1rem; }
+  .role-card { padding: 1.2rem 1.15rem 1.1rem; }
+  .role-card > .role-card-avatar { top: -2.9rem; right: 0.6rem; width: 7.15rem; height: 6.95rem; }
+  .role-card > h3, .role-card > p { max-width: calc(100% - 6.8rem); }
+}
+@media (max-width: 480px) {
+  .landing-logo-image { height: 1.15rem; max-width: 6.8rem; }
 }
 @media (max-width: 360px) {
-  .role-card > .role-card-avatar { top: -0.65rem; right: -0.2rem; width: 6.6rem; height: 5.6rem; }
-  .role-card-kasse > .role-card-avatar { right: 0.2rem; width: 5.69rem; height: 4.83rem; }
-  .role-card > h3, .role-card > p { max-width: 68%; }
+  .audience-section .features-header { margin-bottom: 2.75rem; }
+  .role-card { padding: 1.1rem 1rem 1rem; }
+  .role-card > .role-card-avatar { top: -2.65rem; right: 0.45rem; width: 6.55rem; height: 6.35rem; }
+  .role-card > h3, .role-card > p { max-width: calc(100% - 6.3rem); }
+  .role-action { min-height: 1.95rem; padding-inline: 0.7rem; font-size: 0.64rem; }
+  .landing-header { gap: 0.25rem; padding: 0.55rem 0.6rem; }
+  .landing-logo-image { height: 1.08rem; max-width: 6rem; }
+  .landing-login-link, .landing-header-cta { min-height: 2.45rem; padding-inline: 0.4rem; font-size: 0.64rem; }
+  .landing-header-cta .cta-label-full { display: none; }
+  .landing-header-cta .cta-label-compact { display: inline; }
 }
+.cta-label-compact { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .problem-signal:hover, .widget-card:hover, .comparison-column:hover, .faq-item:hover, .calc-launch-panel:hover, .calc-result:hover, .pilot-panel:hover { transform: none; }
   .problem-signal-orbit span, .comparison-row, .comparison-bridge i, .workflow-steps.visible .workflow-step { animation: none; }
@@ -1769,6 +1790,9 @@ header.landing-header {
   .calc-launch-action { justify-items: start; }
   .calc-toolbar { align-items: flex-start; flex-direction: column; gap: 0.5rem; }
 }
+@media (min-width: 561px) and (max-width: 900px) {
+  .role-card-kasse > h3, .role-card-kasse > p { max-width: calc(100% - 7.4rem); }
+}
 @media (prefers-reduced-motion: reduce) {
   .widget-grid-alt[data-od-id="path-3-2-1"] *,
   .widget-grid-alt[data-od-id="path-3-2-1"] .sp-doc.has-notice::after,
@@ -1803,14 +1827,14 @@ header.landing-header {
 
 <header class="landing-header" data-od-id="landing-header" style="position:fixed;left:50%;transform:translateX(-50%);width:min(900px,calc(100% - 2rem));top:0.85rem;border-radius:18px;border:0.5px solid rgba(255,255,255,0.42);box-shadow:0 8px 24px rgba(17,24,39,0.045),inset 0 1px 0 rgba(255,255,255,0.62),inset 0 -1px 0 rgba(17,24,39,0.025);background:linear-gradient(135deg,rgba(255,255,255,0.34),rgba(255,255,255,0.08));backdrop-filter:blur(34px) saturate(220%) contrast(112%);-webkit-backdrop-filter:blur(34px) saturate(220%) contrast(112%)">
   <a href="index.html" class="landing-logo" aria-label="KlubOS">
-    <img src="/assets/klubos-logo-soft.svg" alt="KlubOS" class="brand-logo-image landing-logo-image">
+    <img src="assets/klubos-logo-soft.svg" alt="KlubOS" class="brand-logo-image landing-logo-image">
   </a>
   <nav class="landing-nav" data-od-id="landing-nav" style="flex:1;align-items:center;justify-content:center;gap:1.25rem">
     <a href="#problem">Das Problem</a>
     <a href="#system">So hilft KlubOS</a>
   </nav>
   <a href="login.html" class="landing-login-link">Einloggen</a>
-  <a href="pilot.html" class="btn btn-primary landing-header-cta">Pilotgespräch vereinbaren</a>
+  <a href="pilot.html" class="btn btn-primary landing-header-cta"><span class="cta-label-full">Pilotgespräch vereinbaren</span><span class="cta-label-compact" aria-hidden="true">Pilotgespräch</span></a>
 </header>
 
 <main>
@@ -2148,27 +2172,36 @@ header.landing-header {
       <h2 class="h2">Jede Rolle findet schneller den nächsten Schritt.</h2>
       <p style="color:var(--fg-muted);font-size:0.9375rem;max-width:560px;margin:0.75rem auto 0">KlubOS bringt Vorsitz, Kasse und Sport zusammen, ohne dass für jede Aufgabe ein neues Tool oder eine neue Liste entsteht.</p>
     </div>
-    <div class="widget-grid-alt reveal" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+    <div class="widget-grid-alt reveal">
       <div class="widget-card role-card role-card-vorsitz" data-od-id="role-vorsitz">
-        <img class="role-card-avatar" src="/assets/role-avatars/klubos-role-vorsitz.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
-        <span class="role-card-index">01</span>
+        <img class="role-card-avatar" src="assets/role-avatars/klubos-role-vorsitz.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
         <h3>Vorsitz</h3>
         <p>Sieht offene Entscheidungen, Sitzungsgrundlagen und Aufgaben, die im Vorstand weiterlaufen müssen.</p>
-        <div class="role-card-task">Sitzung vorbereiten <span>→</span></div>
+        <div class="role-card-actions" aria-label="Beispiele für Aufgaben im Vorsitz">
+          <span class="role-action">JHV planen</span>
+          <span class="role-action">Wöchentliche Sitzung</span>
+          <span class="role-action">Aufgaben verteilen</span>
+        </div>
       </div>
       <div class="widget-card role-card role-card-kasse is-featured" data-od-id="role-kasse">
-        <img class="role-card-avatar" src="/assets/role-avatars/klubos-role-kasse.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
-        <span class="role-card-index">02</span>
+        <img class="role-card-avatar" src="assets/role-avatars/klubos-role-kasse.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
         <h3>Kasse</h3>
         <p>Behält Einnahmen, Ausgaben und offene Punkte im Blick – mit dem aktuellen Stand für die nächste Besprechung.</p>
-        <div class="role-card-task">Monatsstand vorbereiten <span>→</span></div>
+        <div class="role-card-actions" aria-label="Beispiele für Aufgaben in der Kasse">
+          <span class="role-action">Monatsstand prüfen</span>
+          <span class="role-action">Beiträge im Blick</span>
+          <span class="role-action">Kassenbericht vorbereiten</span>
+        </div>
       </div>
       <div class="widget-card role-card role-card-sport" data-od-id="role-sport">
-        <img class="role-card-avatar" src="/assets/role-avatars/klubos-role-sport.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
-        <span class="role-card-index">03</span>
+        <img class="role-card-avatar" src="assets/role-avatars/klubos-role-sport.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
         <h3>Sport &amp; Jugend</h3>
         <p>Plant Trainings, Mannschaften und Events, ohne jedes Mal bei verstreuten Listen neu anzufangen.</p>
-        <div class="role-card-task">Saisonstart planen <span>→</span></div>
+        <div class="role-card-actions" aria-label="Beispiele für Aufgaben in Sport und Jugend">
+          <span class="role-action">Saisonstart planen</span>
+          <span class="role-action">Trainingszeiten ordnen</span>
+          <span class="role-action">Mannschaften vorbereiten</span>
+        </div>
       </div>
     </div>
   </section>
@@ -2237,7 +2270,7 @@ header.landing-header {
   <div class="landing-footer-main">
     <div class="landing-footer-brand">
       <a href="index.html" class="landing-footer-logo" aria-label="KlubOS Startseite">
-        <img src="/assets/klubos-favicon.png" alt="KlubOS" class="landing-footer-icon" width="32" height="32">
+        <img src="assets/klubos-logo-soft.svg" alt="KlubOS" class="brand-logo-image landing-footer-logo-image" width="112" height="24">
       </a>
       <p class="landing-footer-tagline">Mehr Überblick für die Arbeit eures Vorstands.</p>
       <a class="landing-footer-contact" href="mailto:dohm@klubos.de">dohm@klubos.de</a>
