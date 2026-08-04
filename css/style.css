@@ -235,15 +235,22 @@ input, textarea { font-family: inherit; color: inherit; }
    ══════════════════════════════════════════════════════════════ */
 
 .auth-login-page {
+  display: flow-root;
   background: #e9e5e2;
+  min-height: var(--login-vh, 100vh);
+  height: var(--login-vh, 100vh);
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 .login-shell {
   width: min(1380px, calc(100% - 3rem));
-  min-height: min(860px, calc(100vh - 3rem));
-  margin: 1.5rem auto;
+  height: min(860px, calc(var(--login-vh, 100vh) - 3rem));
+  max-height: calc(var(--login-vh, 100vh) - 3rem);
+  min-height: 0;
+  margin: 1.5rem auto 0;
   display: grid;
+  grid-template-rows: minmax(0, 1fr);
   grid-template-columns: minmax(420px, 0.92fr) minmax(540px, 1.08fr);
   overflow: hidden;
   background: var(--surface);
@@ -254,7 +261,7 @@ input, textarea { font-family: inherit; color: inherit; }
 
 .login-form-panel {
   min-width: 0;
-  min-height: 100%;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   padding: clamp(2rem, 4vw, 4.25rem) clamp(2rem, 5vw, 5.5rem) 1.75rem;
@@ -276,10 +283,10 @@ input, textarea { font-family: inherit; color: inherit; }
 .login-form-wrap {
   width: min(100%, 28rem);
   margin: auto;
-  padding: 3rem 0;
+  padding: 1.5rem 0;
 }
 
-.login-intro { margin-bottom: 2.25rem; }
+.login-intro { margin-bottom: 1.5rem; }
 .login-eyebrow,
 .login-product-kicker {
   margin-bottom: 0.8rem;
@@ -303,11 +310,11 @@ input, textarea { font-family: inherit; color: inherit; }
   line-height: 1.55;
 }
 
-.login-form { display: grid; gap: 1.2rem; }
+.login-form { display: grid; gap: 0.9rem; }
 .login-form .form-group { display: grid; gap: 0.45rem; }
 .login-form .form-label { font-size: 0.82rem; font-weight: 600; }
 .login-input {
-  min-height: 3.35rem;
+  min-height: 3rem;
   padding: 0.85rem 1rem;
   background: var(--surface);
   border-color: #d8d2ce;
@@ -356,7 +363,7 @@ input, textarea { font-family: inherit; color: inherit; }
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.3rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
   color: var(--fg-muted);
   font-size: 0.82rem;
   line-height: 1.5;
@@ -379,11 +386,12 @@ input, textarea { font-family: inherit; color: inherit; }
 .login-product-panel {
   position: relative;
   min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-  padding: clamp(2.25rem, 5vw, 5rem);
+  padding: clamp(1.5rem, 3.2vw, 3rem);
   background: var(--accent);
   color: #fff;
   isolation: isolate;
@@ -438,7 +446,7 @@ input, textarea { font-family: inherit; color: inherit; }
 .login-product-mockup {
   position: relative;
   width: min(100%, 40rem);
-  margin: clamp(2.25rem, 5vw, 4rem) auto 0;
+  margin: clamp(1.5rem, 3vw, 2.5rem) auto 0;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.58);
   border-radius: 0.95rem;
@@ -458,7 +466,7 @@ input, textarea { font-family: inherit; color: inherit; }
 }
 .mockup-dot { width: 0.38rem; height: 0.38rem; border-radius: 999px; background: #d4ccc6; }
 .mockup-window-title { margin-left: 0.55rem; color: #8d8580; font-size: 0.55rem; letter-spacing: 0.02em; }
-.mockup-body { display: flex; min-height: 16.75rem; }
+.mockup-body { display: flex; min-height: 14.5rem; }
 .mockup-sidebar { width: 2.9rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 0.7rem 0.35rem; background: #f0ece9; }
 .mockup-sidebar-brand { width: 1.25rem; height: 1.25rem; display: grid; place-items: center; border-radius: 0.35rem; background: var(--accent); color: #fff; font-size: 0.55rem; font-weight: 700; }
 .mockup-nav-line { width: 0.95rem; height: 0.45rem; border-radius: 0.2rem; background: #d2c9c4; }
@@ -491,24 +499,27 @@ input, textarea { font-family: inherit; color: inherit; }
     grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   }
   .login-form-panel { padding-inline: 3rem; }
-  .login-product-panel { padding-inline: 3rem; }
-  .login-product-copy h2 { font-size: clamp(2rem, 4vw, 3.15rem); }
+  .login-product-panel { padding-inline: 2.25rem; }
+  .login-product-copy h2 { font-size: clamp(1.85rem, 3.25vw, 2.75rem); }
   .login-product-mockup { margin-top: 2.5rem; }
 }
 
 @media (max-width: 860px) {
+  .auth-login-page {
+    height: auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
   .login-shell {
     width: min(640px, calc(100% - 2rem));
+    height: auto;
     min-height: auto;
     grid-template-columns: 1fr;
     margin: 1rem auto;
   }
   .login-form-panel { min-height: 42rem; }
   .login-form-wrap { margin: auto; padding-block: 3.5rem; }
-  .login-product-panel { padding: 3.5rem clamp(1.5rem, 6vw, 4rem); }
-  .login-product-copy { max-width: 34rem; }
-  .login-product-copy h2 { font-size: clamp(1.55rem, 6.5vw, 2.3rem); }
-  .login-product-mockup { margin-top: 2.5rem; }
+  .login-product-panel { display: none; }
 }
 
 @media (max-width: 480px) {
@@ -527,22 +538,11 @@ input, textarea { font-family: inherit; color: inherit; }
   .login-intro h1 { font-size: 2.35rem; }
   .login-intro > p:last-child { font-size: 0.9rem; }
   .login-footer-note { padding-top: 0.25rem; }
-  .login-product-panel { padding: 2.75rem 1.25rem 2.5rem; }
-  .login-product-copy h2 { font-size: clamp(1.45rem, 6.5vw, 2.3rem); }
-  .login-product-copy > p:last-child { font-size: 0.9rem; }
-  .login-product-mockup { margin-top: 2rem; transform: none; }
-  .mockup-body { min-height: 0; }
-  .mockup-content { padding: 0.75rem; }
-  .mockup-metrics { grid-template-columns: 1fr 1fr; }
-  .mockup-card-wide { grid-column: 1 / -1; }
-  .mockup-bottom-row { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 360px) {
   .login-form-panel { padding-inline: 1rem; }
-  .login-product-panel { padding-inline: 1rem; }
   .login-intro h1 { font-size: 2.1rem; }
-  .login-product-copy h2 { font-size: 1.25rem; }
   .mockup-sidebar { width: 2.35rem; }
   .mockup-content-head strong { font-size: 0.75rem; }
   .mockup-card { padding: 0.55rem; }

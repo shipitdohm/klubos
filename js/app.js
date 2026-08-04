@@ -716,3 +716,22 @@ function toggleWidget(widgetId, visible) {
   const el = document.querySelector(`[data-od-id="${widgetId}"]`);
   if (el) el.style.display = visible ? '' : 'none';
 }
+
+/* ── Login page viewport + scrolling title ────────────────── */
+
+if (document.body?.classList.contains('auth-login-page')) {
+  const setLoginViewport = () => {
+    document.documentElement.style.setProperty('--login-vh', `${window.innerHeight}px`);
+  };
+  setLoginViewport();
+  window.addEventListener('resize', setLoginViewport);
+
+  const loginTitle = 'Willkommen zurück bei KlubOS';
+  let loginTitleOffset = 0;
+  const scrollLoginTitle = () => {
+    document.title = `${loginTitle.slice(loginTitleOffset)} · ${loginTitle.slice(0, loginTitleOffset)}`;
+    loginTitleOffset = (loginTitleOffset + 1) % loginTitle.length;
+  };
+  scrollLoginTitle();
+  window.setInterval(scrollLoginTitle, 260);
+}
